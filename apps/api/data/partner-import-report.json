@@ -1,0 +1,387 @@
+{
+  "matched_survey": [
+    {
+      "partner": "Biokunststoff Handel Martin Schwemmer",
+      "survey": "Biokunststoff Handel",
+      "score": 1.0
+    },
+    {
+      "partner": "BIOWERT Industrie GmbH",
+      "survey": "Biowert Industrie GmbH",
+      "score": 1.0
+    },
+    {
+      "partner": "EDAG Engineering GmbH",
+      "survey": "EDAG Engineering GmbH",
+      "score": 1.0
+    },
+    {
+      "partner": "Institut für Kreislaufwirtschaft der Bio:Polymer (ibp) der Hochschule Hof",
+      "survey": "Institut für Kreislaufwirtschaft der Bio:Polymere (ibp)",
+      "score": 0.839
+    },
+    {
+      "partner": "poly/prove Consulting Dr. Wolff",
+      "survey": "poly/prove Consulting Dr. Wolff",
+      "score": 1.0
+    },
+    {
+      "partner": "UPM Biochemicals GmbH",
+      "survey": "UPM Biochemicals GmbH",
+      "score": 1.0
+    },
+    {
+      "partner": "UVEX Safety Group GmbH & Co. KG",
+      "survey": "UVEX SAFETY GROUP GmbH & Co. KG   ",
+      "score": 1.0
+    }
+  ],
+  "no_survey": [
+    {
+      "partner": ".lichtl Ethics & Brands GmbH",
+      "best_score": 0.278
+    },
+    {
+      "partner": "Albrecht Dinkelaker, Polymer- und Produktentwicklung",
+      "best_score": 0.384
+    },
+    {
+      "partner": "ALLOD Werkstoff GmbH & Co. KG",
+      "best_score": 0.4
+    },
+    {
+      "partner": "ASTORPLAST Klebetechnik GmbH",
+      "best_score": 0.417
+    },
+    {
+      "partner": "Behrentin Communication GmbH",
+      "best_score": 0.326
+    },
+    {
+      "partner": "Bender GmbH & Co. KG",
+      "best_score": 0.0
+    },
+    {
+      "partner": "BHYO GmbH",
+      "best_score": 0.0
+    },
+    {
+      "partner": "Biomer",
+      "best_score": 0.0
+    },
+    {
+      "partner": "Bioplasmar GmbH",
+      "best_score": 0.385
+    },
+    {
+      "partner": "Bioscovery ® - eine Brand der Biofibre GmbH",
+      "best_score": 0.406
+    },
+    {
+      "partner": "BIOVOX GmbH",
+      "best_score": 0.0
+    },
+    {
+      "partner": "Bürkert Werke GmbH & Co. KG",
+      "best_score": 0.273
+    },
+    {
+      "partner": "C.A.R.M.E.N. e.V.",
+      "best_score": 0.323
+    },
+    {
+      "partner": "carbonauten GmbH",
+      "best_score": 0.293
+    },
+    {
+      "partner": "Carl Zeiss Meditec AG",
+      "best_score": 0.282
+    },
+    {
+      "partner": "Chemie-Cluster Bayern GmbH",
+      "best_score": 0.432
+    },
+    {
+      "partner": "Cluster Nanotechnologie",
+      "best_score": 0.417
+    },
+    {
+      "partner": "CO2BIOCLEAN GmbH",
+      "best_score": 0.37
+    },
+    {
+      "partner": "comatstudio",
+      "best_score": 0.323
+    },
+    {
+      "partner": "ContainerGrid",
+      "best_score": 0.414
+    },
+    {
+      "partner": "C-Technologies",
+      "best_score": 0.4
+    },
+    {
+      "partner": "Dahlia Biotech",
+      "best_score": 0.4
+    },
+    {
+      "partner": "ebalta Kunststoff GmbH",
+      "best_score": 0.595
+    },
+    {
+      "partner": "edding Gruppe",
+      "best_score": 0.0
+    },
+    {
+      "partner": "eibe Produktion + Vertrieb GmbH & Co.KG",
+      "best_score": 0.353
+    },
+    {
+      "partner": "European EPC Competence Center GmbH",
+      "best_score": 0.4
+    },
+    {
+      "partner": "F.S. Fehrer Automotive GmbH",
+      "best_score": 0.323
+    },
+    {
+      "partner": "Fa. Wieland electric GmbH",
+      "best_score": 0.373
+    },
+    {
+      "partner": "Farben – Kiroff – Technik e.K.",
+      "best_score": 0.48
+    },
+    {
+      "partner": "Fraunhofer ISC",
+      "best_score": 0.41
+    },
+    {
+      "partner": "Fraunhofer IWKS",
+      "best_score": 0.35
+    },
+    {
+      "partner": "Fraunhofer UMSICHT",
+      "best_score": 0.372
+    },
+    {
+      "partner": "Fraunhofer-Institut für Verfahrenstechnik und Verpackung IVV",
+      "best_score": 0.42
+    },
+    {
+      "partner": "gabo Systemtechnik GmbH",
+      "best_score": 0.419
+    },
+    {
+      "partner": "Gerresheimer Regensburg GmbH",
+      "best_score": 0.256
+    },
+    {
+      "partner": "GreenSurvey GmbH",
+      "best_score": 0.364
+    },
+    {
+      "partner": "Gruber-Folien GmbH & Co. KG",
+      "best_score": 0.417
+    },
+    {
+      "partner": "GS1 Germany GmbH",
+      "best_score": 0.444
+    },
+    {
+      "partner": "HEW-Kabel GmbH",
+      "best_score": 0.4
+    },
+    {
+      "partner": "Hochschule Aalen",
+      "best_score": 0.375
+    },
+    {
+      "partner": "Hochschule Albstadt-Sigmaringen, Sustainable Packaging Institute SPI",
+      "best_score": 0.26
+    },
+    {
+      "partner": "Hochschule München",
+      "best_score": 0.279
+    },
+    {
+      "partner": "Holzmühle Westerkamp GmbH",
+      "best_score": 0.323
+    },
+    {
+      "partner": "HYDRA Marine Sciences GmbH",
+      "best_score": 0.324
+    },
+    {
+      "partner": "IPPM Technologies GmbH",
+      "best_score": 0.424
+    },
+    {
+      "partner": "J. Rettenmaier & Söhne GmbH + Co KG",
+      "best_score": 0.4
+    },
+    {
+      "partner": "Kabel Sterner GmbH",
+      "best_score": 0.345
+    },
+    {
+      "partner": "KLT Hummel Plastic GmbH",
+      "best_score": 0.316
+    },
+    {
+      "partner": "Landpack",
+      "best_score": 0.0
+    },
+    {
+      "partner": "Lechner Kunststofftechnik",
+      "best_score": 0.68
+    },
+    {
+      "partner": "MANN+HUMMEL GmbH",
+      "best_score": 0.296
+    },
+    {
+      "partner": "Marker Deutschland GmbH",
+      "best_score": 0.421
+    },
+    {
+      "partner": "Neue Materialien Bayreuth GmbH",
+      "best_score": 0.4
+    },
+    {
+      "partner": "Novamont GmbH",
+      "best_score": 0.0
+    },
+    {
+      "partner": "NTIC GmbH",
+      "best_score": 0.0
+    },
+    {
+      "partner": "OTH Regensburg - Technologie Campus Neustadt an der Donau",
+      "best_score": 0.333
+    },
+    {
+      "partner": "POLIFILM EXTRUSION GmbH",
+      "best_score": 0.357
+    },
+    {
+      "partner": "Polysecure GmbH",
+      "best_score": 0.5
+    },
+    {
+      "partner": "poraComp GmbH",
+      "best_score": 0.0
+    },
+    {
+      "partner": "RAUMEDIC AG",
+      "best_score": 0.0
+    },
+    {
+      "partner": "R-Cycle Initiative",
+      "best_score": 0.294
+    },
+    {
+      "partner": "RENOLIT SE",
+      "best_score": 0.0
+    },
+    {
+      "partner": "Rottal Hanf GmbH",
+      "best_score": 0.452
+    },
+    {
+      "partner": "ROWASOL GmbH",
+      "best_score": 0.0
+    },
+    {
+      "partner": "Sachverständigenrat Bioökonomie Bayern (SVB)",
+      "best_score": 0.316
+    },
+    {
+      "partner": "Schlegel und Partner GmbH",
+      "best_score": 0.385
+    },
+    {
+      "partner": "SEMRAU technologies",
+      "best_score": 0.457
+    },
+    {
+      "partner": "Siegfried Hofmann GmbH",
+      "best_score": 0.351
+    },
+    {
+      "partner": "SÜDPACK Verpackungen SE & Co. KG",
+      "best_score": 0.389
+    },
+    {
+      "partner": "Süd-West-Chemie GmbH",
+      "best_score": 0.452
+    },
+    {
+      "partner": "Technische Hochschule Nürnberg",
+      "best_score": 0.34
+    },
+    {
+      "partner": "Technologie- und Förderzentrum Straubing",
+      "best_score": 0.392
+    },
+    {
+      "partner": "Tecnaro GmbH",
+      "best_score": 0.0
+    },
+    {
+      "partner": "TecPart Verband Technische Kunststoff-Produkte e.V.",
+      "best_score": 0.429
+    },
+    {
+      "partner": "Textilforschungsinstitut Thüringen-Vogtland e.V.",
+      "best_score": 0.486
+    },
+    {
+      "partner": "Trägerverein Umwelttechnologie-Cluster Bayern e.V.",
+      "best_score": 0.392
+    },
+    {
+      "partner": "VerDeSoft GmbH",
+      "best_score": 0.4
+    },
+    {
+      "partner": "Völkl Sports GmbH",
+      "best_score": 0.455
+    },
+    {
+      "partner": "Weimako GmbH",
+      "best_score": 0.0
+    },
+    {
+      "partner": "Werkzeugbau Willi Geyer GmbH",
+      "best_score": 0.237
+    }
+  ],
+  "skipped": [],
+  "warnings": [
+    {
+      "partner": "POLIFILM EXTRUSION GmbH",
+      "warning": "kein Ansprechpartner-Name, Firmenname verwendet"
+    },
+    {
+      "partner": "poraComp GmbH",
+      "warning": "kein Ansprechpartner-Name, Firmenname verwendet"
+    },
+    {
+      "partner": "R-Cycle Initiative",
+      "warning": "kein Ansprechpartner-Name, Firmenname verwendet"
+    },
+    {
+      "partner": "VerDeSoft GmbH",
+      "warning": "kein Ansprechpartner-Name, Firmenname verwendet"
+    }
+  ],
+  "summary": {
+    "partners_filtered": 87,
+    "companies_ready": 87,
+    "survey_matches": 7,
+    "no_survey": 80,
+    "skipped": 0
+  }
+}

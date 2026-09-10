@@ -1,0 +1,89 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-b2b}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-b2b_dev_password}
+      POSTGRES_DB: ${POSTGRES_DB:-b2b_matchmaking}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-b2b} -d ${POSTGRES_DB:-b2b_matchmaking}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  mailpit:
+    image: axllent/mailpit:latest
+    restart: unless-stopped
+    ports:
+      - "${MAILPIT_SMTP_PORT:-1025}:1025"
+      - "${MAILPIT_UI_PORT:-8025}:8025"
+    environment:
+      MP_MAX_MESSAGES: 500
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+      target: dev
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      DATABASE_URL: ${DATABASE_URL:-postgres://b2b:b2b_dev_password@postgres:5432/b2b_matchmaking}
+      JWT_SECRET: ${JWT_SECRET:-change-me}
+      COOKIE_SECRET: ${COOKIE_SECRET:-change-me}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      COOKIE_DOMAIN: ${COOKIE_DOMAIN:-}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:5173}
+      UPLOADS_DIR: /app/uploads
+      PUBLIC_UPLOADS_BASE_URL: ${PUBLIC_UPLOADS_BASE_URL:-http://localhost:4000/uploads}
+      APP_BASE_URL: ${APP_BASE_URL:-http://localhost:5173}
+      SMTP_HOST: ${SMTP_HOST:-mailpit}
+      SMTP_PORT: ${SMTP_PORT:-1025}
+      SMTP_SECURE: ${SMTP_SECURE:-false}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      MAIL_FROM: ${MAIL_FROM:-CREATE <noreply@create-cluster.local>}
+      PORT: 4000
+    ports:
+      - "${API_PORT:-4000}:4000"
+    volumes:
+      - ./apps/api/src:/app/apps/api/src
+      - ./packages/shared/src:/app/packages/shared/src
+      - api_uploads:/app/uploads
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      target: dev
+    restart: unless-stopped
+    depends_on:
+      - api
+    environment:
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:4000}
+    ports:
+      - "${WEB_PORT:-5173}:5173"
+    volumes:
+      - ./apps/web/src:/app/apps/web/src
+      - ./apps/web/public:/app/apps/web/public
+      - ./apps/web/index.html:/app/apps/web/index.html
+      - ./apps/web/vite.config.ts:/app/apps/web/vite.config.ts
+      - ./apps/web/tailwind.config.ts:/app/apps/web/tailwind.config.ts
+      - ./apps/web/postcss.config.cjs:/app/apps/web/postcss.config.cjs
+      - ./packages/shared/src:/app/packages/shared/src
+
+volumes:
+  postgres_data:
+  api_uploads:

@@ -1,0 +1,24 @@
+# Abhaengigkeiten und Build-Artefakte werden im Image frisch erzeugt.
+**/node_modules
+**/dist
+**/build
+
+# Lokale Konfiguration / Secrets niemals ins Image.
+.env
+.env.*
+!.env.example
+
+# VCS / Editor / OS
+.git
+.gitignore
+.editorconfig
+**/.DS_Store
+**/*.log
+
+# Caches
+**/.vite
+**/.cache
+coverage
+
+# Container-bezogene Dateien werden nicht in den Build-Kontext gebraucht.
+docker-compose.yml

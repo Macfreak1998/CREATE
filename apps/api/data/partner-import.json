@@ -1,0 +1,3177 @@
+{
+  "version": 1,
+  "exported_at": "2026-07-20T13:37:45.662119+00:00",
+  "taxonomies": {
+    "industries": [
+      {
+        "slug": "beratung-und-dienstleistungen",
+        "name": "Beratung und Dienstleistungen"
+      },
+      {
+        "slug": "energieerzeugung",
+        "name": "Energieerzeugung"
+      },
+      {
+        "slug": "forschung-und-entwicklung",
+        "name": "Forschung und Entwicklung"
+      },
+      {
+        "slug": "kunststoff-chemikalien-rohstofferzeugung",
+        "name": "Kunststoff-, Chemikalien- und Rohstofferzeugung"
+      },
+      {
+        "slug": "kunststoffmaschinenbau",
+        "name": "Kunststoffmaschinenbau"
+      },
+      {
+        "slug": "kunststoffrecycling",
+        "name": "Kunststoffrecycling inkl. Entsorgung und Sortierung"
+      },
+      {
+        "slug": "kunststoffverarbeitung-compoundeur",
+        "name": "Kunststoffverarbeitung, Compoundeur"
+      },
+      {
+        "slug": "landwirtschaftliche-rohstoffproduktion",
+        "name": "Landwirtschaftliche Rohstoffproduktion"
+      },
+      {
+        "slug": "psa-herstellung",
+        "name": "PSA Herstellung"
+      },
+      {
+        "slug": "verarbeitung-vertrieb-endprodukte",
+        "name": "Verarbeitung und Vertrieb von Endprodukten"
+      }
+    ],
+    "machines": [],
+    "technologies": [
+      {
+        "slug": "kunststofftechnik",
+        "name": "Kunststofftechnik"
+      }
+    ],
+    "knowhows": [
+      {
+        "slug": "chemie-erneuerbarer-materialien",
+        "name": "Chemie erneuerbarer Materialien"
+      },
+      {
+        "slug": "kreislaufschliessung-biomasse",
+        "name": "Kreislaufschließung durch Biomasse als Rohstoff und Kompostierbarkeit"
+      },
+      {
+        "slug": "marktzugang-best-practices",
+        "name": "Marktzugang und Best Practices"
+      },
+      {
+        "slug": "materialentwicklung-verarbeitung",
+        "name": "Materialentwicklung und Verarbeitung"
+      },
+      {
+        "slug": "nachhaltigkeitsbetrachtung",
+        "name": "Nachhaltigkeitsbetrachtung"
+      }
+    ],
+    "sizes": [
+      {
+        "slug": "1-10",
+        "name": "1 - 10 Mitarbeitende",
+        "sort_order": 10
+      },
+      {
+        "slug": "11-50",
+        "name": "11 - 50 Mitarbeitende",
+        "sort_order": 20
+      },
+      {
+        "slug": "51-250",
+        "name": "51 - 250 Mitarbeitende",
+        "sort_order": 30
+      },
+      {
+        "slug": "251-1000",
+        "name": "251 - 1.000 Mitarbeitende",
+        "sort_order": 40
+      },
+      {
+        "slug": "gt-1000",
+        "name": "mehr als 1.000 Mitarbeitende",
+        "sort_order": 50
+      }
+    ]
+  },
+  "companies": [
+    {
+      "name": ".lichtl Ethics & Brands GmbH",
+      "display_name": null,
+      "description": ".lichtl ist eine Unternehmensberatung , die seit mehr als 25 Jahre auf Nachhaltigkeits-Marketing und -Kommunikation spezialisiert ist. In diesem Zusammenhang hat .lichtl zahlreiche Kommunikationsprojekte zur Biotonne in Zusammenarbeit mit Kommunen, nationalen Verbänden und Unternehmen realisiert. Ein konkretes Ergebnis dieser Arbeit ist die Entwicklung und der Direktvertrieb eines  aufmerksamkeitsstarken Vorsortierbehälters für organische Küchenabfälle, der seit 2024 aus erneuerbaren Rohstoffen gefertigt wird. Bereits seit den 1990er Jahren befasst sich .lichtl mit der Vermarktung von Produkten aus innovativen erneuerbaren Rohstoffen.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "65719",
+      "city": "Hofheim/Taunus",
+      "country": "Deutschland",
+      "contact_name": "Martin",
+      "contact_position": "Vertrieb des biobasierten BiOTONi (entwickelt im UCB-Projekt reGIOcycle) / Nachhaltigkeitskommunikation",
+      "contact_email": "m.lichtl@lichtl.com",
+      "contact_phone": "+49 172 8338 582",
+      "user_email": "m.lichtl@lichtl.com",
+      "size_slug": null,
+      "industry_slugs": [
+        "beratung-und-dienstleistungen"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 9,
+          "notes": "Biobasierter Bioabfall-Vorsortierbehälter; Vermarktung von erneuerbaren Rohstoffen"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Biobasierter Bioabfall-Vorsortierbehälter; Vermarktung von erneuerbaren Rohstoffen",
+          "notes": null,
+          "trl": 9
+        }
+      ]
+    },
+    {
+      "name": "Albrecht Dinkelaker, Polymer- und Produktentwicklung",
+      "display_name": null,
+      "description": "Kompostierbares, wasserfestes, thermoplastisches Werkstoffsystem. Für Biopolymere universell einsetzbare Farbmasterbatches. BioMineralische / Mineralische Direktcompounds. NaturfaseBioComposite. www.caprowax-p.eu",
+      "website_url": null,
+      "street": null,
+      "postal_code": "60437",
+      "city": "Frankfurt am Main",
+      "country": "Deutschland",
+      "contact_name": "Albrecht Dinkelaker",
+      "contact_position": "Produktentwicklung",
+      "contact_email": "info@polyfea2.de",
+      "contact_phone": "069 76893910",
+      "user_email": "info@polyfea2.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoffverarbeitung-compoundeur"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 9,
+          "notes": "Biobasierte und biologisch abbaubare Compounds und Farbmasterbatches"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Biobasierte und biologisch abbaubare Compounds und Farbmasterbatches",
+          "notes": null,
+          "trl": 9
+        }
+      ]
+    },
+    {
+      "name": "ALLOD Werkstoff GmbH & Co. KG",
+      "display_name": null,
+      "description": "ALLOD Werkstoff GmbH & Co. KG\n\nALLOD versteht sich als Entwicklungspartner für maßgeschneiderte thermoplastische Compounds für die Kunststoffindustrie. Kerngeschäft ist die Entwicklung, Herstellung und der Vertrieb Thermoplastischer Elastomere (TPE) unter dem Markennamen ALLRUNA®.\n\nDer Klimawandel ist eine der großen Herausforderungen unserer Zeit. Die Umstellung auf nachhaltige, zirkuläre Prozesse sehen wir deshalb als unsere Verpflichtung. Die Treibhausgasneutralität bis 2045 erfordert enge Zusammenarbeit mit unseren Kunden und unseren Lieferanten.\n\nBei der Entwicklung neuer Materialien achten wir auf einen möglichst geringen CO2-Fußabdruck von allen eingesetzten Komponenten. Die zur Herstellung unserer Produkte benötigte Energie beziehen wir zu 73% aus erneuerbaren Quellen. Der Anteil des selbst erzeugten, erneuerbaren Stroms wird beständig erhöht, um den Ausstoß von Treibhausgasen weiter zu reduzieren.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "91593",
+      "city": "Burgbernheim",
+      "country": "Deutschland",
+      "contact_name": "Si-Hong Luu",
+      "contact_position": "Einkauf",
+      "contact_email": "si-hong.luu@allod.com",
+      "contact_phone": null,
+      "user_email": "si-hong.luu@allod.com",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoffverarbeitung-compoundeur"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "ASTORPLAST Klebetechnik GmbH",
+      "display_name": null,
+      "description": "Wir sind Hersteller selbstklebender Erzeugnisse und rüsten auch Kundenmaterialien im Lohn selbstklebend aus. Unsere Wachstumsgeschäftsfelder sind die Bereiche Luft- und Winddicht und Profiltechnik. Dabei setzen wir heute wässrige Acrylatdispersionen, UV-C vernetzende Acrylat-Schmelzkleber und SIS/SBS-basierende Hotmeltkleber ein, die alle auf Petrolchemie basieren.\n\nWir sind natürlich interessiert, in welche Richtung die Entwicklung der Rohstoffe in Zukunft gehen wird und welche Möglichkeiten sich in Zukunft auch in diesem Bereich für uns ergeben werden.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "73553",
+      "city": "Alfdorf",
+      "country": "Deutschland",
+      "contact_name": "Sigurd Kugler",
+      "contact_position": "Entwicklungsleiter",
+      "contact_email": "s.kugler@astorplast.de",
+      "contact_phone": "0717230335",
+      "user_email": "s.kugler@astorplast.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "verarbeitung-vertrieb-endprodukte"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "Behrentin Communication GmbH",
+      "display_name": null,
+      "description": "Behrentin Communication GmbH - Vermarktung nachhaltiger Innovationen in der Bioökonomie\n\nDie Behrentin Communication GmbH ist eine auf Bioökonomie spezialisierte Beratungs- und Kommunikationsagentur, die Unternehmen und Kommunen bei der Vermarktung nachhaltiger Produkte aus nachwachsenden Rohstoffen unterstützt. Unser Fokus liegt auf der Entwicklung und Implementierung von Strategien zur Positionierung biobasierter Innovationen in den Bereichen Biokunststoffe, Textilien, Verpackung und Bauwesen.\n\nForschung und Entwicklung in der Bioökonomie\n\nIn Zusammenarbeit mit der RWTH Aachen sind wir an einem Forschungsprojekt zur Nutzung von Hanf in der Textilbranche beteiligt. Das Ziel ist, die Potenziale von Hanf als nachhaltigem Rohstoff zu erforschen und industrielle Anwendungen zu fördern.\n\nPartnerschaft mit der Stadt Aachen - Oecherlab 2025\n\nAb April 2025 präsentieren wir für vier Monate gemeinsam mit der Stadt Aachen das Thema Hanf in der Bioökonomie im Oecherlab. Unternehmen, Medien und Besucher können sich hier über nachhaltige Innovationen informieren. Vorgestellt werden unter anderem biobasierte Lösungen für die Bereiche Bauwesen, Biokunststoffe und Textilien",
+      "website_url": null,
+      "street": null,
+      "postal_code": "54576",
+      "city": "Hillesheim",
+      "country": "Deutschland",
+      "contact_name": "Dieter Behrentin",
+      "contact_position": "Geschäftsführer",
+      "contact_email": "d.behrentin@behrentin.com",
+      "contact_phone": "065939809900",
+      "user_email": "d.behrentin@behrentin.com",
+      "size_slug": null,
+      "industry_slugs": [
+        "beratung-und-dienstleistungen"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "Bender GmbH & Co. KG",
+      "display_name": null,
+      "description": "Bender ist einer der weltweit führenden Anbieter für Lösungen, die elektrische Anlagen intelligent und sicherer machen.\nWir sorgen in Krankenhäusern, im Bergbau, auf Schiffen, in Fabriken, Rechenzentren, Wind- und Solaranlagen, bei der Bahn oder in Elektro-Autos für intelligenten und sicheren Strom.\n\nAls weltweit agierendes Familienunternehmen mit mehr als 1.350 Mitarbeiterinnen und Mitarbeitern, über 75 Jahren Erfahrung und kontinuierlicher Forschung und Entwicklung liefern wir somit innovative Antworten auf die Fragen der Energietechnik von morgen.\n\nBender hat sich als verantwortungsbewusstes Familienunternehmen der nachhaltigen Wirtschaft verpflichtet.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "35305",
+      "city": "Grünberg",
+      "country": "Deutschland",
+      "contact_name": "Mansoor Ahmad",
+      "contact_position": null,
+      "contact_email": "mansoor.ahmad@bender.de",
+      "contact_phone": null,
+      "user_email": "mansoor.ahmad@bender.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "verarbeitung-vertrieb-endprodukte"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "BHYO GmbH",
+      "display_name": null,
+      "description": "Bhyo ist ein technologieorientiertes Start-up mit Sitz in der Metropolregion Rhein-Neckar und Mitglied im Chemie-Cluster Bayern. Das Unternehmen entwickelt modulare Anlagen zur dezentralen Erzeugung von CO₂-negativem Wasserstoff sowie zur stofflichen Nutzung biogener Reststoffe.\n\nDie Kernkompetenz liegt in einem innovativen thermochemischen Verfahren, das organische Reststoffe wie Klärschlamm, Biomüll oder verunreinigte Biomassen in Wasserstoff, CO₂, nutzbare Wärme und weitere Zwischenprodukte überführt. Dabei wird nicht nur Energie erzeugt, sondern auch aktiv CO₂ abgeschieden, PFAS unschädlich gemacht und Mikroplastik entfernt.\n\nBezug zur Bioökonomie: Die Technologie von Bhyo steht für eine ressourcenschonende und zirkuläre Wirtschaft. Sie erschließt biogene Abfallstoffe als neue Rohstoffquelle, schließt Stoffkreisläufe und verbindet Energie- mit Stoffstromwende. Damit schlägt Bhyo eine Brücke zwischen chemischer Industrie, Kreislaufwirtschaft und regionaler Energiewende.\n\nRelevante Schnittstellen zu CREATE:\n\nGrüne Chemie: Nutzung von Synthesegas für Folgeprodukte wie Methanol, E-Fuels oder biobasierte Kunststoffe",
+      "website_url": null,
+      "street": null,
+      "postal_code": "67069",
+      "city": "Ludwigshafen",
+      "country": "Deutschland",
+      "contact_name": "Stefan Rößler",
+      "contact_position": "Business Development",
+      "contact_email": "stefan.roessler@bhyo.de",
+      "contact_phone": null,
+      "user_email": "stefan.roessler@bhyo.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoff-chemikalien-rohstofferzeugung"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 4,
+          "notes": "Denzentrale Wasserstofferzeugung aus biogenen Reststoffen"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Denzentrale Wasserstofferzeugung aus biogenen Reststoffen",
+          "notes": null,
+          "trl": 4
+        }
+      ]
+    },
+    {
+      "name": "Biokunststoff Handel Martin Schwemmer",
+      "display_name": null,
+      "description": "Biomasseumwandlung Bio Benzin und Kunststoffherstellung PLA\n\n.Als Ihr Partner für Biokunststoffe liefern wir nachhaltige Rohstofflösungen für Industrie und Design. Weniger CO₂, weniger Erdöl, volle Performance!\n\nWir produzieren reinstes PLA aus zellulosehaltigen Reststoffen für verschiedenste thermoplastische Anwendungen und Compoundieren dies nach Kundenwunsch - und kümmern uns auch um das Recycling.\n\nBiokunststoffhandel - Intelligent, effizient und konsequent grün.",
+      "website_url": "https://www.biokunststoffhandel.de",
+      "street": "Bürgerstrasse 22",
+      "postal_code": "63225",
+      "city": "Langen",
+      "country": "Deutschland",
+      "contact_name": "Martin Schwemmer",
+      "contact_position": "CEO",
+      "contact_email": "biokunststoffhandel@gmail.com",
+      "contact_phone": "01752835019",
+      "user_email": "biokunststoffhandel@gmail.com",
+      "size_slug": "1-10",
+      "industry_slugs": [
+        "kunststoff-chemikalien-rohstofferzeugung",
+        "forschung-und-entwicklung",
+        "beratung-und-dienstleistungen",
+        "kunststoffverarbeitung-compoundeur",
+        "verarbeitung-vertrieb-endprodukte",
+        "energieerzeugung"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": null,
+          "notes": null
+        }
+      ],
+      "knowhows": [
+        {
+          "slug": "materialentwicklung-verarbeitung",
+          "name": "Materialentwicklung und Verarbeitung",
+          "score": 90
+        },
+        {
+          "slug": "nachhaltigkeitsbetrachtung",
+          "name": "Nachhaltigkeitsbetrachtung",
+          "score": 90
+        },
+        {
+          "slug": "marktzugang-best-practices",
+          "name": "Marktzugang und Best Practices",
+          "score": 90
+        },
+        {
+          "slug": "chemie-erneuerbarer-materialien",
+          "name": "Chemie erneuerbarer Materialien",
+          "score": 90
+        },
+        {
+          "slug": "kreislaufschliessung-biomasse",
+          "name": "Kreislaufschließung durch Biomasse als Rohstoff und Kompostierbarkeit",
+          "score": 90
+        }
+      ],
+      "demos": [],
+      "services": [
+        {
+          "title": "Beratung und Entwicklung von Anlagen für PLA und Nebenströme aus Cellulose",
+          "description": null,
+          "sort_order": 0
+        }
+      ],
+      "technology_suggestions": [
+        {
+          "name": "PLA Compound für Verpackungen",
+          "notes": "Neuartiges Compound für Verpackungen mit sehr guter Barriere und Verarbeitbarkeit",
+          "trl": 5
+        }
+      ]
+    },
+    {
+      "name": "Biomer",
+      "display_name": null,
+      "description": "Unser Unternehmen transformiert den Biopolyester in stabile Bioplaste\nAnliegen:\n\"- EU-Parlament: single use für PHB\n- falsche Ansichten bei PHB: kein Thermoplast, hat nur thermoplastische \nEigenschaften. Braucht Additive: biobasiert?\"",
+      "website_url": null,
+      "street": null,
+      "postal_code": "65824",
+      "city": "Schwalbach",
+      "country": "Deutschland",
+      "contact_name": "Urs Hänggi",
+      "contact_position": "GF",
+      "contact_email": "haenggi@biomer.de",
+      "contact_phone": "0157 8188 0108",
+      "user_email": "haenggi@biomer.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoff-chemikalien-rohstofferzeugung"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 9,
+          "notes": "Thermoplastische PHB-Compounds"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Thermoplastische PHB-Compounds",
+          "notes": null,
+          "trl": 9
+        }
+      ]
+    },
+    {
+      "name": "Bioplasmar GmbH",
+      "display_name": null,
+      "description": "Die Bioplasmar GmbH mit Sitz in Bergen-Thalmannsfeld, Bayern, ist ein innovatives Unternehmen im Bereich der Bioökonomie, das sich auf die Entwicklung und Produktion biologisch abbaubarer Biokomposite aus regionalen organischen Abfällen spezialisiert hat. Durch modernste Technologien verwandeln wir Grünabfälle in nachhaltige Materialien, die als umweltfreundliche Alternativen zu konventionellen Kunststoffen dienen.\nUnsere Biowerkstoffe lassen sich nahtlos in bestehende industrielle Prozesse integrieren und finden Anwendung in verschiedenen Branchen wie Landwirtschaft, Gartenbau, Verpackung und Bauwesen. Beispielsweise bieten wir biologisch abbaubare Pflanzgefäße an, die sich im Boden zersetzen und dabei die Bodengesundheit fördern. Unsere Materialien tragen zur Reduzierung von Plastikmüll und CO₂-Emissionen bei und unterstützen die Prinzipien der Kreislaufwirtschaft.\nZusätzlich bieten wir Compoundierdienstleistungen an – allerdings ausschließlich für Materialien, die nachhaltig sind und den Grundprinzipien der Bioökonomie entsprechen. Dabei unterstützen wir Partnerunternehmen bei der Entwicklung und Herstellung nachhaltiger Werkstofflösungen auf Basis biologischer oder recycelbarer Rohstoffe.\n\nIm Kontext des Innovationsclusters CREATE sehen wir vielfältige Synergien, insbesondere in den Bereichen nachhaltige Materialentwicklung, Ressourceneffizienz und Förderung der Bioökonomie. Unsere Expertise in der Verarbeitung organischer Abfälle zu hochwertigen Biokompositen kann wertvolle Impulse für gemeinsame Forschungs- und Entwicklungsprojekte liefern. Zudem sind wir offen für Kooperationen, um innovative Lösungen für eine nachhaltigere Zukunft zu gestalten.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "91790",
+      "city": "Bergen-Thalmannsfeld",
+      "country": "Deutschland",
+      "contact_name": "Fabrizio Ranieri",
+      "contact_position": "Director of sales",
+      "contact_email": "fabrizio@bioplasmar.com",
+      "contact_phone": "+491602943841",
+      "user_email": "fabrizio@bioplasmar.com",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoff-chemikalien-rohstofferzeugung"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 9,
+          "notes": "Biologisch abbaubarer Compound aus regionalen organischen Abfällen"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Biologisch abbaubarer Compound aus regionalen organischen Abfällen",
+          "notes": null,
+          "trl": 9
+        }
+      ]
+    },
+    {
+      "name": "Bioscovery ® - eine Brand der Biofibre GmbH",
+      "display_name": null,
+      "description": "Die Biofibre GmbH – 2011 gegründet und mittlerweile ein Joint Venture der Steinl Group und der Anvis Plastics – fokussiert sich auf Aktivitäten im Bereich der stofflichen Nutzung nachwachsender Rohstoffe.\n\nSämtliche naturfaserverstärkte Biowerkstoffe und Produkte können mit thermoplastischen Standardverfahren, wie Spritzgießen und Extrudieren zu Endprodukten weiterverarbeitet werden. Für uns ist die ständige Weiterentwicklung unserer Technologien Grundstein unserer Zukunftsfähigkeit.\n\nDerzeit entwickeln wir zwei kontinuierliche Extrusionsverfahren zur schonenden und homogenen Einarbeitung von Mikrofibrillierter Cellulose (in der Patentbeantragung) sowie zur Hydrophobierung von Naturfasern (erteiltes Patent EP3656524B1). Teilweise werden diese momentan vom Land Bayern gefördert und unterstreichen den hohen Innovationscharakter.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "94315",
+      "city": "Straubing",
+      "country": "Deutschland",
+      "contact_name": "Christoph Habel",
+      "contact_position": "Business Development",
+      "contact_email": "christoph.habel@bioscovery.com",
+      "contact_phone": null,
+      "user_email": "christoph.habel@bioscovery.com",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoffverarbeitung-compoundeur"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 9,
+          "notes": "Thermoplastische, naturfaserverstärkte Biowerkstoffe; Neuentwicklung von kontinuierlicher, schonender Extrusion und Hydrophobierung von Naturfasern"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Thermoplastische, naturfaserverstärkte Biowerkstoffe; Neuentwicklung von kontinuierlicher, schonender Extrusion und Hydrophobierung von Naturfasern",
+          "notes": null,
+          "trl": 9
+        }
+      ]
+    },
+    {
+      "name": "BIOVOX GmbH",
+      "display_name": null,
+      "description": "Die BIOVOX GmbH stellt nachhaltige Biokunststoffcompounds f¸r Medizintechnik, Pharma & \nLabor her. Die Compounds sparen bis zu 85% CO2-Emissionen gegen¸ber herkˆmmlichen \nKunststoffen und haben das Potential in einem geschlossenen Kreislauf recycelt zu werden. \nAlle BIOVOX Compounds sind auf Biokompatibilit‰t bis MDR Risikoklasse IIb gepr¸ft. BIOVOX \nist der erste Biokunststoffanbieter, der nach der Norm f¸r medizinische Qualit‰tsmanagement_x0002_systeme ISO 13485 zertifiziert ist.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "64293",
+      "city": "Darmstadt",
+      "country": "Deutschland",
+      "contact_name": "Vinzenz Nienhaus",
+      "contact_position": null,
+      "contact_email": "vinzenz.nienhaus@biovox.systems",
+      "contact_phone": null,
+      "user_email": "vinzenz.nienhaus@biovox.systems",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoffverarbeitung-compoundeur"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 9,
+          "notes": "Nahchhaltige Biokunststoffcompounds für die Medizintechnik"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Nahchhaltige Biokunststoffcompounds für die Medizintechnik",
+          "notes": null,
+          "trl": 9
+        }
+      ]
+    },
+    {
+      "name": "BIOWERT Industrie GmbH",
+      "display_name": "BIOWERT",
+      "description": "Biowert entwickelt nachhaltige Biokunststoffe aus regionalem Wiesengras. In einer einzigartigen Bioraffinerie entstehen recyclingfähige Materialien, Ökostrom und Dünger – nahezu ohne Abfall. So reduziert Biowert CO₂, ersetzt Erdöl und setzt neue Maßstäbe für eine echte Kreislaufwirtschaft.",
+      "website_url": "https://www.biowert.com",
+      "street": "Ochsenwiesenweg 4",
+      "postal_code": "64395",
+      "city": "Brensbach",
+      "country": "Deutschland",
+      "contact_name": "Jens Meyes zu Drewer",
+      "contact_position": "GF",
+      "contact_email": "j.meyerzudrewer@biowert.com",
+      "contact_phone": "06161 8066 3216",
+      "user_email": "j.meyerzudrewer@biowert.com",
+      "size_slug": "11-50",
+      "industry_slugs": [
+        "kunststoff-chemikalien-rohstofferzeugung",
+        "kunststoffverarbeitung-compoundeur"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 9,
+          "notes": "Grasfasergefüllte biobasierte oder rezyklierte Kunststoffe"
+        }
+      ],
+      "knowhows": [
+        {
+          "slug": "materialentwicklung-verarbeitung",
+          "name": "Materialentwicklung und Verarbeitung",
+          "score": 70
+        },
+        {
+          "slug": "nachhaltigkeitsbetrachtung",
+          "name": "Nachhaltigkeitsbetrachtung",
+          "score": 70
+        },
+        {
+          "slug": "marktzugang-best-practices",
+          "name": "Marktzugang und Best Practices",
+          "score": 90
+        },
+        {
+          "slug": "chemie-erneuerbarer-materialien",
+          "name": "Chemie erneuerbarer Materialien",
+          "score": 70
+        },
+        {
+          "slug": "kreislaufschliessung-biomasse",
+          "name": "Kreislaufschließung durch Biomasse als Rohstoff und Kompostierbarkeit",
+          "score": 70
+        }
+      ],
+      "demos": [],
+      "services": [
+        {
+          "title": "Materialentwicklung und Produktion",
+          "description": null,
+          "sort_order": 0
+        },
+        {
+          "title": "Lohn-Compoundierung",
+          "description": null,
+          "sort_order": 1
+        }
+      ],
+      "technology_suggestions": [
+        {
+          "name": "Bio-Raffinerie",
+          "notes": "Herstellung von Naturfasern aus Gras aus dem Umland",
+          "trl": 8
+        },
+        {
+          "name": "Compoundierung",
+          "notes": "Kunststoff-Compoundierung von Bio-Kunststoffen und Recycling-Kunststoffen mit Naturfasern (Gras, Stroh, Holz)",
+          "trl": 8
+        },
+        {
+          "name": "Fermenter",
+          "notes": "Herstellung von Bio-Polyestern",
+          "trl": 4
+        }
+      ]
+    },
+    {
+      "name": "Bürkert Werke GmbH & Co. KG",
+      "display_name": null,
+      "description": "Bürkert ist ein weltweit führender Hersteller von Mess-, Steuer- und Regelungssystemen für Flüssigkeiten und Gase. Die Produkte von Bürkert kommen in den unterschiedlichsten Bereichen zum Einsatz: von der Pharmaindustrie und Biotechnologie über Medizin- und Labortechnik bis hin zur Lebensmittel- und Getränkeindustrie.\n\nIhr Vorhaben steht im Einklang mit unserem Unternehmensziel, nachhaltige und umweltfreundliche Produkte zu entwickeln und einzusetzen. Mit unserer Erfahrung zu Produktanforderungen in verschiedensten Anwendungen sowie der breiten Marktkenntnis möchten wir gerne einen Beitrag zum Erfolg Ihres Vorhabens leisten.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "76131",
+      "city": "Karlsruhe",
+      "country": "Deutschland",
+      "contact_name": "Yanneck Deller",
+      "contact_position": null,
+      "contact_email": "yanneck.deller@burkert.com",
+      "contact_phone": null,
+      "user_email": "yanneck.deller@burkert.com",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoffmaschinenbau"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "C.A.R.M.E.N. e.V.",
+      "display_name": null,
+      "description": "C.A.R.M.E.N. e.V., das Centrale Agrar-Rohstoff Marketing- und Energie_x0002_Netzwerk, wurde 1992 gegr¸ndet und ist die bayerische \nKoordinierungsstelle f¸r Nachwachsende Rohstoffe, Erneuerbare \nEnergien und nachhaltige Ressourcennutzung. C.A.R.M.E.N. e.V. b¸ndelt \nInformationen und bietet kostenfreie, neutrale Beratung f¸r alle \nInteressengruppen. Das Netzwerk ist Teil des Kompetenzzentrums f¸r \nNachwachsende Rohstoffe (KoNaRo) in Straubing.\nC.A.R.M.E.N. e.V. hat langj‰hrige Erfahrung im Wissenstransfer, engagiert \nsich in der Organisation von Veranstaltungen und ist seit vielen Jahren im \nBereich Bildung aktiv. Zu den Angeboten z‰hlt unter anderem die \nWanderausstellung ÑBioˆkonomie zum Anfassenì die eine breite Auswahl \nan nachhaltigen Produkten vorstellt. Auflerdem werden F¸hrungen durch \ndie Dauerausstellung ÑNachwachsende Rohstoffe ñ von der Pflanze zur \nNutzungì in Straubing angeboten. Daneben unterst¸tzt C.A.R.M.E.N. e.V. \nBildungseinrichtungen durch spezielle Angebote (zum Beispiel Nawaro_x0002_Box, Schulungen f¸r Lehrende, Vortr‰ge, Workshops, Webseminare).",
+      "website_url": null,
+      "street": null,
+      "postal_code": "94315",
+      "city": "Straubing",
+      "country": "Deutschland",
+      "contact_name": "Monika Wels",
+      "contact_position": "CREATE-Projektmanagerin",
+      "contact_email": "monika.wels@carmen-ev.bayern.de",
+      "contact_phone": null,
+      "user_email": "monika.wels@carmen-ev.bayern.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "beratung-und-dienstleistungen"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "carbonauten GmbH",
+      "display_name": null,
+      "description": "carbonauten entwickelt und produziert CO2-negative Polymer-Compounds. Diese verfügen über verbesserte Eigenschaften, messbare CO2-Senken- und -Reduzierungen in Scope 2 + 3 und sind günstig. Dazu werden in dezentralen Fabriken holzige Biomassereste pyrolytisch karbonisiert. Die Pflanzenkohle wird in den Fabriken zu technischen Biokohlenstoffen veredelt und mit Additiven und u. a. mit Biopolymeren compoundiert. Der Anteil an Biokohlenstoff im Compound beträgt derzeit zwischen 25 und 50 %. Dies führt in der CO2-Bilanzierung zu negativen Werten. Die Produktion der Compounds ist klimaneutral, da die Energie für die Anlagen und Maschinen aus dem Synthesegas der Pyrolyse gewonnen wird.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "89537",
+      "city": "Giengen",
+      "country": "Deutschland",
+      "contact_name": "Babu Reddy",
+      "contact_position": null,
+      "contact_email": "babu.reddy@carbonauten.com",
+      "contact_phone": null,
+      "user_email": "babu.reddy@carbonauten.com",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoff-chemikalien-rohstofferzeugung"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 9,
+          "notes": "Pflanzenkohle als biobasierter Rußersatz"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Pflanzenkohle als biobasierter Rußersatz",
+          "notes": null,
+          "trl": 9
+        }
+      ]
+    },
+    {
+      "name": "Carl Zeiss Meditec AG",
+      "display_name": null,
+      "description": "Die Ophthalmologie und die Mikrochirurgie nachhaltig zu prägen, ist das langfristige Ziel der Carl Zeiss Meditec Gruppe. Mit dem Anspruch, neue Wege zu gehen, gelingt es unseren weltweiten Teams, innovative Technologien, digitale Lösungen und spezifische Applikationen für die Arbeitsabläufe von Kundinnen und Kunden zu entwickeln, die es ihnen beispielsweise ermöglichen, Sehkraft bis ins hohe Alter zu erhalten und Gehirntumore zu bekämpfen.\nFür den Markt der Augenheilkunde bietet der strategische Geschäftsbereich (SBU) Ophthalmology eines der umfangreichsten Produktportfolios. Es umfasst Systeme sowie Verbrauchsmaterialien für die Kataraktchirurgie und die Hornhautrefraktion, bietet Produkte und Lösungen für das Management chronischer Augenkrankheiten sowie für die Diagnose und Behandlungen von Erkrankungen am hinteren Augenabschnitt.\n\nDie Produkte für die Kataraktchirurgie enthalten teilweise viele Kunststoffkomponenten, für die wir nachhaltigere Lösungen suchen. Für uns sind die Fachforen \"Materialentwicklung und -verarbeitung\" und \"best practice\" interessant, wenn es auch die Medizintechnik mit abdeckt.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "10589",
+      "city": "Berlin",
+      "country": "Deutschland",
+      "contact_name": "Ramona Braun",
+      "contact_position": null,
+      "contact_email": "ramona.braun@zeiss.com",
+      "contact_phone": null,
+      "user_email": "ramona.braun@zeiss.com",
+      "size_slug": null,
+      "industry_slugs": [
+        "verarbeitung-vertrieb-endprodukte"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "Chemie-Cluster Bayern GmbH",
+      "display_name": null,
+      "description": "Im Chemie-Cluster Bayern vernetzen sich ¸ber 100 Unternehmen, Startups und Forschungseinrichtungen \naus allen Bereichen der Chemie und dar¸ber hinaus. Wir realisieren die Entwicklung, sowie den Transfer \nwissenschaftlicher Erkenntnisse in industrielle Anwendungen und unterst¸tzen Clustermitglieder bei \nFˆrdermittelantr‰gen. Als assoziierter Cluster-Partner f¸r CREATE sehen wir vielversprechende \nMˆglichkeiten strategische Partnerschaften mit namhaften Partnerunternehmen und -institutionen entlang \ndes gesamten Lebenszyklus von (Bio)Kunststoffprodukten aufzubauen. Zudem kˆnnen wir gezielte \nKommunikationsmaflnahmen zur Bekanntmachung und Steigerung der ˆffentlichen Wahrnehmung des \nProjektvorhabens beitragen.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "80336",
+      "city": "München",
+      "country": "Deutschland",
+      "contact_name": "Georg Weig",
+      "contact_position": null,
+      "contact_email": "weig@chemiecluster-bayern.de",
+      "contact_phone": null,
+      "user_email": "weig@chemiecluster-bayern.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "beratung-und-dienstleistungen"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "Cluster Nanotechnologie",
+      "display_name": null,
+      "description": "Der Cluster Nanotechnologie ist eine zentrale Anlaufstelle für Nanotechnologie und vernetzt gezielt Kompetenzen aus Wirtschaft, Wissenschaft, Politik und Lehre. Durch Kooperationsnetzwerke und individuelle Dienstleistungen wie Seminare, Ideen-Workshops, Förderakquise und Projektmanagement fördert er den effizienten Transfer von Forschungs- und Entwicklungs-Ergebnissen in marktfähige Produkte. Schwerpunkte umfassen Design und Synthese von Nano- und hybriden Materialien, Entwicklung von Prozesstechnologien, Einrichtung von Analytik und Qualitätskontrolle sowie zielorientierte Kommunikation von Nanoprodukten inklusive Chancen- und Risikobewertung. Bioökonomie spielt in Netzwerken wie nanoInk und NanoCarbon eine Schlüsselrolle. Hier entstehen in Kooperationen mit den Netzwerkpartnern innovative Lösungen, etwa bioabbaubare Kunststoffe.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "97074",
+      "city": "Würzburg",
+      "country": "Deutschland",
+      "contact_name": "Justus Hermannsdörfer",
+      "contact_position": null,
+      "contact_email": "justus.hermannsdoerfer@nanoinitiative-bayern.de",
+      "contact_phone": null,
+      "user_email": "justus.hermannsdoerfer@nanoinitiative-bayern.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "beratung-und-dienstleistungen"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "CO2BIOCLEAN GmbH",
+      "display_name": null,
+      "description": "Das Startup CO2BIOCLEAN hat ein Verfahren entwickelt, das CO₂ aus industriellen Emissionen in nachhaltige Polymere umwandelt. Der aus dem Verfahren entstehende Kunststoff PHA ist biologisch abbaubar. Damit wirkt das CO2BIOCLEAN-Verfahren durch den Verzicht auf fossile Rohstoffe sowohl dem Klimawandel als auch der Plastikverschmutzung von Meeren und Umwelt entgegen.\n\nDer Biokunststoff wird im Industriepark Frankfurt-Höchst unter industriellen Bedingungen in einer Pilotanlage hergestellt. Das produzierte Material wird verwendet, um gemeinsam mit Partnerunternehmen Anwendungen zu entwickeln. Im Fokus stehen bisher die Segmente Verpackung, Kosmetik, Landwirtschaft und Textil.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "65760",
+      "city": "Eschborn",
+      "country": "Deutschland",
+      "contact_name": "Josef Glaß",
+      "contact_position": "Josef",
+      "contact_email": "josef.glass@co2bioclean.com",
+      "contact_phone": null,
+      "user_email": "josef.glass@co2bioclean.com",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoff-chemikalien-rohstofferzeugung"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 5,
+          "notes": "PHA-Synthese aus industriellen Emissionen"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "PHA-Synthese aus industriellen Emissionen",
+          "notes": null,
+          "trl": 5
+        }
+      ]
+    },
+    {
+      "name": "comatstudio",
+      "display_name": null,
+      "description": "Comat Studio ist ein zukunftsorientiertes Designstudio, das Forschung, Praxis und Gesellschaft verbindet, um nachhaltige Innovationen sichtbar, verständlich und erlebbar zu machen. Der Fokus liegt darauf, Inhalte durch Gestaltung verständlich zu machen, Komplexität sichtbar zu machen und mit Expertise in Materialinnovation einzigartige Lösungen zu entwickeln. Dies zeigt sich z. B. in Ausstellungen, Messeständen, Workshops, Kommunikations-Formaten oder Pilotprojekten für Unternehmen und Forschungspartner. (Beispielprojekt: Austelltungsentwicklung und Narrativ für FiberFutures/BIOTEXFUTURE – https://www.instagram.com/fiber.futures/)",
+      "website_url": null,
+      "street": null,
+      "postal_code": "90429",
+      "city": "Nürnberg",
+      "country": "Deutschland",
+      "contact_name": "Franziska Seehausen",
+      "contact_position": "Gründerin, Expertin Kommunikation",
+      "contact_email": "fs@comat.studio",
+      "contact_phone": null,
+      "user_email": "fs@comat.studio",
+      "size_slug": null,
+      "industry_slugs": [
+        "beratung-und-dienstleistungen"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "ContainerGrid",
+      "display_name": null,
+      "description": "ContainerGrid entwickelt eine digitale Plattform, die die verschiedenen Akteure fragmentierter und dezentraler Lieferketten miteinander verbindet. Sie optimiert die Logistik durch intelligente Routenplanung und Bündelung. Als digitale Schnittstelle zwischen den Beteiligten ermöglicht sie eine nahtlose Zusammenarbeit. Über unsere Plattform erhalten Kunden Einblicke in die Leistungsfähigkeit der Lieferkette und in Materialflüsse, um Verluste und Abfallproduktion zu reduzieren.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "80797",
+      "city": "München",
+      "country": "Deutschland",
+      "contact_name": "Burkhard Ohs",
+      "contact_position": "Chief Development Officer",
+      "contact_email": "burkhard.ohs@containergrid.de",
+      "contact_phone": "01756784778",
+      "user_email": "burkhard.ohs@containergrid.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "beratung-und-dienstleistungen"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "C-Technologies",
+      "display_name": null,
+      "description": "Selbstständig. Ich beschäftige mich mit der Entwicklung, dem Bau und der Verwendung von Granulat-Extrudern für 3D-Drucker. Diese können alle möglichen Werkstoffe mit z.B. PA11-Pulver (aus Rizinusöl) compoundieren und direkt 3D drucken, ohne Umwege von Granulat oder Filament. Meine Extruder sind sehr klein und leicht in Bezug auf Ausstoß und Leistung. Meine Extruder sind daher ein Muss für alle Entwickler und Kleinanwender. Auch Erfahrung mit zB Kaffesatz mit bioPA11, PLA, WPC. \"Es tut sich wirklich viel in den letzten Jahren\"",
+      "website_url": null,
+      "street": null,
+      "postal_code": "83569",
+      "city": null,
+      "country": "Deutschland",
+      "contact_name": "Wolfgang Schreib",
+      "contact_position": "Forschung und Entwicklung",
+      "contact_email": "w-schreib@t-online.de",
+      "contact_phone": "08038-699170",
+      "user_email": "w-schreib@t-online.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "forschung-und-entwicklung"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 7,
+          "notes": "Granulatextruder für 3D-Druck von Kleinanwendern, unter anderem diverse Biobasierte/-gefüllte Kunststoffe"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Granulatextruder für 3D-Druck von Kleinanwendern, unter anderem diverse Biobasierte/-gefüllte Kunststoffe",
+          "notes": null,
+          "trl": 7
+        }
+      ]
+    },
+    {
+      "name": "Dahlia Biotech",
+      "display_name": null,
+      "description": "Dahlia Biotech ist ein Biotechnologie-Startup mit Sitz in München, das sich der Defossilisierung der chemischen Industrie verschrieben hat. Im Zentrum unserer Arbeit steht die Umwandlung von industriellen Biomasse-Abfällen in leistungsstarke, biobasierte Inhaltsstoffe mittels acetogener Bakterien und energieeffizienter Aufreinigungstechnologien. Unsere Produkte ersetzen fossile Rohstoffe direkt und ermöglichen so eine nachhaltige, lokale und kreislauforientierte Wertschöpfung. Unser Produktfokus sind dabei organische Säuren, Alkohole und Salze. Durch die Nutzung von Neben- und Abfallströmen stärken wir die Resilienz europäischer Lieferketten und leisten einen aktiven Beitrag zum Aufbau einer zukunftsfähigen Bioökonomie.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "85748",
+      "city": "Garching bei München",
+      "country": "Deutschland",
+      "contact_name": "Zora Rerop",
+      "contact_position": "Gründerin",
+      "contact_email": "zora.rerop@dahliabiotech.com",
+      "contact_phone": null,
+      "user_email": "zora.rerop@dahliabiotech.com",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoff-chemikalien-rohstofferzeugung"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 4,
+          "notes": "Energieeffiziente Biomassekonversion zu hochwertigen Plattformchemikalien (Organische Säuren, Alkohole und Salze)"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Energieeffiziente Biomassekonversion zu hochwertigen Plattformchemikalien (Organische Säuren, Alkohole und Salze)",
+          "notes": null,
+          "trl": 4
+        }
+      ]
+    },
+    {
+      "name": "ebalta Kunststoff GmbH",
+      "display_name": null,
+      "description": "Das Unternehmen ebalta steht für mehr als hochleistungsfähige Epoxid- und Polyurethanharze. Wir verstehen uns als den kompetenten Partner mit der nachhaltigen Kunststofflösung. Das haben wir uns zur Mission gemacht. Dafür setzen sich rund 130 engagierte Mitarbeiter*innen ein.\n\nDer Einsatz nachwachsender Rohstoffe – ob als Biopolymer oder als nachwachsende Rohstoffe in Form von Füllmaterial für Verbundstoffe – ist für uns ein wichtiges Entwicklungsthema. Derzeit entwickeln wir ein, soweit technisch möglich, nachhaltiges Material „Green Stuff“ zur Herstellung von Halbzeugen. Aktuell haben wir bereits erste Versuche mit Mustern und Prototypen bei Endanwenderkunden durchgeführt, wir schätzen also das TRL dieses neuen Materials als Level 6 ein.\n\nWeiterhin sind wir bestrebt, unsere anderen Produkte zu nachhaltigeren Varianten weiterzuentwickeln oder mit entsprechenden Alternativen zu ersetzen, ohne Einbußen in der Performance. Ein Beispiel in diesem Fall wäre unser GM1914 für Klettergriffe, das bereits 40 % Rohstoffe aus nachwachsenden Quellen enthält und circa TRL 6–7 erreicht hat.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "91542",
+      "city": "Rothenburg o.d.T.",
+      "country": "Deutschland",
+      "contact_name": "Clemens Saalbach",
+      "contact_position": null,
+      "contact_email": "csaalbach@ebalta.com",
+      "contact_phone": null,
+      "user_email": "csaalbach@ebalta.com",
+      "size_slug": null,
+      "industry_slugs": [
+        "verarbeitung-vertrieb-endprodukte"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 6,
+          "notes": "Entwicklung biobasierter und bio-gefüllter Harze für Halbzeuge und Klettergriffe"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Entwicklung biobasierter und bio-gefüllter Harze für Halbzeuge und Klettergriffe",
+          "notes": null,
+          "trl": 6
+        }
+      ]
+    },
+    {
+      "name": "EDAG Engineering GmbH",
+      "display_name": "EDAG",
+      "description": "Als weltweit führendes unabhängiges Engineering-Unternehmen der Automobilindustrie, entwickelt EDAG serienreife Lösungen für die nachhaltige Mobilität der Zukunft. Mit einer ganzheitlichen Prozesskette Für Eahrzeug- und Karosserieentwicklungen, Batteriesysteme, E-Antriebe, Leistungselektronik und Software, sowie die Planung und Realisierung dazugehörigen Eertigungsanlagen decken wir im Kundenauftragdie Entwicklung von Eahrzeugen, Eahrzeugderivaten und Modulen ab. Unser Leistungsspektrum umfasst zudem Modell_x0002_und Prototypenbau, Eahrzeugvalidierung und [Klein-]5erienfertigung einschließlich der Elektrik und Elektronikentwicklung. Zu unserem Kundenkreis für den Mobilitätssektor zählen die deutschen und weltweit führenden Automobilhersteller sowie Systemlieferanten, Technologiefirmen und Newcomer. Ein wesentlicher Anteil für die Entwicklung von innovativen und nachhaltigen Konzepten für die Mobilität von morgen. Als Entwicklungspartner Für die Automobilindustrie entwickelt EDAG ständig neue Produkte und Produktionsanlagen. Da im Rahmen dieser Entwicklungen, durch die Kunden im stärkeren Maße Nachhaltigkeitskonzepte. Durchführung von Life-Cycle Assesments zur Reduktion des C02-Eußabdrucks der entwickelten Produkte erwartet werden, muss sich EDAG auf diese Anforderung einstellen. Als Entwicklungsdienstleister können wir in den Phasen der Konzeption und Entwicklung von Produkten und Produktionsanlagen einen großen Einfluss auf den späteren C02-Eußabdruck der Produkte unserer Kunden nehmen. Dies wollen wir nutzen und unseren Kunden zukünftig vermehrt nachhaltige Lösungen anbieten. Aus diesem Grund ist EDAG ständig auf der Suche nach neuen Lösungen hinsichtlich der eingesetzten Materialien und Technologie, um diese Ziele zu erreichen. Deshalb sieht EDAG im Ansatz des Innovationsclusters CREATE ein großes Potential, um über die Wahl der richten und nachhaltigen Werkstoffe [hier biobasierte Kunststoffe] einen wertvollen Beitrag zur Erreichung der Ziele zur Bioökonomie leisten zu können.",
+      "website_url": "https://www.edag.com",
+      "street": "Reesbergstr. 1",
+      "postal_code": "36037",
+      "city": "Fulda",
+      "country": "Deutschland",
+      "contact_name": "Michael Begert",
+      "contact_position": "Innovationsmanagement",
+      "contact_email": "michael.begert@edag.com",
+      "contact_phone": "+49 661 6000-801",
+      "user_email": "michael.begert@edag.com",
+      "size_slug": "gt-1000",
+      "industry_slugs": [
+        "verarbeitung-vertrieb-endprodukte",
+        "beratung-und-dienstleistungen"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": null,
+          "notes": null
+        }
+      ],
+      "knowhows": [
+        {
+          "slug": "materialentwicklung-verarbeitung",
+          "name": "Materialentwicklung und Verarbeitung",
+          "score": 40
+        },
+        {
+          "slug": "nachhaltigkeitsbetrachtung",
+          "name": "Nachhaltigkeitsbetrachtung",
+          "score": 90
+        },
+        {
+          "slug": "marktzugang-best-practices",
+          "name": "Marktzugang und Best Practices",
+          "score": 70
+        },
+        {
+          "slug": "chemie-erneuerbarer-materialien",
+          "name": "Chemie erneuerbarer Materialien",
+          "score": 70
+        },
+        {
+          "slug": "kreislaufschliessung-biomasse",
+          "name": "Kreislaufschließung durch Biomasse als Rohstoff und Kompostierbarkeit",
+          "score": 70
+        }
+      ],
+      "demos": [],
+      "services": [
+        {
+          "title": "Vielfältige Prüfdienstleistungen für alle Kunststoffe- inkl. Biokunststoffe",
+          "description": null,
+          "sort_order": 0
+        },
+        {
+          "title": "Konstruktion und Simulation mit Biobasierten Werkstoffen, auch Faserverbunden",
+          "description": null,
+          "sort_order": 1
+        }
+      ],
+      "technology_suggestions": [
+        {
+          "name": "Nutzung biobasierter Fasern (Flachs, Hanf)",
+          "notes": null,
+          "trl": null
+        }
+      ]
+    },
+    {
+      "name": "edding Gruppe",
+      "display_name": null,
+      "description": "Die edding Gruppe steht seit Jahrzehnten für hochwertige Schreibgeräte – von Markern und Textmarkern bis hin zu kreativen Stiften für Büroanwendungen und industrielle Einsatzzwecke. Ein zentrales Element unserer Unternehmensstrategie ist die konsequente Ausrichtung auf Nachhaltigkeit in der Produktentwicklung.\nWir verfolgen das Ziel, die Lebensdauer unserer Produkte gezielt zu verlängern. Dies erreichen wir unter anderem durch nachfüllbare Systeme und austauschbare Spitzen, die eine ressourcenschonende Nutzung ermöglichen.\n \nBesonderes Augenmerk legen wir auf die Auswahl und Verarbeitung umweltfreundlicher Materialien in unserem Produktionswerk in Bautzen. Neben dem Einsatz von Recyclingkunststoffen prüfen wir intensiv die Eignung von Biokunststoffen – sowohl „drop-in“-Lösungen als auch innovative Materialien aus der „New Economy“, einschließlich Kompositen – für die Integration in unsere Produktpalette.\n \nDarüber hinaus arbeiten wir kontinuierlich an der Entwicklung nachhaltiger Tinten. Hierbei identifizieren, formulieren und testen wir alternative Rohstoffe aus nachwachsenden oder im Kreislauf geführten Quellen, um ökologische und funktionale Anforderungen gleichermaßen zu erfüllen.\n \nMit diesen Maßnahmen möchten wir einen aktiven Beitrag zur Transformation unserer Branche leisten und freuen uns auf den Austausch mit Partnern, die ähnliche Ziele verfolgen.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "02625",
+      "city": "Bautzen",
+      "country": "Deutschland",
+      "contact_name": "Clemens Sachse",
+      "contact_position": "Nachhaltigkeitsingenieur",
+      "contact_email": "csachse@edding.de",
+      "contact_phone": null,
+      "user_email": "csachse@edding.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "verarbeitung-vertrieb-endprodukte"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 2,
+          "notes": "Biobasierte Materialien für Schreibgeräte"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Biobasierte Materialien für Schreibgeräte",
+          "notes": null,
+          "trl": 2
+        }
+      ]
+    },
+    {
+      "name": "eibe Produktion + Vertrieb GmbH & Co.KG",
+      "display_name": null,
+      "description": "Das Familienunternehmen eibe stellt Spielgeräte für Kommunen, Gemeinden und viele andere Kunden her. Bereits 1998 wurde das Umweltmanagementsystem eingeführt und seitdem ist man auch nach ISO 140001 und EMAS zertifiziert. Die nachhaltige Entwicklung des Unternehmens und des Standortes Mainfranken liegt uns sehr am Herzen. Deshalb sind wir immer auf der Suche nach nachhaltigen Materialien, die unser Produktportfolio in Bezug auf Nachhaltigkeit und Kreislauffähigkeit verbessern. Seit letztem Jahr beschäftigen wir uns intensiv mit der Zirkularität unserer Produkte und sehen im Netzwerk CREATE eine Möglichkeit neue und innovative Materialien für den Spielplatzgerätebau einzusetzen und am Markt zu etablieren.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "97285",
+      "city": "Röttingen",
+      "country": "Deutschland",
+      "contact_name": "Marcel Neis",
+      "contact_position": "Umwelt- und Nachhaltigkeitsmanager",
+      "contact_email": "marcel.neis@eibe.de",
+      "contact_phone": "+49 9338 89-0",
+      "user_email": "marcel.neis@eibe.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "verarbeitung-vertrieb-endprodukte"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "European EPC Competence Center GmbH",
+      "display_name": null,
+      "description": "Das European EPC Competence Center (EECC) ist führend auf dem europäischen Markt für Lösungen und Dienstleistungen rund um den Electronic Product Code (EPC) sowie die damit verbundenen vernetzten Informationssysteme (EPCIS). Unser Ziel ist es, Lieferketten zu automatisieren.\n\nDas EECC in Neuss wurde bereits im Jahr 2005 als erstes europäisches Labor von EPCglobal als „EPCglobal Performance Test Center“ zertifiziert. Dort zeigen wir in unseren InnovationLabs, wie Daten in Lieferketten gesammelt und genutzt werden können. Zudem entwickeln wir neue Lösungen und Geschäftsmodelle für die Industrie, Logistik und den Handel.\n\nIm Rahmen unserer Cyclance Initiative arbeiten wir derzeit an Softwarelösungen zur Unterstützung und zum Nachweis von Nachhaltigkeit in den Bereichen Kunststoff, Batterien, Elektronik, Bekleidung sowie Lebensmittel. Hierbei kommt unsere Expertise im Verfolgen von Ereignissen in Produktlebenszyklen und Lieferketten sowie in der Bereitstellung dieser Daten über den Standard EPCIS allen Stakeholdern zugute.\n\nBesonders gefragt und in Entwicklung sind digitale Produktpässe, die wir unter anderem im vom BMBF geförderten Projekt ENLARGE mit der Forschungsfertigung Batteriezelle der Fraunhofer-Gesellschaft entwickeln. Diese Produktpässe ermöglichen einen sicheren und nachprüfbaren Nachweis von Produkteigenschaften und unterstützen so die Entscheidung von Verbrauchern für nachhaltige Produkte.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "50825",
+      "city": "Köln",
+      "country": "Deutschland",
+      "contact_name": "Georg Schwering",
+      "contact_position": null,
+      "contact_email": "info@eecc.info",
+      "contact_phone": null,
+      "user_email": "info@eecc.info",
+      "size_slug": null,
+      "industry_slugs": [
+        "beratung-und-dienstleistungen"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "F.S. Fehrer Automotive GmbH",
+      "display_name": null,
+      "description": "Wir bei der F.S. Fehrer Automotive GmbH sind weltweit führende Spezialisten für Komponenten im Fahrzeuginnenraum und Teil der international agierenden AUNDE Group. Unser Hauptsitz befindet sich in Kitzingen, Deutschland, und wir sind bekannt für die Entwicklung und Produktion von Sitzpolstern, Sitzmodulen und Leichtbaustrukturen aus faserverstärkten Kunststoffen.\n\nIn Bezug auf die Bioökonomie verfügen wir über Kompetenzen in der Herstellung von Composite-Bauteilen aus nachhaltigen Materialien. Diese Leichtbaustrukturen tragen zur Reduzierung des Fahrzeuggewichts bei, was wiederum den Kraftstoffverbrauch und die CO2-Emissionen verringert. Wir setzen auf innovative Materialien und Technologien, um umweltfreundliche Lösungen für die Automobilindustrie zu entwickeln.\n\nEin besonderer Fokus liegt auf dem Einsatz von biobasierten Werkstoffen bei unseren Polyurethan-Sitzpolstern (ISCC+-zertifiziert). Darüber hinaus engagieren wir uns in Projekten mit alternativen Werkstoffen und der Suche nach biobasierten Werkstoffen. Unser Ziel ist es, fossile Rohstoffe durch nachwachsende Materialien zu ersetzen und so die Umweltbelastung weiter zu reduzieren.\n\nEin weiterer wichtiger Aspekt unserer Arbeit ist der Ersatz von Glas- und Kohlefaserverstärkungen durch Naturfaserverstärkungen. Diese Naturfasern bieten nicht nur ökologische Vorteile, sondern auch hervorragende mechanische Eigenschaften, die für den Einsatz in der Automobilindustrie geeignet sind.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "97318",
+      "city": "Kitzingen",
+      "country": "Deutschland",
+      "contact_name": "Manfred Walter",
+      "contact_position": "Head of Advanced Development",
+      "contact_email": "manfred.walter@fehrer.com",
+      "contact_phone": "+49 170 5622 971",
+      "user_email": "manfred.walter@fehrer.com",
+      "size_slug": null,
+      "industry_slugs": [
+        "verarbeitung-vertrieb-endprodukte"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 4,
+          "notes": "Composite-Bauteilen im Automotive Bereich; Einsatz von biobasierten Polyurethanen und weiteren alternativen Werkstoffen"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Composite-Bauteilen im Automotive Bereich; Einsatz von biobasierten Polyurethanen und weiteren alternativen Werkstoffen",
+          "notes": null,
+          "trl": 4
+        }
+      ]
+    },
+    {
+      "name": "Fa. Wieland electric GmbH",
+      "display_name": null,
+      "description": "Lösungsanbieter und Weltmarktführer für steckbare Elektroinstallation in der Gebäudetechnik und Anbieter für Sicherheits- und Automatisierungstechnik. In über 70 Ländern weltweit betreuen wir Kunden im Bereich Maschinenbau, Windenergie sowie Gebäude- und Lichttechnik.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "96052",
+      "city": "Bamberg",
+      "country": "Deutschland",
+      "contact_name": "Dieter Popp",
+      "contact_position": "Fachexperte Kunststofftechnik, Technologie und Grundlagenmanagement",
+      "contact_email": "dieter.popp@wieland-electric.com",
+      "contact_phone": "0951-9324 467",
+      "user_email": "dieter.popp@wieland-electric.com",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoffmaschinenbau"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "Farben – Kiroff – Technik e.K.",
+      "display_name": null,
+      "description": "Mitglied des ChemieClusters Bayern, langjähriger Partner von C.A.R.M.E.N., Lack-und-Farbenhersteller (Klebstoffe, Reinigungsmittel, Oberflächenchemie), Problemlöser der Industrie, Entwicklung derzeit von: Kinderspielklebstoffen, Wischfeste Kreidemalfarbe, Masterbatch für PLA-Filament, Hersteller von Naturharz-Lacken (Gummen);",
+      "website_url": null,
+      "street": null,
+      "postal_code": "90763",
+      "city": "Fürth",
+      "country": "Deutschland",
+      "contact_name": "Selinay Tezcan",
+      "contact_position": null,
+      "contact_email": "selinay.tezcan@kiroff.de",
+      "contact_phone": "0911 / 74 80 66",
+      "user_email": "selinay.tezcan@kiroff.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoff-chemikalien-rohstofferzeugung"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "Fraunhofer ISC",
+      "display_name": null,
+      "description": "Durch nachhaltige Lösungen und die effiziente stoffliche Nutzung biogener Werkstoffe bündelt das Fraunhofer-Institut für Silicatforschung ISC im Bereich Forschung und Entwicklung zum Thema Bioökonomie verschiedene Kompetenzen.\n\nDiese reichen von der Entwicklung biogener hybrider Werkstoffe, über funktionale Beschichtungen aus biogenen (Rest)Stoffen, bis hin zur toxikologischen und metabolischen Bewertung neuer Funktionsmaterialien aus nachwachsenden Rohstoffen.\n\nDerzeitige Entwicklungen seitens des Fraunhofer ISC sind u. a. nachhaltige Mulchfolien für die Landwirtschaft, sortenreine Polyolefin- oder Rezyklat-basierte Verpackungen, oder auch recycelbare Elektronik.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "97082",
+      "city": "Würzburg",
+      "country": "Deutschland",
+      "contact_name": "Claudia Stauch",
+      "contact_position": "Senior Scientist",
+      "contact_email": "claudia.stauch@isc.fraunhofer.de",
+      "contact_phone": null,
+      "user_email": "claudia.stauch@isc.fraunhofer.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "forschung-und-entwicklung"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 4,
+          "notes": "Biogene hybride Werkstoffe; Funktionale Beschichtungen aus biogenen (Rest)stoffen"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Biogene hybride Werkstoffe; Funktionale Beschichtungen aus biogenen (Rest)stoffen",
+          "notes": null,
+          "trl": 4
+        }
+      ]
+    },
+    {
+      "name": "Fraunhofer IWKS",
+      "display_name": null,
+      "description": "Die Forschungsarbeiten der Fraunhofer-Einrichtung für Wertstoffkreisläufe und Ressourcenstrategie fokussieren sich auf die Etablierung einer geschlossenen Kreislaufwirtschaft: Die Abfälle von heute sind die Ressourcen von morgen. Wertvolle Rohstoffe können zurückgewonnen und wiederverwertet oder aber durch nachhaltige, umwelt- und sozialverträglichere Alternativen ersetzt werden. Hierfür werden innovative Verfahren in den Bereichen Magnetwerkstoffe, Energiematerialien, Bioökonomie und Digitalisierung der Ressourcen entwickelt. Die Ergebnisse der Forschung werden transferiert in die Industrie. Das IWKS ist Mitglied im Industrieverband Verstärkte Kunststoffe AVK. Die Kompetenzen in Bezug zur Bioökonomie liegen in drei Bereichen: in der Gewinnung von Polymeren aus pflanzlichen Reststoffströmen und ihrer chemischen Funktionalisierung für Anwendungen in Beschichtungen und Kunststoffen, in der Bewertung der Rezyklierbarkeit von Kunststoffen, insbesondere der Sortierbarkeit, und in der Erstellung von Ökobilanzen. Ein breites Spektrum an analytischen Verfahren reicht von der Charakterisierung von pflanzlichen Fasern (Form und chemische Zusammensetzung, Verunreinigung) und von Polymeren (Molmassenverteilung, thermisches Verhalten) bis hin zu Eigenschaften der Polymere in Schmelzen bzw. Formulierungen (Rheologie) und in Beschichtungen (Kontaktwinkel, Grenzflächenscherfestigkeit).",
+      "website_url": null,
+      "street": null,
+      "postal_code": "63755",
+      "city": "Alzenau",
+      "country": "Deutschland",
+      "contact_name": "Stefan Hanstein",
+      "contact_position": "Forschung im Bereich Biowerkstoffe",
+      "contact_email": "stefan.hanstein@iwks.fraunhofer.de",
+      "contact_phone": "+49 6023 32039-829",
+      "user_email": "stefan.hanstein@iwks.fraunhofer.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "forschung-und-entwicklung"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 4,
+          "notes": "Chemische Funktionalisierung von Biokunststoffen und diverse Charackterisierungsmöglichkeiten"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Chemische Funktionalisierung von Biokunststoffen und diverse Charackterisierungsmöglichkeiten",
+          "notes": null,
+          "trl": 4
+        }
+      ]
+    },
+    {
+      "name": "Fraunhofer UMSICHT",
+      "display_name": null,
+      "description": "CHT in Sulzbach-Rosenberg entwickelt Verfahren und Anlagen für die Defossilisierung der Industrie. Insbesondere Technologien zur Konversion biogener Abfall- und Reststoffe zu nachhaltigen Kraftstoffen, Basischemikalien und Karbonisaten; für das Recycling von Verbundmaterialien und Kunststoffen; sowie für die Aufbereitung der Produkte aus Konversionsprozessen (z.B. Pyrolyseöle) für die chemische Industrie. Im Bereich Bioenergie forscht das Institut an emissionsarmen Verbrennungs- und Feuerungstechnologien sowie an der Bereitstellung und Speicherung von klimaneutraler (Hochtemperatur-)Prozesswärme. Zudem verfügt es über Kompetenzen in Abfall- und Ressourcenstrategien sowie in der Ökobilanzierung (LCA).",
+      "website_url": null,
+      "street": null,
+      "postal_code": "92235",
+      "city": "Sulzbach-Rosenberg",
+      "country": "Deutschland",
+      "contact_name": "Frederik Betsch",
+      "contact_position": "Head of Strategy, Marketing and Communications",
+      "contact_email": "frederik.betsch@umsicht.fraunhofer.de",
+      "contact_phone": "+49 9661 8155 555",
+      "user_email": "frederik.betsch@umsicht.fraunhofer.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "forschung-und-entwicklung"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 4,
+          "notes": "Chemisches Recycling von Verbundmaterialien; Biomassekonversion zu Plattformchemikalien und Karbonisaten; Aufbereitung von Pyrolyseölen; Klimaneutrale Hochtemperatur Prozesswärme"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Chemisches Recycling von Verbundmaterialien; Biomassekonversion zu Plattformchemikalien und Karbonisaten; Aufbereitung von Pyrolyseölen; Klimaneutrale Hochtemperatur Prozesswärme",
+          "notes": null,
+          "trl": 4
+        }
+      ]
+    },
+    {
+      "name": "Fraunhofer-Institut für Verfahrenstechnik und Verpackung IVV",
+      "display_name": null,
+      "description": "Das Fraunhofer IVV (Institut für Verfahrenstechnik und Verpackung) treibt die Bioökonomie durch angewandte Forschung an nachhaltigen Lebensmittel- und Verpackungssystemen voran, fokussiert auf Kreislaufwirtschaft, biobasierte Produkte (Proteine, Beschichtungen), Ressourcenschonung und klimaneutrale Prozesse, um fossile Rohstoffe zu ersetzen und die Versorgungssicherheit zu erhöhen. Es entwickelt innovative Lösungen, von der Gewinnung pflanzlicher Proteine bis zu biobasierten Barrieren in Verpackungen, und ist Teil des Fraunhofer-Verbunds VRB, der die Bioökonomie-Kompetenzen bündelt.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "85354",
+      "city": "Freising",
+      "country": "Deutschland",
+      "contact_name": "Marie Föllmer",
+      "contact_position": null,
+      "contact_email": "marie.foellmer@ivv.fraunhofer.de",
+      "contact_phone": null,
+      "user_email": "marie.foellmer@ivv.fraunhofer.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "forschung-und-entwicklung"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 4,
+          "notes": "Nachhaltige Lebensmittel und Verpackungssysteme"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Nachhaltige Lebensmittel und Verpackungssysteme",
+          "notes": null,
+          "trl": 4
+        }
+      ]
+    },
+    {
+      "name": "gabo Systemtechnik GmbH",
+      "display_name": null,
+      "description": "Die gabo Systemtechnik GmbH mit Sitz in Niederwinkling ist ein führender Hersteller von Mikrorrohr-Systemen \"Made in Germany\". Das Unternehmen bietet ein abgestimmtes Komplettsystem aus einer Hand und steht für gleichbleibend hohe Leistungsfähigkeit über die gesamte Lebensdauerr seiner Produkte. Mit üner 50 Jahren Erfahrung in der Telekommunikation ist gabo ein verlässlicher Üartner für nationale und internationale Netzberteiber bei der nachhaltigen und skalierbaren Planung von Glasfaseringrastrukturen bis zum Gebäudeanschluss. Wir sind in der Kunststoffindustrie tätig - Kunststoffe sind daher ein zentrales Thema für uns. Im Rahmen unserer Bemühungen um mehr Nachhaltigkeit testen wir fortlaufend biobasierte und umweltfreundlichere Kunststofflösungen. Aus diesem Grund sind wir sehr an dem geplanten Tool interessiert, mit welchem man die CO2-Einsparung bei Verwendung eines anderen Kunststoffes berechnen kann.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "94559",
+      "city": "Niederwinkling",
+      "country": "Deutschland",
+      "contact_name": "Silvia Müller",
+      "contact_position": null,
+      "contact_email": "silvia.mueller@gabosys.de",
+      "contact_phone": null,
+      "user_email": "silvia.mueller@gabosys.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoffverarbeitung-compoundeur"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 2,
+          "notes": "Biobasierte Kunststofflösungen für Glasfaser"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Biobasierte Kunststofflösungen für Glasfaser",
+          "notes": null,
+          "trl": 2
+        }
+      ]
+    },
+    {
+      "name": "Gerresheimer Regensburg GmbH",
+      "display_name": null,
+      "description": "roduktpalette für Pharma, Gesundheit, Wellness und Biotech. Wir bringen alle Arten von Medikamenten sicher, zuverlässig und bequem zum oder in den Patienten. Kunden und Partner aus der ganzen Welt kommen mit neuen Herausforderungen auf uns zu. Wir sind Lösungsanbieter mit dem unbedingten Willen zur Leistung, vom Konzept bis zum Endprodukt. Auf diese Weise erfüllen wir die Bedürfnisse unserer Kunden und ihrer Kunden - der Anwender.\n\nSustainability ist ein wichtiges Ziel für die Zukunft. Dies umfasst Überlegungen zu umweltfreundlicher Auslegung von Produkten (EcoDesign) wie auch Senkung der Scope Emissionen.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "92442",
+      "city": "Wackersdorf",
+      "country": "Deutschland",
+      "contact_name": "Bernhard Schmitt",
+      "contact_position": "University Relations",
+      "contact_email": "bernhard.schmitt@gerresheimer.com",
+      "contact_phone": "09431 639 6940",
+      "user_email": "bernhard.schmitt@gerresheimer.com",
+      "size_slug": null,
+      "industry_slugs": [
+        "verarbeitung-vertrieb-endprodukte"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "GreenSurvey GmbH",
+      "display_name": null,
+      "description": "Unser Unternehmen Die GreenSurvey GmbH ist ein Marktforschungsinstitut mit exklusivem \nFokus auf die Bedürfnisse ihrer Kundenzielgruppen. Wir differenzieren uns von anderen \nMarktforschungsunternehmen durch die Vereinigung von spezifischem Fachwissen und \neiner breiten Methodenkompetenz in der Marktforschung, kombiniert mit einer fundierten \nwissenschaftlich geprägten Herangehensweise. Inhaltlich fokussiert sich GreenSurvey auf \ndie „Grüne Branche“. Unsere Projekte reichen von der Verwertung von landwirtshcaftlichen \nReststoffen, über die Möglichkeiten des Einsatzes von Substituten für Torf bis hin zur LCA_x0002_Analysen in Lebens- und Futtermittelsystemen.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "94315",
+      "city": "Straubing",
+      "country": "Deutschland",
+      "contact_name": "Thomas Decker",
+      "contact_position": null,
+      "contact_email": "decker@green-survey.de",
+      "contact_phone": null,
+      "user_email": "decker@green-survey.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "beratung-und-dienstleistungen"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "Gruber-Folien GmbH & Co. KG",
+      "display_name": null,
+      "description": "Die Firma Gruber Folien ist ein Unternehmen, das sich auf die Herstellung und Verarbeitung von hochwertigen Folien spezialisiert hat. Sie bietet eine breite Palette an Folienlösungen für verschiedene Branchen an, darunter Verpackungen, technische Anwendungen und Spezialfolien. Das Unternehmen legt großen Wert auf Qualität, Innovation und Nachhaltigkeit, um den Anforderungen ihrer Kunden gerecht zu werden.\n\nIm Zusammenhang mit den Tätigkeitsfeldern, die mit dem Innovationscluster CREATE verbunden sind, lässt sich sagen, dass Gruber Folien durch ihre Fokussierung auf innovative Folienprodukte und -technologien aktiv an der Entwicklung neuer Lösungen beteiligt ist. CREATE fördert die Zusammenarbeit und Innovation in Bereichen wie Materialentwicklung, nachhaltige Produktion und technologische Fortschritte. Somit trägt Gruber Folien durch ihre Forschungs- und Entwicklungsaktivitäten dazu bei, innovative Materialien und Verfahren zu entwickeln, die in den Cluster-Projekten eine Rolle spielen könnten.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "94315",
+      "city": "Straubing",
+      "country": "Deutschland",
+      "contact_name": "Tobias Proksch",
+      "contact_position": "Head of Strategic Sourcing & Sustainable Material Development",
+      "contact_email": "proksch@gruber-folien.de",
+      "contact_phone": "+49 9421 189956-29",
+      "user_email": "proksch@gruber-folien.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "verarbeitung-vertrieb-endprodukte"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "GS1 Germany GmbH",
+      "display_name": null,
+      "description": "GS1 Germany ist die neutrale Plattform zum Austausch und zur Kollaboration von Unter_x0002_nehmen aus ¸ber 20 Branchen, von Herstellern, H‰ndlern, Dienstleistern – und Wettbe_x0002_werbern. Dieser Austausch zwischen den Teilnehmenden der Wertschˆpfung, die gemein_x0002_same Arbeit an Lˆsungen zu gemeinsamen Herausforderungen, unsere Neutralit‰t und \ndie damit verbundene Diskriminierungsfreiheit sind unser Anspruch und unser Alleinstel_x0002_lungsmerkmal zugleich. Dies stellt zudem die Grundlage f¸r eine funktionierende Kreis_x0002_laufwirtschaft dar. Gerade erforschen wir den Aufbau von Registern und Identifikations_x0002_bzw. Kennzeichnungsverfahren, die im Zusammenhang mit dem Bereich der Bioˆkono_x0002_mie gebraucht werden, um kollaborative Wertschˆpfung in Netzwerken zu betreiben. \nDurch den Austausch mit anderen Playern der Branche, die Mˆglichkeit Aus- und Weiter_x0002_bildungsmaflnahmen wahrnehmen zu kˆnnen und unsere Marktsituation besser identifi_x0002_zieren zu kˆnnen, erhoffen wir uns Vorteile bei der zuk¸nftigen Weiterentwicklung von \ninternationalen Standards im Bereich Bioˆkonomie des digitalen Produktpasses im Zu_x0002_sammenhang mit biobasierten Kunststoffverpackungen bis hin zur Marktreife.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "50825",
+      "city": "Köln",
+      "country": "Deutschland",
+      "contact_name": "Tim Bartram",
+      "contact_position": null,
+      "contact_email": "tim.bartram@gs1.de",
+      "contact_phone": null,
+      "user_email": "tim.bartram@gs1.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "beratung-und-dienstleistungen"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "HEW-Kabel GmbH",
+      "display_name": null,
+      "description": "HEW-Kabel islein internationaler Spezialkabelhersteller. Unsere Konnektivitätslösungen sind wichtiger Bestandteil in den verschiedensten industriellen Marktsegmenten: von sauberer Energieerzeugung über sichere Fahrzeuge bis hin zu intelligenten. produktiveren Industrieanlagen. Gemeinsam mit unseren Kunden ermöglichen wir Technologien der Zukunft und entwickeln maßgeschneiderte Verbindungslösungen für die anspruchsvollsten Anwendungen, die über das Gewöhnliche hinausgehen. Dabei ist es unser Ziel mit geringem Einsatz von Ressourcen möglichst viel zu erreichen und umweltfreundliche, energieeFFiziente Kabel und Leitungen Für unsere Kunden zu entwickeln, die gleichzeitig reduzierte C02-Emissionen und mehr Sicherheit bieten. Wir sind bestrebt unsere Produkte effektiv und zupleich umweltverträplich zu konstruieren. Aufgrund dessen stellt eine Teilnahme am Innovationscluster CREATE Für uns eine vielversprechende Möglichkeit dar aktuelle technologische Entwicklungen zu verFolgen und wertvolle KonLakte zu knüpfen.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "51688",
+      "city": "Wipperfürth",
+      "country": "Deutschland",
+      "contact_name": "Miriam Biedermann",
+      "contact_position": "Werkstoffentwicklerin",
+      "contact_email": "miriam.biedermann@habia.com",
+      "contact_phone": null,
+      "user_email": "miriam.biedermann@habia.com",
+      "size_slug": null,
+      "industry_slugs": [
+        "verarbeitung-vertrieb-endprodukte"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "Hochschule Aalen",
+      "display_name": null,
+      "description": "Der schonende Umgang mit natürlichen Ressourcen ist eine zentrale gesellschaftliche Herausforderung und steht im Mittelpunkt der Forschungsaktivitäten des iSPC. Die Vision des Instituts umfasst die Entwicklung innovativer Materialsysteme sowie die Verarbeitung und Charakterisierung von Werkstoffen, die Teil einer zirkulären Ökonomie sind – entweder im biologischen Kreislauf (Rückführung in die Natur) oder im technischen Kreislauf (dauerhafte Nutzung als Produkt, Modul oder Werkstoff).\n\nDrei zentrale Forschungsschwerpunkte: Nachhaltige Werkstoffe. Leichtbau, Recycling\nDie Ergebnisse und Prozesse werden stets im Hinblick auf eine mögliche KI-gestützte Material- und Prozessauswahl sowie Nachhaltigkeitsbewertung dokumentiert.\n\nDas iSPC bringt umfangreiche Erfahrung in folgenden Bereichen ein:\n\nCharakterisierung (mechanisch, rheologisch, thermo-physikalisch, chemisch)\nVerarbeitung (Extrusion, Spritzguss, Compoundierung, Granulierung, VARI, RTM)\nEnd-of-Life-Kompetenzen: Detektion und Sortierung von Kunststoffen, Biodegradation, Alterung und Bewitterung",
+      "website_url": null,
+      "street": null,
+      "postal_code": "73430",
+      "city": "Aalen",
+      "country": "Deutschland",
+      "contact_name": "Iman Taha",
+      "contact_position": "Professur \"Nachhaltige Werkstoffe in der Kunststofftechnik\"",
+      "contact_email": "iman.taha@hs-aalen.de",
+      "contact_phone": "07361/576-2558",
+      "user_email": "iman.taha@hs-aalen.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "forschung-und-entwicklung"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 4,
+          "notes": "Innovative, ressourcenschonende Materialsysteme mit Fokus auf nachhaltige Werkstoffe, Leichtbau und Recycling"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Innovative, ressourcenschonende Materialsysteme mit Fokus auf nachhaltige Werkstoffe, Leichtbau und Recycling",
+          "notes": null,
+          "trl": 4
+        }
+      ]
+    },
+    {
+      "name": "Hochschule Albstadt-Sigmaringen, Sustainable Packaging Institute SPI",
+      "display_name": null,
+      "description": "Das Sustainable Packaging Institute (SPI) verfolgt die Vision einer nachhaltigeren, kreislauforientierten Bioökonomie. In diesem Zusammenhang forschen wir intensiv an innovativen biobasierten Materialien sowie deren Funktionalisierung für den Verpackungsbereich. Unsere Mission ist es, alle Akteure der Life Science Industrie entlang der gesamten Verpackungswertschöpfungskette zu unterstützen und auf ihrem Weg hin zu einer kreislauforientierten Bioökonomie zu begleiten. Ein zentraler Fokus unserer Arbeit liegt auf der Nutzung von Rest- und Nebenstoffen der Lebensmittel- und Agrarindustrie, die wir auf ihre Potenziale für die Anwendung in Verpackungen hin untersuchen. Die Ergebnisse unserer Forschung werden auf ihre ökologische, ökonomische und soziale Nachhaltigkeit hin bewertet und Konsumentenstudien durchgeführt. Hierbei tragen wir dazu bei, Ressourcen effizienter zu nutzen und die Abhängigkeit von fossilen Ressourcen zu reduzieren. Im Rahmen des Innovationsclusters CREATE sehen wir uns als aktiven Mitgestalter der Transformation zu einer nachhaltigeren kreislauforientierten Bioökonomie. Wir bringen unsere Expertise in den Bereichen Materialentwicklung, Kreislaufwirtschaft und die Nutzung biogener Ressourcen ein, um innovative und praxisorientierte Lösungen zu entwickeln, die sowohl ökologische als auch ökonomische Potenziale erschließen. Durch interdisziplinäre Zusammenarbeit möchten wir zur Schaffung einer zukunftsfähigen und nachhaltigeren Verpackungsindustrie beitragen.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "72488",
+      "city": "Sigmaringen",
+      "country": "Deutschland",
+      "contact_name": "Alina Kleiner",
+      "contact_position": "wissenschaftliche Mitarbeiterin",
+      "contact_email": "kleineral@hs-albsig.de",
+      "contact_phone": null,
+      "user_email": "kleineral@hs-albsig.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "forschung-und-entwicklung"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 4,
+          "notes": "Funktionale, biobasierte Verpackungen aus Rest- und Nebenstoffen"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Funktionale, biobasierte Verpackungen aus Rest- und Nebenstoffen",
+          "notes": null,
+          "trl": 4
+        }
+      ]
+    },
+    {
+      "name": "Hochschule München",
+      "display_name": null,
+      "description": "Die Forschungsgruppe Industrielle Biotechnologie der Hochschule München beschäftigt sich mit der Entwciklung und wirtschaftlichen Bewertung nachhaltiger Werkstoffe und Anwendungen basierend auf biotechnologischen Verfahren, nachwachsenden Rohstoffen sowie Reststoffen.Schwerpunktthemen sind:Entwicklung molekularbiologischer Werkzeuge zum Engineering mikrobieller non-standard ProduktionsstämmeGenetik biopolymerproduzierender MikroorganismenEntwicklung mikrobieller Produktionssysteme für biobasierte Kunststoffe (PHAs, mikrokristalline Cellulose)Adaption von Mikroorganismen an nachhaltige Substrate auf Basis von Reststoffen oder Nebenströmen",
+      "website_url": null,
+      "street": null,
+      "postal_code": "80335",
+      "city": "München",
+      "country": "Deutschland",
+      "contact_name": "David Kostner",
+      "contact_position": "Industrial Biotechnology and Bioeconomy",
+      "contact_email": "david.kostner@hm.edu",
+      "contact_phone": "08912653920",
+      "user_email": "david.kostner@hm.edu",
+      "size_slug": null,
+      "industry_slugs": [
+        "forschung-und-entwicklung"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "Holzmühle Westerkamp GmbH",
+      "display_name": null,
+      "description": "Die Holzmühle Westerkamp GmbH produziert seit 1956 Holzmehle aus unbehandelten Reststoffen der Sägeindustrie und ist damit seit Gründung im Rahmen der Bioökonomie tätig. Heute finden die hochwertigen Holzmehle, Holzfasern und auch Holzgranulate Einsatz in den unterschiedlichsten Branchen, z.B. als Füllstoff in der WPC-Industrie oder auch in der Kartonherstellung, als Reibemittel in der Kosmetikindustrie, als ballaststoffreicher Futtermittelzusatz in der Futtermittelindustrie u.v.m.\n\nNeben der Nutzung von Sägenebenprodukten hat sich das Unternehmen allgemein auf die Reststoffaufbereitung spezialisiert, getreu dem Firmenmotto „Modern Material Milling“. Hier liegt ein Fokus auf der Aufbereitung von Haferspelzen als Reststoff der Lebensmittelindustrie. Weitere Erfahrungen liegen in der Aufbereitung von Spargelschalen, Kaffeesatz oder Sonnenblumenkernschalen, welche im Rahmen von Lohnvermahlungen oder auch Projekten umgesetzt wurden.\n\nSeit ca. 6 Jahren forscht und entwickelt das Unternehmen an eigenen naturfasergefüllten Biopolymercompounds, welche unter der Marke arweco - Advanced Biobased Compounds vertrieben werden. Hier werden insbesondere die Haferfasern aus der Haferspelze in den Fokus gesetzt, aber auch holzfasergefüllte Compounds werden angeboten.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "49429",
+      "city": "Visbek",
+      "country": "Deutschland",
+      "contact_name": "Kolja Ostendorf",
+      "contact_position": "Forschung und Entwicklung",
+      "contact_email": "kolja.ostendorf@westerkamp-gmbh.de",
+      "contact_phone": "04445/987777-87",
+      "user_email": "kolja.ostendorf@westerkamp-gmbh.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "landwirtschaftliche-rohstoffproduktion"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 9,
+          "notes": "Verwertung von Sägenebenprodukten (Holzmehle, -fasern und -granulate), auch in WPC; Compunds mit Haferfasern aus der Haferspelze; Projekte zu anderen Reststoffen wie Spargelschalen, Kaffeesatz und Sonnenblumenkernschalen"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Verwertung von Sägenebenprodukten (Holzmehle, -fasern und -granulate), auch in WPC; Compunds mit Haferfasern aus der Haferspelze; Projekte zu anderen Reststoffen wie Spargelschalen, Kaffeesatz und Son",
+          "notes": null,
+          "trl": 9
+        }
+      ]
+    },
+    {
+      "name": "HYDRA Marine Sciences GmbH",
+      "display_name": null,
+      "description": "HYDRA Marine Sciences ist ein führendes Institut für die Prüfung biologisch abbaubarer Materialien, Umweltforschung, Dokumentation und Beratung. Wir testen den biologischen Abbau und die Desintegration abbaubarer Kunststoffe unter marinen, Süßwasser- und Bodenbedingungen, führen Ökotoxizitätstests durch und sind das erste anerkannte Labor für Tests zur Zertifizierung ‚Biologisch abbaubar im marinen Umfeld‘ von DIN CERTCO. Über Standardtests hinaus entwickeln wir spezifische Verfahren zur Überprüfung der biologischen Abbaubarkeit neuartiger Materialien zusammen mit unseren Partnern. HYDRA hilft Polymerentwicklern, Kunststoffherstellern, Verarbeitern und Anwendern bei der Entwicklung mithilfe maßgeschneiderter Forschungsstrategien bezüglich biologischer Abbaubarkeit, um Schritt für Schritt kostengünstige Lösungen zu erarbeiten. Unser mehrstufiges Testsystem liefert umweltrelevante Ergebnisse, die in eine umfassende Umweltbilanzierung (LCA) für biologisch abbaubare Polymere und Kunststoffanwendungen einfließen, um sie in einer Risiko-Nutzen-Analyse z.B. mit nicht-abbaubaren Anwendungen zu vergleichen.\nNeben der Konzipierung tragen wir durch Vorträge, Webinare und Workshops zum besseren Verständnis der Vorgänge rund um das Thema Bioabbau bei und unterstützen Partner aus Industrie, Akademie, Wirtschaft, öffentlichen Institutionen und NGOs bei einer wissensbasierten Kommunikation zu biologisch abbaubaren Polymeren und deren Anwendungen.\n\nWeitere Informationen: www.hydramarinesciences.com",
+      "website_url": null,
+      "street": null,
+      "postal_code": "77815",
+      "city": "Bühl/Baden",
+      "country": "Deutschland",
+      "contact_name": "Miriam Weber",
+      "contact_position": null,
+      "contact_email": "m.weber@hydramarinesciences.com",
+      "contact_phone": null,
+      "user_email": "m.weber@hydramarinesciences.com",
+      "size_slug": null,
+      "industry_slugs": [
+        "forschung-und-entwicklung"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "Institut für Kreislaufwirtschaft der Bio:Polymer (ibp) der Hochschule Hof",
+      "display_name": null,
+      "description": "stitut für Kreislaufwirtschaft der Bio:Polymere (ibp) versteht sich als Kompetenzträger für angewandte Nachhaltigkeit in der Branche der Kunststofftechnologie. Die Kreislaufwirtschaft für konventionelle Kunststoffe als auch für Biokunststoffe steht mehr denn je im Fokus der industriellen sowie institutionellen Forschung. Dabei funktioniert Nachhaltigkeit grundsätzlich gleichermaßen mit konventionellen Polymeren und mit Biopolymeren. Beide Werkstoffklassen rücken im Sinne der Nachhaltigkeit weiter zusammen, was sich im Namen des Instituts widerspiegelt.\nDas ibp bildet die Brücke zwischen der internationalen Forschung und der Produktentwicklung in Unternehmen. Die Forschungsschwerpunkte liegen in der Kunststoffverarbeitung im Labormaßstab, der Einsatzqualifizierung von Biokunststoffen, Recyclingwerkstoffen und -technologien, der Aufarbeitung und Nutzbarmachung von biogenen Reststoffen, sowie der Forschung zu recyclingfähigen Produktdesigns. Das Ziel ist es Nachhaltigkeit direkt durch Produkt- und Prozessentwicklung, aber auch längerfristig durch Grundlagenforschung zu Struktur-Eigenschafts-Beziehungen an nachhaltigen Werkstoffen und den Einsatz biogener Roh- und Reststoffe zu ermöglichen. Eine umfangreiche Ausstattung zur Aufbereitung von Reststoffen, Herstellung von Kunststoffcompounds, Verarbeitung dieser zu Produkten im Labormaßstab sowie zur ausführlichen wissenschaftlichen Analyse ermöglicht es effektiv zu forschen. Bei der Forschung und Entwicklung am ibp stehen zur Umsetzung der Vorhaben transferorientierte, kooperative sowie grundständige öffentliche Förderprogramme ebenso im Fokus wie die direkte Kooperation mit Industriepartnern oder die Realisierung von Forschungsdienstleistungsaufträgen. Insbesondere die Forschung zur Erhöhung der Einsatzmenge von Biokunststoffen steht in direktem Zusammenhang mit dem Netzwerk CREATE!",
+      "website_url": "https://www.ibp-hof.de",
+      "street": "Alfons-Goppel-Platz 1",
+      "postal_code": "95028",
+      "city": "Hof",
+      "country": "Deutschland",
+      "contact_name": "Michael Nase",
+      "contact_position": "Institutsleiter",
+      "contact_email": "michael.nase@hof-university.de",
+      "contact_phone": "015152327355",
+      "user_email": "michael.nase@hof-university.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "forschung-und-entwicklung",
+        "kunststoffverarbeitung-compoundeur"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 4,
+          "notes": "Erstqualifizierung von biobasierten Kunststoffen; Aufarbeitung von biogenen Reststoffen"
+        }
+      ],
+      "knowhows": [
+        {
+          "slug": "materialentwicklung-verarbeitung",
+          "name": "Materialentwicklung und Verarbeitung",
+          "score": 90
+        },
+        {
+          "slug": "nachhaltigkeitsbetrachtung",
+          "name": "Nachhaltigkeitsbetrachtung",
+          "score": 90
+        },
+        {
+          "slug": "marktzugang-best-practices",
+          "name": "Marktzugang und Best Practices",
+          "score": 40
+        },
+        {
+          "slug": "chemie-erneuerbarer-materialien",
+          "name": "Chemie erneuerbarer Materialien",
+          "score": 90
+        },
+        {
+          "slug": "kreislaufschliessung-biomasse",
+          "name": "Kreislaufschließung durch Biomasse als Rohstoff und Kompostierbarkeit",
+          "score": 90
+        }
+      ],
+      "demos": [
+        {
+          "title": "Compounder (3 bis 15 kg/h)",
+          "description": null,
+          "sort_order": 0
+        },
+        {
+          "title": "Blasfolienextrusionsanlage (8 kg/h)",
+          "description": null,
+          "sort_order": 1
+        },
+        {
+          "title": "Castfolienextrusionsanlage (5 kg/h)",
+          "description": null,
+          "sort_order": 2
+        },
+        {
+          "title": "Spritzgussanlage (für Prüfstäbe)",
+          "description": null,
+          "sort_order": 3
+        }
+      ],
+      "services": [
+        {
+          "title": "Forschung & Entwicklung",
+          "description": null,
+          "sort_order": 0
+        }
+      ],
+      "technology_suggestions": [
+        {
+          "name": "Erstqualifizierung von biobasierten Kunststoffen; Aufarbeitung von biogenen Reststoffen",
+          "notes": null,
+          "trl": 4
+        }
+      ]
+    },
+    {
+      "name": "IPPM Technologies GmbH",
+      "display_name": null,
+      "description": "Die Kernkompetenz der IPPM Technologies sind mikrowellenunterstützte chemische Reaktionen und Prozesse in speziell konfigurierten Mikrowellenreaktoren im kontinuierlichen Fluss. Vom Labor- bis zum Industriemaßstab können wertvolle Inhaltsstoffe wie beispielsweise Tocopherol oder Squalen aus Nebenprodukten der Speiseölgewinnung isoliert werden.\n\nIm Sol-Gel-Prozess können im Mikrowellenfeld neuartige Produkte (Silica Cluster) mit verbesserten Materialeigenschaften hergestellt werden, die in den Bereichen Kosmetik, Pharma und Pflanzenschutz Anwendung finden und organische Polymere ersetzen können. Abbauprodukte dieser Silica Cluster sind orthokieselsäure (o-Kieselsäure), ein natürlich vorkommender Inhaltsstoff, und Silikate.\n\nZudem lassen sich im Mikrowellenverfahren aus Nebenprodukten der Lebensmittelindustrie Bausteine zur Herstellung biologisch gut abbaubarer Kunststoffe gewinnen.\n\nDie mikrowellenunterstützten Verfahren zeichnen sich durch hohe Energieeffizienz aus und sind im 1000-Tonnen-Maßstab skalierbar.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "63755",
+      "city": "Alzenau",
+      "country": "Deutschland",
+      "contact_name": "Gertraud Scholz",
+      "contact_position": "Mitgründer, Geschäftsführung",
+      "contact_email": "scholz@ippm.eu",
+      "contact_phone": "015253710579",
+      "user_email": "scholz@ippm.eu",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoff-chemikalien-rohstofferzeugung"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 5,
+          "notes": "Mikrowellenunterstützte chemische Reaktionen zur gezielten Isolierung von Feinchemikalien, zB Squalene aus Speiseöl; Auch relevant zur Modifikation von Sol-Gel-Prozessen; Auch möglich für Polymer-Grundstoffe"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Mikrowellenunterstützte chemische Reaktionen zur gezielten Isolierung von Feinchemikalien, zB Squalene aus Speiseöl; Auch relevant zur Modifikation von Sol-Gel-Prozessen; Auch möglich für Polymer-Grun",
+          "notes": null,
+          "trl": 5
+        }
+      ]
+    },
+    {
+      "name": "J. Rettenmaier & Söhne GmbH + Co KG",
+      "display_name": null,
+      "description": "Die Rettenmaier & Söhne GmbH + Co KG – als inhabergeführtes Familienunternehmen seit 1878 regional verwurzelt und als Unternehmensgruppe mit ca. 4 000 Mitarbeiter*innen global aktiv – fokussiert sich auf Aktivitäten im Bereich nachhaltiger, funktionaler Pflanzenfasern.\n\nUnsere hochwertigen funktionalen Faser-Produkte bestehen aus natürlichen, nachwachsenden Rohstoffen wie Getreide- und Fruchtfasern, Meeresalgen, Holz sowie der daraus gewonnenen Cellulose.\n\nDerzeit entwickeln wir mikrofibrillierte Weizenstrohzellstoffe optimiert für die Einarbeitung in Kunststoffe sowie erörtern die Vorteile behandelter gegenüber unbehandelter Holzpartikel und -fasern, um die Eigenschaften von Biopolymer-Kompositen zu verbessern.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "74523",
+      "city": "Rosenberg",
+      "country": "Deutschland",
+      "contact_name": "Sascha Galic",
+      "contact_position": "Senior Produktmanager",
+      "contact_email": "sascha.galic@jrs.de",
+      "contact_phone": "07967152513",
+      "user_email": "sascha.galic@jrs.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoff-chemikalien-rohstofferzeugung"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 9,
+          "notes": "Funktionalisierte Pflanzenfasern für Kunststoffe (Getreide- und Fruchtfasern, Meeresalgen,Cellulose,…)"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Funktionalisierte Pflanzenfasern für Kunststoffe (Getreide- und Fruchtfasern, Meeresalgen,Cellulose,…)",
+          "notes": null,
+          "trl": 9
+        }
+      ]
+    },
+    {
+      "name": "Kabel Sterner GmbH",
+      "display_name": null,
+      "description": "Die Kabel Sterner GmbH mit Sitz in Gaimersheim ist ein führender Hersteller von Spezialkabeln. Mit an die 100 verarbeiteten Kunststofftypen und einem modernen Maschinenpark bieten wir individuelle Extrusionslösungen für verschiedenste Anwendungen. Obwohl wir derzeit noch keine biobasierten oder nachhaltigen Kunststoffe einsetzen, sind wir sehr daran interessiert, in diesem Bereich aktiv mitzuwirken. Unser Ziel ist es, gemeinsam mit Partnern neue, nachhaltige Materialien zu erproben und so einen Beitrag zu einer ressourcenschonenden Zukunft zu leisten.\n\nIm Innovationscluster CREATE sehen wir eine wertvolle Plattform, um unser Know-how einzubringen und gemeinsam neue Wege für die Industrie zu entwickeln.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "85080",
+      "city": "Gaimersheim",
+      "country": "Deutschland",
+      "contact_name": "Sebastian Rott",
+      "contact_position": "Forschung & Entwicklung",
+      "contact_email": "sebastian.rott@kabel-sterner.de",
+      "contact_phone": "085483239121",
+      "user_email": "sebastian.rott@kabel-sterner.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoffverarbeitung-compoundeur"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "KLT Hummel Plastic GmbH",
+      "display_name": null,
+      "description": "KLT ist seit 1963 Hersteller von Spritzgussprodukten für verschiedenste Anwendungen in den Bereichen Automotive, Industrie, Medizintechnik und Haushalt.\n\nIm Bereich der Bioökonomie verfügt das Unternehmen aktuell noch über wenig Erfahrung – bisher wurden nur probeweise Mustermaterialien auf Bio-Basis verarbeitet. Regranulat und Recyclat werden dagegen, je nach Zulassung durch die Kunden, regelmäßig eingesetzt.\n\nIm Zuge der Innovation-Factory (das Technikum des Unternehmens) sollen die Kompetenzen in Zukunft erweitert werden, da die Kundenanforderungen im Bereich Nachhaltigkeit spürbar ansteigen.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "97424",
+      "city": "Schweinfurt",
+      "country": "Deutschland",
+      "contact_name": "Thomas Arbter",
+      "contact_position": "Projekt Mangement",
+      "contact_email": "t.arbter@klt.de",
+      "contact_phone": null,
+      "user_email": "t.arbter@klt.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoffverarbeitung-compoundeur"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "Landpack",
+      "display_name": null,
+      "description": "Als Landpack GmbH (Alling) entwickeln und produzieren wir ökologische Isolierverpackungen. Unsere Bioökonomie-Kompetenzen umfassen die Verwendung nachwachsender Rohstoffe (Stroh von regionalen Landwirten) und die Entwicklung kompostierbarer Verpackungsmaterialien. Wir betreiben eigene Produktionsanlagen zur Verarbeitung von Naturfasern.Im Zusammenhang mit dem Innovationscluster CREATE tragen wir durch regionale Rohstoffnutzung, innovative Biowerkstoffe und die Demonstration biobasierter Anwendungen zur nachhaltigen Entwicklung bei.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "82239",
+      "city": "Alling",
+      "country": "Deutschland",
+      "contact_name": "Thomas Maier-Eschenlohr",
+      "contact_position": "GF",
+      "contact_email": "thomas.maier@landpack.de",
+      "contact_phone": null,
+      "user_email": "thomas.maier@landpack.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "landwirtschaftliche-rohstoffproduktion"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 9,
+          "notes": "Regionale, strohbasiere Isolierverpackungen"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Regionale, strohbasiere Isolierverpackungen",
+          "notes": null,
+          "trl": 9
+        }
+      ]
+    },
+    {
+      "name": "Lechner Kunststofftechnik",
+      "display_name": null,
+      "description": "Über richtige Kompetenzen verfügen wir bisher noch nicht. Haben allerdings Interesse an dem Thema biobasierte Kunststoffe, weil wir denken das wird verstärkt kommen bzw. ist Zukunftsweisend. Erste Kunden Fragen auch bereits bei uns an ob wir biobasierte Kunststoffe anbieten könnten?",
+      "website_url": null,
+      "street": null,
+      "postal_code": "85567",
+      "city": "Grafing",
+      "country": "Deutschland",
+      "contact_name": "Florian Arndt",
+      "contact_position": "QMB",
+      "contact_email": "f.arndt@franz-lechner.de",
+      "contact_phone": "080922325611",
+      "user_email": "f.arndt@franz-lechner.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoffverarbeitung-compoundeur"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "MANN+HUMMEL GmbH",
+      "display_name": null,
+      "description": "MANN+HUMMEL ist ein weltweit führendes Unternehmen in der Filtrationstechnologie. Unterteilt in die zwei Geschäftsbereiche Transportation sowie Life Sciences & Environment entwickelt der in Ludwigsburg (Deutschland) ansässige Konzern intelligente Filtrations- und Trennlösungen, die saubere Mobilität, saubere Luft, sauberes Wasser und eine saubere Industrie ermöglichen. Damit leistet das 1941 gegründete Familienunternehmen einen wichtigen Beitrag zu einer sauberen Erde und zur nachhaltigen Nutzung begrenzter Ressourcen. Im Jahr 2023 erwirtschafteten über 22.000 Mitarbeitende an mehr als 80 Standorten einen Umsatz von 4,7 Milliarden Euro.\n\nWeitere Informationen zu MANN+HUMMEL finden Sie unter mann-hummel.com.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "71636",
+      "city": "Ludwigsburg",
+      "country": "Deutschland",
+      "contact_name": "Alrun Spennemann",
+      "contact_position": "Leitung Spritzguss und Schweißen",
+      "contact_email": "alrun.spennemann@mann-hummel.com",
+      "contact_phone": "+49 (7141) 98 - 4305",
+      "user_email": "alrun.spennemann@mann-hummel.com",
+      "size_slug": null,
+      "industry_slugs": [
+        "verarbeitung-vertrieb-endprodukte"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "Marker Deutschland GmbH",
+      "display_name": null,
+      "description": "Ein erheblicher Anteil unserer Scope-3.1 Emissionen stammt aus der Verwendung von Kunststoffen. Daher suchen wir gezielt nach funktionalen, wirtschaftlichen und nachhaltigen Alternativen zu konventionellen Kunststoffen. Unser Ziel ist es, biobasierte Materialien in unsere Produkte zu integrieren, um die Abhängigkeit von fossilen Rohstoffen zu verringern. Diese Maßnahmen wollen wir durch fundiertes Life-Cycle-Assessment bewerten. Daher haben wir auch großes Interesse am Fachforum Nachhaltigkeitsbetrachtung.\n\n\nMarker ist ein führender Anbieter von Skibindungen und Teil des Elevate Outdoor Collective. Wir setzen auf Innovation und Nachhaltigkeit, um die Zukunft des Wintersports mitzugestalten.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "82377",
+      "city": "Penzberg",
+      "country": "Deutschland",
+      "contact_name": "Michael Knye",
+      "contact_position": "Global Sustainability Manager",
+      "contact_email": "michael.knye@elevate-oc.eu",
+      "contact_phone": "+49 8856 8000-117",
+      "user_email": "michael.knye@elevate-oc.eu",
+      "size_slug": null,
+      "industry_slugs": [
+        "verarbeitung-vertrieb-endprodukte"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 2,
+          "notes": "Biobasierte Lösungen für nachhaltigere Skibindungen"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Biobasierte Lösungen für nachhaltigere Skibindungen",
+          "notes": null,
+          "trl": 2
+        }
+      ]
+    },
+    {
+      "name": "Neue Materialien Bayreuth GmbH",
+      "display_name": null,
+      "description": "Die Neue Materialien Bayreuth GmbH ist eine außeruniversitäre Landesforschungseinrichtung mit Sitz in Bayreuth. Sie ist spezialisiert auf die Entwicklung innovativer Werkstoffe und energieeffizienter Verfahren in den Bereichen Leichtbau für Kunststoffe, Metalle und Verbundwerkstoffe.\n\nKompetenzen in Bezug zur Bioökonomie:\n\nMaterialentwicklung mit biobasierten und kompositbasierten Werkstoffen\nEntwicklung von Partikelschäumen auf Basis biobasierter Materialien\nAdditive & digitale Fertigung von biobasierten Materialien in einer SLS-Demofabrik\nProzessdigitalisierung & Automatisierung zur Effizienzsteigerung und Reproduzierbarkeit\nRecyclingstrategien für biobasierte Materialien und Substitution kritischer Rohstoffe\nDurchführung von LCA-Analysen (Life Cycle Assessment)",
+      "website_url": null,
+      "street": null,
+      "postal_code": "95448",
+      "city": "Bayreuth",
+      "country": "Deutschland",
+      "contact_name": "Andreas Köppel",
+      "contact_position": "Teamleiter Partikelschäume",
+      "contact_email": "andreas.koeppel@nmbgmbh.de",
+      "contact_phone": null,
+      "user_email": "andreas.koeppel@nmbgmbh.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "forschung-und-entwicklung"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 4,
+          "notes": "Materialentwicklung biobasierte und biologisch abbaubarer Werkstoffe; Darauf aufbauend Entwicklung von Partikelschäumen; additiver Fertigung"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Materialentwicklung biobasierte und biologisch abbaubarer Werkstoffe; Darauf aufbauend Entwicklung von Partikelschäumen; additiver Fertigung",
+          "notes": null,
+          "trl": 4
+        }
+      ]
+    },
+    {
+      "name": "Novamont GmbH",
+      "display_name": null,
+      "description": "NOVAMONT ist in den Bereichen Biokunststoffe und Biochemikalien ein international führendes Unternehmen. NOVAMONT engagiert sich für ein Modell der Bioökonomie, in dem sie nicht allein für eine effiziente und nachhaltige Nutzung erneuerbarer Ressourcen steht, sondern auch eine wesentliche Rolle bei der Erneuerung des ländlichen Raumes spielt.\nNovamont ist ein zertifiziertes B Corporation-Unternehmen, das zu den internationalen Akteuren im Bereich biologisch abbaubarer und kompostierbarer Biokunststoffe sowie in der Entwicklung von vollständig oder teilweise pflanzlichen Bioprodukten und Biochemikalien, z.B. biobasiertes 1,4-Butandiol und Pelargonsäure, gehört.\nMit einem zirkulären Ansatz für die Bioökonomie wollen wir seit jeher die Art und Weise neu gestalten, wie Materialien und Anwendungen hergestellt, verbraucht und entsorgt werden, und dabei die Entstehung lokaler Kreislaufwirtschaftssysteme fördern.  Unsere Innovationen sind das Ergebnis eines Modells der Kreislaufwirtschaft, das wir seit unseren Anfängen verfolgen und das auf der Umwandlung stillgelegter oder nicht mehr wettbewerbsfähiger Industriestandorte, auf Forschungs- und Innovationsaktivitäten zur Entwicklung einer in der Region integrierten landwirtschaftlichen Lieferkette und auf der Entwicklung von Produkten basiert, die zur Lösung spezifischer ökologischer, wirtschaftlicher und sozialer Probleme konzipiert sind.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "65760",
+      "city": "Eschborn",
+      "country": "Deutschland",
+      "contact_name": "Friedrich von Hesler",
+      "contact_position": "Area Manager DACH",
+      "contact_email": "friedrich.vonhesler@novamont.com",
+      "contact_phone": "06196-947888",
+      "user_email": "friedrich.vonhesler@novamont.com",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoff-chemikalien-rohstofferzeugung"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 9,
+          "notes": "Herstellung des  biobasierten und biologisch abbaubaren thermoplastischen Stärkeblends"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Herstellung des  biobasierten und biologisch abbaubaren thermoplastischen Stärkeblends",
+          "notes": null,
+          "trl": 9
+        }
+      ]
+    },
+    {
+      "name": "NTIC GmbH",
+      "display_name": null,
+      "description": "Wir sind mehr als ein Biokunststoffhersteller. Wir helfen Unternehmen und Menschen, ihre Nachhaltigkeitsziele zu erreichen. Unsere Produkte sind vom BPI und vom TÜV Österreich dafür zertifiziert, dass sie das tun, was wir versprechen - in einer kompostierenden Umgebung in die Natur zurückzukehren, ohne Mikroplastik zu hinterlassen.\n\nBei Natur-Tec kontrollieren wir unsere Lieferkette von der Produktforschung und -entwicklung bis hin zum fertigen Produkt. Wir entwickeln zertifizierte kompostierbare Granulate und Technologien in unseren Labors in den USA, Indien und China. Die fertigen Produkte werden dann innerhalb eines Netzwerks von globalen Vertragspartnern hergestellt, die unseren Marken verpflichtet sind.\n\nWir konzipieren, entwickeln und verbessern Produkte auf der Grundlage der sich ändernden Marktanforderungen und -bedürfnisse, der Gesetzgebung und unserer Verpflichtung, die leistungsfähigsten Produkte zu liefern.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "47809",
+      "city": "Krefeld",
+      "country": "Deutschland",
+      "contact_name": "Frank Höbener",
+      "contact_position": "Geschäftsführer",
+      "contact_email": "fhoebener@ntic.com",
+      "contact_phone": "01788866913",
+      "user_email": "fhoebener@ntic.com",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoff-chemikalien-rohstofferzeugung"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 9,
+          "notes": "Kompostierbare Kunststoffprodukte"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Kompostierbare Kunststoffprodukte",
+          "notes": null,
+          "trl": 9
+        }
+      ]
+    },
+    {
+      "name": "OTH Regensburg - Technologie Campus Neustadt an der Donau",
+      "display_name": null,
+      "description": "Der Technologie Campus Neustadt an der Donau, eine dezentrale Einrichtung der OTH Regensburg, widmet sich der Erforschung der Themengebiete Leichtbau, Faserverbund und Werkstoffsimulation. Im Bereich des Faserverbunds forschen Mitarbeitende seit geraumer Zeit an der Verwendung von Naturfasern im technischen Kontext. Ziel der Forschungsaktivitäten ist es unter anderem, kohlenstoff- und glasfaserbasierte Werkstoffe durch den Einsatz nachhaltiger, nachwachsender Rohstoffe, wie beispielsweise Hanf oder Hopfen, zumindest teilweise zu substituieren bzw. die Qualität und Eigenschaftskonstanz von Verbundwerkstoffen mit Naturfaserbasis zu verbessern.\n\nUnsere Kompetenzen liegen hierbei im fachlichen Kontext bei der Material- und Prozessforschung sowie in Mechanik und Maschinenbau, ebenso wie in der Geräte- und Anlageninfrastruktur. Die thematische Ausrichtung auf die Nachhaltigkeit weist ein hohes Potential für die Zukunft der deutschen Ökonomie und der weltweiten Entwicklung auf. Ein zentraler Aspekt ist in diesem Zusammenhang auch der Wissenstransfer, den wir in zahlreichen Netzwerken und Aktivitäten betreiben und der dazu dient, die Ergebnisse der Forschung auf lange Sicht in Wirtschaft und Gesellschaft zu spiegeln.\n\nDas fachliche Thema der wirtschaftlichen Nutzung von bio-basierten Kunst- und Füllstoffen zeigt zudem eine hohe Übereinstimmung mit den Bestrebungen des Technologie Campus. Wir unterstützen das CREATE Netzwerk und wollen gemeinsam die Bioökonomie der Kunststoffe voranbringen.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "93333",
+      "city": "Neustadt an der Donau",
+      "country": "Deutschland",
+      "contact_name": "Annalena Böck",
+      "contact_position": "Forschungsreferentin",
+      "contact_email": "annalena.boeck@oth-regensburg.de",
+      "contact_phone": null,
+      "user_email": "annalena.boeck@oth-regensburg.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "forschung-und-entwicklung"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 4,
+          "notes": "Technischer Leichtbau mit biobasiertem Faserverbund und Werkstoffsimulation"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Technischer Leichtbau mit biobasiertem Faserverbund und Werkstoffsimulation",
+          "notes": null,
+          "trl": 4
+        }
+      ]
+    },
+    {
+      "name": "POLIFILM EXTRUSION GmbH",
+      "display_name": null,
+      "description": "Die POLIFILM EXTRUSION GmbH ist Teil der familiengeführten, international agierenden POLIFILM Gruppe, einem führenden Hersteller polyolefinbasierter Folienlösungen. Als Spezialist in der Folienextrusion zählt die POLIFILM EXTRUSION mit Hauptsitz in Weißandt-Gölzau zu Europas größten Extrusionsstandorten.\n\nDie POLIFILM EXTRUSION ist bestrebt, nachhaltige und umweltschonende Produkte anzubieten und betreibt zu diesem Zweck eigene Forschungs- und Entwicklungsleistungen. Im Fokus steht der Einsatz nachwachsender Rohstoffe, ob als kompostierbares Biopolymer oder als Polymer aus nachwachsenden Rohstoffquellen.\n\nWeitere Entwicklungsthemen beschäftigen sich mit dem Einsatz von PCR-Materialien und der Wieder- und Weiterverarbeitung von eigenen Recyclingabfallströmen. Dazu wurde erst vor kurzem eine Komplettlösung in Betrieb genommen, die Folienabfälle wieder direkt in Folienprodukte verarbeiten und konfektionieren kann, ohne die Abfälle zuvor zu regranulieren. Die Technologie ist besonders für schwer recyclebare Abfälle, wie u. a. kleberbeschichtete Folien, geeignet.\n\nDie Entwicklungsabteilung beschäftigt sich ebenfalls mit der Erforschung von bioabbaubaren und kompostierbaren Folienanwendungen und ist hier in mehreren Forschungsprojekten aktiv.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "6369",
+      "city": "Südliches Anhalt",
+      "country": "Österreich",
+      "contact_name": "POLIFILM EXTRUSION GmbH",
+      "contact_position": null,
+      "contact_email": "info-pfe@polifilm.de",
+      "contact_phone": null,
+      "user_email": "info-pfe@polifilm.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoffverarbeitung-compoundeur"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 3,
+          "notes": "Forschungsprojekte zu kompostierbaren Folien"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Forschungsprojekte zu kompostierbaren Folien",
+          "notes": null,
+          "trl": 3
+        }
+      ]
+    },
+    {
+      "name": "poly/prove Consulting Dr. Wolff",
+      "display_name": "poly/prove",
+      "description": "poly/prove unterstützt Unternehmen der Kunststoffindustrie dabei, regulatorische Randbedingungen der Kreislaufwirtschaft in wirtschaftlichen Mehrwert zu übersetzen. Kunststoffexpertise und Betriebswirtschaft wirken Hand in Hand für optimierte Kosten- und Ertragsstrukturen, höhere Profitabilität und nachhaltige Wettbewerbsfähigkeit.",
+      "website_url": "https://polyprove.de",
+      "street": "Am Schmiedlacker 20c",
+      "postal_code": "84028",
+      "city": "Landshut",
+      "country": "Deutschland",
+      "contact_name": "Thomas Wolff",
+      "contact_position": "Inhaber",
+      "contact_email": "wolff@polyprove.de",
+      "contact_phone": "015904899887",
+      "user_email": "wolff@polyprove.de",
+      "size_slug": "1-10",
+      "industry_slugs": [
+        "beratung-und-dienstleistungen"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [
+        {
+          "slug": "materialentwicklung-verarbeitung",
+          "name": "Materialentwicklung und Verarbeitung",
+          "score": 70
+        },
+        {
+          "slug": "nachhaltigkeitsbetrachtung",
+          "name": "Nachhaltigkeitsbetrachtung",
+          "score": 90
+        },
+        {
+          "slug": "marktzugang-best-practices",
+          "name": "Marktzugang und Best Practices",
+          "score": 70
+        },
+        {
+          "slug": "kreislaufschliessung-biomasse",
+          "name": "Kreislaufschließung durch Biomasse als Rohstoff und Kompostierbarkeit",
+          "score": 70
+        }
+      ],
+      "demos": [],
+      "services": [
+        {
+          "title": "Technologische und wirtschaftliche Unternehmensanalysen, insbesondere Stoffstrom- und Wertstromanalysen,",
+          "description": "Szenarioanalysen und Bewertungen von Geschäftsentwicklungen, Zukunftsszenarien in Form von Potenzialen, Risiken und Business Cases,\nMaßnahmenplanung und operative Umsetzung im Rahmen eines strukturierten Projektmanagements.",
+          "sort_order": 0
+        }
+      ],
+      "technology_suggestions": []
+    },
+    {
+      "name": "Polysecure GmbH",
+      "display_name": null,
+      "description": "Mit unserer Sortierlösung SORT4CIRCLE® eröffnet POLYSECURE eine neue Ära an Präzision und Effizienz in der Sortierung von Wertstoffen. Dabei werden alle Objekte erst vereinzelt und dann in einem einzigen Schritt über die kombinierte Anwendung relevanter Detektionstechnologien bestmöglich identifiziert und zielgerichtet sortiert (vgl. Briefsortierung).",
+      "website_url": null,
+      "street": null,
+      "postal_code": "79111",
+      "city": "Freiburg",
+      "country": "Deutschland",
+      "contact_name": "Christof Strohhöfer",
+      "contact_position": "CTO",
+      "contact_email": "christof.strohhoefer@polysecure.eu",
+      "contact_phone": null,
+      "user_email": "christof.strohhoefer@polysecure.eu",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoffrecycling"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 2,
+          "notes": "Präzise und effiziente Sortiertechnologie, auch für biobasierte Kunststoffe"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Präzise und effiziente Sortiertechnologie, auch für biobasierte Kunststoffe",
+          "notes": null,
+          "trl": 2
+        }
+      ]
+    },
+    {
+      "name": "poraComp GmbH",
+      "display_name": null,
+      "description": "Die poraComp GmbH stellt Kunststoffcompounds für verschiedenste Anwendungen wie Bau, Automotive, \nMöbel- oder Elektroprodukte her. Hierbei verwenden wir bereits Füllstoffe aus Altglas und Kunststoffrezyklate \nlokaler Lieferanten. Derzeit entwickeln wir ebenfalls einen Compound auf Biopolymerbasis als weitere \nnachhaltige Alternative. Wie erhoffen uns durch die derzeit hier stattfindenden Entwicklungsarbeiten innerhalb \nder nächsten 1,5 Jahre einen Prototyp mit TRL6-Reifegrad zu realisieren. Dieser soll speziell in E&E_x0002_Anwendungen eingesetzt werden wo momentan noch fast ausschliefllich auf Neuware-Compounds gesetzt wird.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "96132",
+      "city": "Schlüsselfeld",
+      "country": "Deutschland",
+      "contact_name": "poraComp GmbH",
+      "contact_position": null,
+      "contact_email": "lang.marieluise@poracomp.de",
+      "contact_phone": "01712802277",
+      "user_email": "lang.marieluise@poracomp.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoffverarbeitung-compoundeur"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 5,
+          "notes": "Compound auf Biopolymerbasis für elektrische und elektronische Anwendungen"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Compound auf Biopolymerbasis für elektrische und elektronische Anwendungen",
+          "notes": null,
+          "trl": 5
+        }
+      ]
+    },
+    {
+      "name": "RAUMEDIC AG",
+      "display_name": null,
+      "description": "Für RAUMEDIC ist die Bioökonomie ein wesentlicher Ansatz, um fossile Rohstoffe zu reduzieren und \nnachhaltigere Lösungen für die Medizintechnik zu entwickeln. Da Medizinprodukte nach \nPatientenkontakt in der Regel nicht recycelt werden können, ist es umso wichtiger, bereits zu Beginn \ndes Produktlebenszyklus auf ressourcenschonende Materialien wie Biopolymere zu setzen. Bei der \nAuswahl und Bewertung dieser Materialien bringt RAUMEDIC seine langjährige Erfahrung ein und \nberücksichtigt Funktionalität, Sicherheit und regulatorische Anforderungen gleichermaßen.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "95233",
+      "city": "Helmbrechts",
+      "country": "Deutschland",
+      "contact_name": "Jessica Hiller",
+      "contact_position": "Senior Materials Engineer",
+      "contact_email": "jessica.hiller@raumedic.com",
+      "contact_phone": "+49 9252 359 2505",
+      "user_email": "jessica.hiller@raumedic.com",
+      "size_slug": null,
+      "industry_slugs": [
+        "verarbeitung-vertrieb-endprodukte"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 2,
+          "notes": "Nachhaltige Compounds für Medizinprodukte"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Nachhaltige Compounds für Medizinprodukte",
+          "notes": null,
+          "trl": 2
+        }
+      ]
+    },
+    {
+      "name": "R-Cycle Initiative",
+      "display_name": null,
+      "description": "R-Cycle ist ein Zusammenschluss von Unternehmen und Organisationen, die sich f¸r die weltweite \nStandardisierung von digitalen Produktp‰ssen f¸r Kunststoffprodukte einsetzen - basierend auf GS1 \nStandards. R-Cycle ist der offene R¸ckverfolgungsstandard f¸r nachhaltige Kunststoffprodukte und \n-verpackungen. Mit dem digitalen Produktpass werden bereits w‰hrend der Verpackungsherstellung und \n-bef¸llung (recycling)relevante Informationen automatisch erfasst und durch die Wertschˆpfungskette \nweitergeleitet. Dies ist die Grundlage f¸r eine funktionierende Kreislaufwirtschaft. Das System ist bereits als \nPrototyp im realen Einsatz und wir entwickeln es zur Marktreife (~TRL8).",
+      "website_url": null,
+      "street": null,
+      "postal_code": "53844",
+      "city": "Troisdorf",
+      "country": "Deutschland",
+      "contact_name": "R-Cycle Initiative",
+      "contact_position": null,
+      "contact_email": "benedikt.brenken@reifenhauser.com",
+      "contact_phone": null,
+      "user_email": "benedikt.brenken@reifenhauser.com",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoffrecycling"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "RENOLIT SE",
+      "display_name": null,
+      "description": "RENOLIT forscht und entwickelt an Produkten, die auf nachwachsenden Rohstoffen basieren. Dies umfasst die Untersuchung alternativer Materialien und die Anpassung unserer Produktionsprozesse. Darüber hinaus arbeiten wir an Produktionsprozessen in der vorgelagerten Wertschöpfungskette, um Rohstoffe aus nachwachsenden und nachhaltigen Quellen zu erzeugen.\n\nRENOLIT setzt sich für das Recycling seiner Produkte ein und entwickelt Lösungen, die die Wiederverwertbarkeit von Kunststoffen verbessern. Dies beinhaltet die Entwicklung von recyclingfähigen Produktdesigns und die Zusammenarbeit mit Partnern im Recyclingbereich. Wir optimieren unsere Produktionsprozesse, um den Verbrauch von Ressourcen wie Wasser und Energie zu minimieren. Dies trägt nicht nur zur Bioökonomie bei, sondern senkt auch unsere Produktionskosten und verbessert unsere Umweltbilanz.\n\nAls Familienunternehmen denkt RENOLIT langfristig und investiert in nachhaltige Lösungen. Die Bioökonomie ist ein wichtiger Bestandteil unserer Unternehmensstrategie für eine zukunftsfähige Entwicklung.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "67547",
+      "city": "Worms",
+      "country": "Deutschland",
+      "contact_name": "Heribert Decher",
+      "contact_position": "Leiter Nachhaltigkeit",
+      "contact_email": "heribert.decher@renolit.com",
+      "contact_phone": "015157234510",
+      "user_email": "heribert.decher@renolit.com",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoffverarbeitung-compoundeur"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "Rottal Hanf GmbH",
+      "display_name": null,
+      "description": "Unser Unternehmen sieht sich als Primärproduzent von Nutzhanf - die 100% Nutzung der Pflanze steht hierbei im Vordergrund. Neue Entwicklungen wurden auf den Weg gebracht, welche neue Faserqualitäten ermöglichen. Diese sowie weitere Vorhaben gilt es im Rahmen von CREATE zu evaluieren.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "94140",
+      "city": "Ering am Inn",
+      "country": "Deutschland",
+      "contact_name": "Matthias Schwarz",
+      "contact_position": "Geschäftsführer",
+      "contact_email": "schwarzm@rottal-hanf.de",
+      "contact_phone": "08573 96 87 865",
+      "user_email": "schwarzm@rottal-hanf.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "landwirtschaftliche-rohstoffproduktion"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 2,
+          "notes": "Hanffasern für Biokomposite"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Hanffasern für Biokomposite",
+          "notes": null,
+          "trl": 2
+        }
+      ]
+    },
+    {
+      "name": "ROWASOL GmbH",
+      "display_name": null,
+      "description": "Wir stellen Flüssigfarben für die Kunststoffeinfärbung her und sind Mitglied des SKZ. Wir werden zur KUTENO die neue Produktgruppe \"ROWASOL GreenLine\" launchen. Das sind biobasierte Flüssigfarben (inkl. Biobasierten Farbmitteln!) zum Einfärben von biobasierten Kunststoffen. Zudem verfass ich eine Masterarbeit zum Thema \"Strategien für biobasierte Funktionalstoffe in Premium-Nischen - KMU-spezifische Positionierungs- und Kooperationsmodelle in der Spezialchemie\". Zum einen suche ich dafür noch Interviewpartner, zum anderen möchte ich die Ergebnisse in den passenden Netzwerken veröffentlichen.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "25421",
+      "city": "Pinneberg",
+      "country": "Deutschland",
+      "contact_name": "Udo Wilkens",
+      "contact_position": "Geschäftsführer",
+      "contact_email": "u.wilkens@rowasol.de",
+      "contact_phone": "015162654196",
+      "user_email": "u.wilkens@rowasol.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoffverarbeitung-compoundeur"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 7,
+          "notes": "Biobasierte Flüssigfarben für biobasierte Kunststoffe"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Biobasierte Flüssigfarben für biobasierte Kunststoffe",
+          "notes": null,
+          "trl": 7
+        }
+      ]
+    },
+    {
+      "name": "Sachverständigenrat Bioökonomie Bayern (SVB)",
+      "display_name": null,
+      "description": "Der Sachverst‰ndigenrat Bioˆkonomie Bayern ber‰t in erster Linie die Bayerische \nStaatsregierung in Fragestellungen der Bioˆkonomie, evaluiert die Bayerische Bioˆkono_x0002_miestrategie und erarbeitet Empfehlungen f¸r deren Weiterentwicklung und f¸r die Ge_x0002_staltung der Rahmenbedingungen zur erfolgreichen Umsetzung einer biobasierten Wirt_x0002_schaft in Bayern. Die Expertise der berufenen Mitglieder erstreckt sich ¸ber die umfang_x0002_reichen Themengebiete der zirkul‰ren Bioˆkonomie wie Biotechnologie, Chemie bioge_x0002_ner Rohstoffe, Bioverfahrenstechnik, Holzwissenschaften und die industrielle Nutzung \nvon nachwachsenden Rohstoffen. Ziel des SVB ist es auch, einen gesellschaftlichen Dia_x0002_log ¸ber Bioˆkonomie zu fˆrd",
+      "website_url": null,
+      "street": null,
+      "postal_code": "94315",
+      "city": "Straubing",
+      "country": "Deutschland",
+      "contact_name": "Anna Eiglsberger",
+      "contact_position": null,
+      "contact_email": "anna.eiglsperger@biooekonomierat.bayern.de",
+      "contact_phone": null,
+      "user_email": "anna.eiglsperger@biooekonomierat.bayern.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "beratung-und-dienstleistungen"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "Schlegel und Partner GmbH",
+      "display_name": null,
+      "description": "Schlegel und Partner ist eine technische Unternehmensberatung. Als Wachstumsberater haben wir uns auf kundenspezifische Business-to-Business-Marktforschung und Strategieberatung spezialisiert. Wir decken Chancen und Risiken innerhalb vorhandener Märkte auf und identifizieren neue Material-, Produkt- oder Kundenpotenziale. Wir sind der Missing Link zwischen Marktforschung und Strategieberatung und liefern valide Entscheidungsgrundlagen für  erfolgreichen Strategien.\nUnsere Kunden und Kompetenzen liegen neben klassischen Industrien wie Automobil- und Maschinenbau sowie Textilien vor allem auch in Life Science und Chemie, von wo wir Know-how in der Kunststoffindustrie sowie vielfältigen Ansätzen zur Nachhaltigkeit mitbringen können. Wir haben großes Interesse an den Entwicklungen in Bezug auf eine Bioökonomie und würden uns sehr freuen, an den Aktivitäten im Rahmen des Cluster CREATE teilzunehmen.Beschreiben Sie ggf. auch die Tätigkeitsfelder, welche mit dem Innovationscluster CREATE in einem Zusammenhang stehen.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "69469",
+      "city": "Weinheim",
+      "country": "Deutschland",
+      "contact_name": "Thorsten Bies",
+      "contact_position": "Senior Consultant",
+      "contact_email": "thorsten.bies@schlegelundpartner.de",
+      "contact_phone": null,
+      "user_email": "thorsten.bies@schlegelundpartner.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "beratung-und-dienstleistungen"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "SEMRAU technologies",
+      "display_name": null,
+      "description": "Wir sind Hersteller von Reinigungsgranulaten und deshalb zum einen auf der Suche nach alternativen Rohstoffen für unsere Produkte und zum anderen möchten wir helfen mit unseren Produkten die Problemstellungen bei der Verarbeitung von biobasierten Kunststoffen lösen.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "97237",
+      "city": "Altertheim",
+      "country": "Deutschland",
+      "contact_name": "Thomas Semrau",
+      "contact_position": null,
+      "contact_email": "t.semrau@semrau-technik.com",
+      "contact_phone": "+499307408",
+      "user_email": "t.semrau@semrau-technik.com",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoffverarbeitung-compoundeur"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "Siegfried Hofmann GmbH",
+      "display_name": null,
+      "description": "Das deutsche Familienunternehmen bietet seinen internationalen Kunden innovative Lösungen in den Bereichen Spritzguss-Werkzeugbau, Maschinenbau, Lohnfertigung, Digitalisierung und Automatisierung für die kunststoffverarbeitende Industrie mit dem Fokus auf Automotive, Medizin und Verpackung.\n\nKontinuierliche Forschungsarbeit sorgt für stetige Impulse sowie neue wirtschaftliche Technologien. So überzeugt beispielsweise das Eigenprodukt BEAD.MACHINE auch dank verschiedener Patente: Von der außergewöhnlichen Produktqualität gepaart mit Designfreiheit, über den nachhaltigen Betrieb mit daraus hervorgehenden Kostenersparnissen, bis hin zur schnellen und flexiblen Einsatzbereitschaft bietet der intuitive Partikelschaum-Formteilautomat ein starkes Gesamtpaket.\n\nÜber 200 Mitarbeiter in Lichtenfels, Oberfranken, entwickeln und produzieren von Multikavitäten-Werkzeugen bis hin zu voll automatisierten Maschinenparks stets gemäß dem Anspruch höchster Produkt- und Servicequalität.\n\nDie 1958 gegründete Siegfried Hofmann GmbH (ehemals Werkzeugbau Siegfried Hofmann GmbH) tritt seit dem Jahr 2017 unter der Marke „Hofmann - Ihr Impulsgeber\" auf.\n\nWir sind stets interessiert an nachhaltigen Themen mitzuwirken und unsere Kompetenzen im Bereich Formenbau, Partikelschaum und 3D-Druck einzubringen.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "96215",
+      "city": "Lichtenfels",
+      "country": "Deutschland",
+      "contact_name": "Andreas Wich",
+      "contact_position": "Leiter Qualitätsmanagement und Nachhaltigkeit",
+      "contact_email": "andreas.wich@hofmann-impulsgeber.de",
+      "contact_phone": "+49 9571 766 9684",
+      "user_email": "andreas.wich@hofmann-impulsgeber.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoffmaschinenbau"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "SÜDPACK Verpackungen SE & Co. KG",
+      "display_name": null,
+      "description": "Ihr Bezug zur Bioökonomie nach eigenen Angaben: \nSÜDPACK zählt zu den innovationsstärksten Verpackungsherstellern Europas und positioniert sich klar als Treiber der Transformation hin zu einer ressourcenschonenden und zirkulären Wirtschaft. Die Aktivitäten des Unternehmens in Bezug auf Bioökonomie und Biopolymere lassen sich in zwei zentralen Handlungsfeldern darstellen. \n\n1. Produktion und Entwicklung von Biopolymer-Compounds\nSÜDPACK bietet ein Portfolio an Biopolymer-Compounds, die auf biobasierten Polymeren sowie natürlichen Füllstoffen wie Zellulose, Lignin und Talkum basieren. Dadurch entstehen Werkstoffe mit hohen biogenen Anteilen, die den Verbrauch fossiler Rohstoffe \nreduzieren und gleichzeitig leistungsfähige Materialeigenschaften bieten. \n\n2. Produktion und Entwicklung  von  Biopolymer-Folien, z.B. PLA-Folien (Polymilchsäure-Folien) \nSÜDPACK bietet ein umfangreiches Sortiment an biobasierten, biologisch abbaubaren PLA Folien, die aufgrund ihrer Transparenz, Lebensmittelverträglichkeit, Barriereeigenschaften und Kompostierbarkeit in vielen Bereichen eingesetzt werden. Sie verbinden Nachhaltigkeit, gute mechanische Eigenschaften und Optik, was sie zu einem zentralen Material im Umfeld biobasierter Verpackungen macht.\n\nBiopolymer-Compounds und Biopolymer-Folien ermöglichen:\n-Substitution fossiler Kunststoffe\n-Nutzung natürlicher Rohstoffquellen und biogener Reststoffe\n-Verbesserte CO₂-Bilanz durch biobasierte Kohlenstoffquellen\n\nDies entspricht zentralen Prinzipien der Bioökonomie, die auf erneuerbaren, nachhaltigen Ressourcen basiert.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "88416",
+      "city": "Ochsenhausen",
+      "country": "Deutschland",
+      "contact_name": "Peter Ryzko",
+      "contact_position": "R&D Leiter Compounding",
+      "contact_email": "peter.ryzko@suedpack.com",
+      "contact_phone": null,
+      "user_email": "peter.ryzko@suedpack.com",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoffverarbeitung-compoundeur"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "Süd-West-Chemie GmbH",
+      "display_name": null,
+      "description": "Die Süd-West-Chemie GmbH wurde 1946 von den Familien Sprenger und Kopp in Neu-Ulm gegründet und setzt damit die Tradition der ehemaligen August Nowack AG, Bautzen, die bereits seit 1925 unter dem Handelsnamen „Neoresit“ Kunstharze und Pressmassen hergestellt hatte, fort. Die SWC hat sich spezialisiert in der Produktion und Vermarktung technisch hochanspruchsvoller rieselfähiger Duroplastmassen, sowohl für das Pressverfahren, Spritzguss, als auch das Transfer-Moulding-Verfahren.\n\nAls Produzent und Entwicklungspartner im Bereich der duroplastischen Harzsysteme auf Basis von Phenol-, Harnstoff- und Melamin-Formaldehyd-Kondensationsharzen hat sich die Süd-West-Chemie GmbH über Jahrzehnte einen starken Einfluss am Weltmarkt erarbeitet und treibt die Entwicklung in diesen Kernbereichen weiter voran. Großer Fokus liegt hierbei in der spezifischen Materialentwicklung für unseren großen Kundenstamm sowie die Weiterentwicklung hin zu umweltverträglicheren und nachwachsenden Rohstoffen.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "89231",
+      "city": "Ulm",
+      "country": "Deutschland",
+      "contact_name": "Sebastian Ziller",
+      "contact_position": "Entwicklungsleiter",
+      "contact_email": "sebastian.ziller@swc.de",
+      "contact_phone": "+49  731 70 70 7-49",
+      "user_email": "sebastian.ziller@swc.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoff-chemikalien-rohstofferzeugung"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "Technische Hochschule Nürnberg",
+      "display_name": null,
+      "description": "Als forschungsintensivste und drittmittelstärkste aller bayerischen Hochschulen ist die \nTH Nürnberg ein wichtiger Innovationsmotor für die Metropolregion Nürnberg, wobei angewandte\nForschung und Entwicklung ein stark profilbildendes Merkmal der TH Nürnberg ist. Für die Fakultät\nVerfahrenstechnik ist die ständige Weiterentwicklung von Technologien zur Herstellung und\nVerarbeitung biobasierter Kunststoffe ein wichtiger und relevanter Forschungsaspekt. Derzeit \noptimieren wir ein Verfahren, um das in Bakterien synthetisierte und biologisch abbaubare\nBiopolymer Polyhydroxybutyrat (PHB) kostengünstig und ressourcenschonend unter Nutzung von\nindustriellen Restströmen mittelfristig im Pilotmaßstab produzieren zu können.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "90489",
+      "city": "Nürnberg",
+      "country": "Deutschland",
+      "contact_name": "Stephanie Stute",
+      "contact_position": null,
+      "contact_email": "stephanie.stute@th-nuernberg.de",
+      "contact_phone": null,
+      "user_email": "stephanie.stute@th-nuernberg.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "forschung-und-entwicklung"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 4,
+          "notes": "Synthese und Verarbeitung biobasierter Polymere; Innovative PHB-Synthese aus Reststoffen"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Synthese und Verarbeitung biobasierter Polymere; Innovative PHB-Synthese aus Reststoffen",
+          "notes": null,
+          "trl": 4
+        }
+      ]
+    },
+    {
+      "name": "Technologie- und Förderzentrum Straubing",
+      "display_name": null,
+      "description": "Das Technologie- und Förderzentrum ist eine Ressortforschungeinrichtung des bayerischen Landwirtschaftsministeriums. In der Abteilung erneuerbare Kraftstoffe und Materialien liegt der Fokus aud der Forschung auf der Vermeidung von Kunststoffen in der Landwirschaft. Durch die Entwicklung von neurartigen Prdukten oder Verfahren auf Basis nachwachsender Rohstoffe sollen konventionelle Kunstsoffe reduziert werden.\n\nText für Website:\nDas Technologie- und Förderzentrum Straubing ist eine ressortgebundene Forschungseinrichtung des Bayerischen Staatsministeriums für Ernöhrung, Landwirtschaft, Forsten und Tourismus. Das TFZ widmet sich seit Jahrzehnten der Praxisorinetierten Forschung, Entwicklung und dem Transfer von Rechnologien rund um nachwachsende Rohstoffe und leistet damit einen wesentlichen Beitrag zur Energie-, Rohstoff-, und Ressourcennutzung im ländlichen Raum. In der Abteilung Erneuerbare Kraftstoffe und Materialien stehen die Entwicklung innovativer Produkte und Verfahren im Vodergrund, die nachwachsende Rohstoffe als nachhaltige Alternativen zu konventionellen Kunststoffen in der Landwirtschaft nutzbar machen. Ziel ist es, biobasierte Lösunten zu erforschen und praxisnah umzusetzen, die sowohl ökologische Vorteile als auch funktionale Mehrwerte für landwirtschaftliche Anwedungen bieten.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "94315",
+      "city": "Straubing",
+      "country": "Deutschland",
+      "contact_name": "Michael Kirchinger",
+      "contact_position": "Abteilung Erneuerbare Kraftstoffe und Materialien",
+      "contact_email": "michael.kirchinger@tfz.bayern.de",
+      "contact_phone": "09421300114",
+      "user_email": "michael.kirchinger@tfz.bayern.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "forschung-und-entwicklung"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 4,
+          "notes": "Produkte zur Vermeidung nicht abbaubarer Kunststoffe in der Landwirtschaft"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Produkte zur Vermeidung nicht abbaubarer Kunststoffe in der Landwirtschaft",
+          "notes": null,
+          "trl": 4
+        }
+      ]
+    },
+    {
+      "name": "Tecnaro GmbH",
+      "display_name": null,
+      "description": "Die TECNARO GmbH ist ein innovatives deutsches Unternehmen, welches Biopolymercompounds auf Basis nachwachsender Rohstoffe selbst entwickelt, produziert und weltweit vermarktet. Die Firma zählt dabei zu den Technologieführern, deren biobasierte Materialien eine breite Palette von technischen Eigenschaften, Aussehen und auf die jeweilige Anwendung hin angepasste Beständigkeit oder biologische Abbaubarkeit bieten. TECNARO verwendet die Methode der Compoundierung. Dabei handelt es sich um ein Verfahren, bei dem Kunststoffe oder Polymere mit anderen Zusatzstoffen gemischt werden. Durch die Zugabe einer Vielzahl von nachwachsenden Rohstoffen, diversen Biopolymeren, Füll- und Verstärkungsstoffen können zahlreiche Eigenschaften in Bezug auf biologische Abbaubarkeit, Biobasiertheit, Flammschutz, Abriebfestigkeit und Strukturverhalten erzielt werden. Die Materialeigenschaften werden durch den Einsatz von Additiven gezielt gesteuert. Die Verarbeitung erfolgt z. B. mittels Spritzgießen, Extrudieren, Kalandrieren, Pressen, Tiefziehen, Blasformen und auch Schmelzspinnen. Verarbeiter sind somit Formteil-, Platten- und Halbzeughersteller aus der kunststoffverarbeitenden Industrie sowie auch Hersteller textiler Produkte. Die Werkstoffe von TECNARO ersetzen fossile Kunststoffe bis zu 100 % durch Materialien aus nachwachsenden Rohstoffen. In den drei Biowerkstofffamilien ARBOFORM®, AR-BOFILL® und ARBOBLEND® werden seit Jahren kundenspezifische Lösungen für die industrielle Serienproduktion erfolgreich umgesetzt. Mit Kunden aus der Automobil-, Solar-, Bau-, Verpackungs-, Schreibgeräte-, Möbel-, Spielwaren-, Haushaltswaren- und Musikinstrumentenbranche bis hin zur Modeindustrie bedienen die Materialien von TECNARO nahezu jeden Markt. TECNARO wurde bereits mehrfach für Nachhaltigkeit, Innovation und Zukunftstechnologien ausgezeichnet.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "74360",
+      "city": "Ilsfeld",
+      "country": "Deutschland",
+      "contact_name": "Michael Schweizer",
+      "contact_position": "Projektleiter bei Tecnaro (Biokunststoff-Granulat-Hersteller)",
+      "contact_email": "michael.schweizer@tecnaro.de",
+      "contact_phone": "+49 7062 97687-251",
+      "user_email": "michael.schweizer@tecnaro.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoffverarbeitung-compoundeur"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 9,
+          "notes": "Biobasierte Compounds für diverse Anwendungen; tlw. Auch bio-gefüllt"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Biobasierte Compounds für diverse Anwendungen; tlw. Auch bio-gefüllt",
+          "notes": null,
+          "trl": 9
+        }
+      ]
+    },
+    {
+      "name": "TecPart Verband Technische Kunststoff-Produkte e.V.",
+      "display_name": null,
+      "description": "TecPart ist die Interessenvertretung für Hersteller von technischen Kunststoff-Produkten in Öffentlichkeit und Politik sowie in nationalen und europäischen Gremien. Die Mitglieder sind vorwiegend klein- und mittelständische Unternehmen aus allen relevanten Bereichen der Kunststoffbranche, darunter:\n\nCompoundierung\nKunststoffrecycling\nSpritzgießtechnik\nThermoformen\nAdditive Fertigung\nWeitere Kunststoffverarbeitungsverfahren\nTecPart arbeitet seit Jahrzehnten erfolgreich mit dem SKZ zusammen und schätzt dessen breite Expertise in nahezu allen Entwicklungsthemen der Kunststoffindustrie sowie den Wissenstransfer durch umfangreiche Bildungsangebote.\n\nDas Projekt CREATE steht in enger Verbindung mit den strategischen Verbandsthemen wie Nachhaltigkeit, Kreislaufwirtschaft und Transformation der Kunststoffindustrie. TecPart möchte sich als Kompetenzpartner im Bereich politischer und normativer Entwicklungen in das Projekt einbringen.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "60596",
+      "city": "Frankfurt a. M.",
+      "country": "Deutschland",
+      "contact_name": "Kristy-Barbara Lange",
+      "contact_position": "Leitung Kommunikation & Public Affairs",
+      "contact_email": "kristy-barbara.lange@tecpart.de",
+      "contact_phone": "+49 1512 2576421",
+      "user_email": "kristy-barbara.lange@tecpart.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "beratung-und-dienstleistungen"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "Textilforschungsinstitut Thüringen-Vogtland e.V.",
+      "display_name": null,
+      "description": "Das TITV Greiz wurde 1992 als gemeinnützige, industrienahe Forschungseinrichtung gegründet. Ursprünglich auf die Textil- und Bekleidungsindustrie ausgerichtet, konzentriert sich das Institut heute auf anwendungsorientierte Forschung in den Bereichen Smart Textiles, Oberflächenfunktionalisierung und flexible Materialien.\n\nIm Fokus stehen interdisziplinäre Hightech-Lösungen mit Anwendungen in Zukunftsfeldern wie Nachhaltigkeit, Recycling, Digitalisierung und Mobilität.\n\nEin besonderer Schwerpunkt liegt zunehmend auf der Verwendung bioökonomischer Kunststoffalternativen. Dabei werden biobasierte und biologisch abbaubare Materialien in textile Strukturen integriert, als Beschichtungen appliziert oder für den 3D-Druck verwendet, um umweltfreundliche, funktionale Werkstoffe zu schaffen.\n\nGemeinsam mit Partnern aus Wissenschaft und Industrie entstehen so innovative Ansätze für eine ressourcenschonende Kreislaufwirtschaft auf textiler Basis.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "7973",
+      "city": "Greiz",
+      "country": "Österreich",
+      "contact_name": "Julia Ullrich",
+      "contact_position": "Gruppenleiterin - Funktionelle Garne und additive Verfahren",
+      "contact_email": "j.ullrich@titv-greiz.de",
+      "contact_phone": "+49 3661/611 403",
+      "user_email": "j.ullrich@titv-greiz.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "forschung-und-entwicklung"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 4,
+          "notes": "Biobasierte und biologischabbaubare Textilien"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Biobasierte und biologischabbaubare Textilien",
+          "notes": null,
+          "trl": 4
+        }
+      ]
+    },
+    {
+      "name": "Trägerverein Umwelttechnologie-Cluster Bayern e.V.",
+      "display_name": null,
+      "description": "Der Umweltcluster Bayern (UCB) ist das Netzwerk der bayerischen Umweltwirtschaft. In enger Zusammenarbeit mit Politik, Forschung, Wissenschaft und Wirtschaft konzentriert sich seine Arbeit auf Transfer, Bildung und Verstärkung von Kooperation. Seine zentrale Aufgabe ist die Vernetzung von Unternehmen und Forschungseinrichtungen.\n\nDie Entwicklung, Implementierung und der Absatz nachhaltiger biobasierter Lösungen in Wertschöpfungsketten der Kunststoffindustrie wird als ein wichtiges Ziel erachtet. Im Bereich der industriellen Bioökonomie hat der UCB bereits einige Projekte erfolgreich durchgeführt, dabei verschiedene Stakeholder mit unterschiedlichen Perspektiven integriert und im Zuge dessen einschlägige Expertise gesammelt.\n\nIn seiner Rolle als Partner bringt der UCB substanziellen Kompetenzen ein: die Akquise geeigneter Unternehmen, die Mitarbeit beim Aufsetzen und der Durchführung von Interviews, die Konzeption und Durchführung von Workshops, die Moderation und inhaltliche Begleitung einzelner Foren sowie die Durchführung von Marktstudien und wirksamer Maßnahmen auf dem Gebiet der Öffentlichkeitsarbeit.\n\nDas Netzwerk greift hierbei auf ein interdisziplinär aufgestelltes Team zurück, das sich durch fundierte und langjährige Projektmanagementerfahrung auszeichnet.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "86167",
+      "city": "Augsburg",
+      "country": "Deutschland",
+      "contact_name": "Christina Zegowitz",
+      "contact_position": null,
+      "contact_email": "christina.zegowitz@umweltcluster.net",
+      "contact_phone": null,
+      "user_email": "christina.zegowitz@umweltcluster.net",
+      "size_slug": null,
+      "industry_slugs": [
+        "beratung-und-dienstleistungen"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "UPM Biochemicals GmbH",
+      "display_name": null,
+      "description": "UPM ist ein weltweit führendes Unternehmen der biobasierten Forstwirtschaft mit über 100 Jahren Geschichte. Die Grundlage des Geschäfts bildet umfassendes Wissen über erneuerbare Holzbiomasse aus nachhaltigen Quellen. UPM betrachtet Biochemikalien auf Holzbasis als nächsten natürlichen Schritt in der Evolution der Holznutzung.\n\nDie erneuerbaren Biochemikalien von UPM bieten nachhaltige, wettbewerbsfähige und qualitativ hochwertige Alternativen zu fossilen Rohstoffen. Bereits heute wird verantwortungsvoll erzeugtes Lignin in verschiedenen Industrien eingesetzt – etwa in Harzen, Klebstoffen, Biokunststoffen und Polyurethanen.\n\nIn der weltweit einzigartigen Bioraffinerie in Leuna wird im industriellen Maßstab massives Holz in Biochemikalien der nächsten Generation umgewandelt, darunter:\n\nBio-Monoethylenglykol (BioMEG)\nBio-Monopropylenglykol (BioMPG)\nErneuerbare Funktionsfüllstoffe auf Lignin-Basis\nIndustriezucker\nDiese Biochemikalien lassen sich vollständig in bestehende Produktions- und Recyclingprozesse integrieren und transformieren die chemische Wertschöpfungskette hin zu einer erneuerbaren Kreislaufwirtschaft. Die ligninbasierten Füllstoffe dienen als nachhaltige Alternative zu Ruß und Kieselsäure in Gummianwendungen.",
+      "website_url": "https://www.upmbiochemicals.com/",
+      "street": "Am Haupttor, Bau 4614",
+      "postal_code": "06237",
+      "city": "Leuna",
+      "country": "Deutschland",
+      "contact_name": "Laura Teuber",
+      "contact_position": "Researcher",
+      "contact_email": "laura.teuber@upm.com",
+      "contact_phone": "+49 (0)151 503 601 61",
+      "user_email": "laura.teuber@upm.com",
+      "size_slug": "251-1000",
+      "industry_slugs": [
+        "kunststoff-chemikalien-rohstofferzeugung",
+        "verarbeitung-vertrieb-endprodukte",
+        "kunststoffverarbeitung-compoundeur"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 7,
+          "notes": "Verwertung von Cellulose und Ligning zu Basisprodukten der Kunststoffindustrie"
+        }
+      ],
+      "knowhows": [
+        {
+          "slug": "materialentwicklung-verarbeitung",
+          "name": "Materialentwicklung und Verarbeitung",
+          "score": 90
+        },
+        {
+          "slug": "nachhaltigkeitsbetrachtung",
+          "name": "Nachhaltigkeitsbetrachtung",
+          "score": 90
+        },
+        {
+          "slug": "marktzugang-best-practices",
+          "name": "Marktzugang und Best Practices",
+          "score": 90
+        },
+        {
+          "slug": "chemie-erneuerbarer-materialien",
+          "name": "Chemie erneuerbarer Materialien",
+          "score": 90
+        },
+        {
+          "slug": "kreislaufschliessung-biomasse",
+          "name": "Kreislaufschließung durch Biomasse als Rohstoff und Kompostierbarkeit",
+          "score": 90
+        }
+      ],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Verwertung von Cellulose und Ligning zu Basisprodukten der Kunststoffindustrie",
+          "notes": null,
+          "trl": 7
+        }
+      ]
+    },
+    {
+      "name": "UVEX Safety Group GmbH & Co. KG",
+      "display_name": "UVEX",
+      "description": "Die UVEX Safety Group GmbH & Co. KG entwickelt und produziert seit fast 100 Jahren hochwertige Arbeitsschutzprodukte. Im Zuge unserer Nachhaltigkeitsstrategie verfolgen wir das Ziel, zukünftig verstärkt nachwachsende, biobasierte und rezyklierte Materialien in unseren Produkten einzusetzen, ohne dabei Kompromisse bei Schutzwirkung oder Tragekomfort einzugehen.\n\nFolgende Kompetenzen können wir in den Cluster einbringen: anwendungsorientierte Prüfung biobasierter Verbundmaterialien für PSA-Produkte sowie die Definition technischer Anforderungen für den Einsatz nachhaltiger Materialien in Schutzprodukten.\n\nFolgende Themen sind für uns von Interesse: Unterstützung bei der Materialauswahl neuer biobasierter Werkstoffe für bestehende Standardmaterialien, Einsatz von biobasierten, reversiblen Klebeverbindungen, kreislauffähiges Produktdesign und Recyclinginfrastruktur bei biobasierten Materialien.",
+      "website_url": "https://www.uvex-group.com/de/",
+      "street": "Würzburger Str. 181‑189",
+      "postal_code": "90766",
+      "city": "Fürth",
+      "country": "Deutschland",
+      "contact_name": "Angelika Treuheit",
+      "contact_position": "Projektingenieur",
+      "contact_email": "a.treuheit@uvex.de",
+      "contact_phone": "+49 151 20852139",
+      "user_email": "a.treuheit@uvex.de",
+      "size_slug": "251-1000",
+      "industry_slugs": [
+        "verarbeitung-vertrieb-endprodukte",
+        "psa-herstellung"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 1,
+          "notes": "Einsatz biobasierter Polymere in persönlicher Schutzausrüstung"
+        }
+      ],
+      "knowhows": [
+        {
+          "slug": "materialentwicklung-verarbeitung",
+          "name": "Materialentwicklung und Verarbeitung",
+          "score": 70
+        },
+        {
+          "slug": "nachhaltigkeitsbetrachtung",
+          "name": "Nachhaltigkeitsbetrachtung",
+          "score": 90
+        },
+        {
+          "slug": "marktzugang-best-practices",
+          "name": "Marktzugang und Best Practices",
+          "score": 40
+        },
+        {
+          "slug": "chemie-erneuerbarer-materialien",
+          "name": "Chemie erneuerbarer Materialien",
+          "score": 70
+        },
+        {
+          "slug": "kreislaufschliessung-biomasse",
+          "name": "Kreislaufschließung durch Biomasse als Rohstoff und Kompostierbarkeit",
+          "score": 70
+        }
+      ],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Teilweise werden biobasierte Kunststoffe verarbeitet mittels Spritzguss",
+          "notes": null,
+          "trl": 8
+        }
+      ]
+    },
+    {
+      "name": "VerDeSoft GmbH",
+      "display_name": null,
+      "description": "VerDeSoft entwickelt von der Ideenfindung ¸ber die Konstruktion und Bemusterung bis hin zur \nEinf¸hrung der Serienfertigung innovative Verpackungslˆsungen. Der Einsatz nachwachsender \nRohstoffe ob als Biopolymer oder als nachwachsende Rohstoffe in Form von Füllmaterial ist für uns \nein wichtiges Entwicklungsthema. Derzeit entwickeln wir ein Verfahren, mit dem es möglich sein soll \nBarrierewirksame Substanzen direkt im Fasergussprozess der Pulpe beizumischen und so \nFasergussteile mit Sauerstoff- und ggf. Wasserdampfbarrieren herstellen zu kennen. Eine \nTestmaschine zur Musterfertigung von Faserguss-Teilen wurde bereits im Rahmen einer Masterthesis \nentwickelt und steht für weitere Versuche zur Verfügung.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "90400",
+      "city": "Nürnberg",
+      "country": "Deutschland",
+      "contact_name": "VerDeSoft GmbH",
+      "contact_position": null,
+      "contact_email": "info@verdesoft.de",
+      "contact_phone": null,
+      "user_email": "info@verdesoft.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "forschung-und-entwicklung"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 3,
+          "notes": "Biobasierter Faserguss für barriere-optimierte Anwendungen"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Biobasierter Faserguss für barriere-optimierte Anwendungen",
+          "notes": null,
+          "trl": 3
+        }
+      ]
+    },
+    {
+      "name": "Völkl Sports GmbH",
+      "display_name": null,
+      "description": "Die Produktenteickung ist ein zentraler Bestandteil unserer Nachhatigkeitsstrategie. Um den ökologischen Fußabdruck unserer Produkte zu verringern, legen wir großen Wert auf eine bewusste Materialauswahl, nachhaltige Konstruktionen und eine umfassende Betrachtung des gesamten Produktlebenszyklus. Unser Ziel ist es, langlebige und leistungsstarke Produkte zu entwickeln, die zugleich umweltverträglich sind. Dies beinhaltet die Prüfung alternativer Werkstoffe, die Verbesserung der Ressourceneffizienz sowie die Integration nachhaltiger Innovationen von der ersten Idee bis zum Ende der Nutzung.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "94315",
+      "city": "Straubing",
+      "country": "Deutschland",
+      "contact_name": "Melanie Frick",
+      "contact_position": "Sustainability and Environmental Manager",
+      "contact_email": "melanie.frick@elevate-oc.eu",
+      "contact_phone": "+49 9421 320-114",
+      "user_email": "melanie.frick@elevate-oc.eu",
+      "size_slug": null,
+      "industry_slugs": [
+        "verarbeitung-vertrieb-endprodukte"
+      ],
+      "machine_slugs": [],
+      "technologies": [],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": []
+    },
+    {
+      "name": "Weimako GmbH",
+      "display_name": null,
+      "description": "Die Weimako GmbH ist seit 2015 ein Hersteller von biobasierten, nachhaltigen Verpackungen aus nachwachsenden Rohstoffen. Kunden haben wir in der Ksmetik, Nahrungsmittelbranche und im Pharmabereich.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "82380",
+      "city": "Peissenberg",
+      "country": "Deutschland",
+      "contact_name": "Knut Ofterdinger",
+      "contact_position": "Geschäftsführer",
+      "contact_email": "k.ofterdinger@weimako.com",
+      "contact_phone": "01754333900",
+      "user_email": "k.ofterdinger@weimako.com",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoffverarbeitung-compoundeur"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 9,
+          "notes": "Biobasierte Verpackungen für Kosmetik, Pharma und Lebensmittel"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Biobasierte Verpackungen für Kosmetik, Pharma und Lebensmittel",
+          "notes": null,
+          "trl": 9
+        }
+      ]
+    },
+    {
+      "name": "Werkzeugbau Willi Geyer GmbH",
+      "display_name": null,
+      "description": "Wir sind ein mittelständiges Familienunternehmen mit ca. 20 Mitarbeiter in Spritzerei und Werkzeugbau aus dem Fichtelgebirge.\nBisher sind wir im Automotivesektor vertreten, konnten aber auch schon mit Eigenprodukten Erfahrungen im Zusammenhang mit Biopolymeren sammeln.",
+      "website_url": null,
+      "street": null,
+      "postal_code": "95709",
+      "city": "Tröstau",
+      "country": "Deutschland",
+      "contact_name": "Michael Mayr",
+      "contact_position": "Leitung Spritzguss",
+      "contact_email": "michael.mayr@wkzbgeyer.de",
+      "contact_phone": "092324041",
+      "user_email": "michael.mayr@wkzbgeyer.de",
+      "size_slug": null,
+      "industry_slugs": [
+        "kunststoffmaschinenbau"
+      ],
+      "machine_slugs": [],
+      "technologies": [
+        {
+          "slug": "kunststofftechnik",
+          "name": "Kunststofftechnik",
+          "trl": 7,
+          "notes": "Werkzeugbau und Spritzguss mit Biopolymeren"
+        }
+      ],
+      "knowhows": [],
+      "demos": [],
+      "services": [],
+      "technology_suggestions": [
+        {
+          "name": "Werkzeugbau und Spritzguss mit Biopolymeren",
+          "notes": null,
+          "trl": 7
+        }
+      ]
+    }
+  ]
+}
