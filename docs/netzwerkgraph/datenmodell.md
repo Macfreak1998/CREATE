@@ -28,6 +28,7 @@ Ein Knoten ist entweder eine Ebene oder die Platzierung einer Firma.
 | `slug` | text, nullable | nur bei `kind = 'layer'`, Baustein des URL-Pfads |
 | `description` | text, nullable | Beschreibungstext der Ebene |
 | `color` | text, nullable | optionale Akzentfarbe der Ebene |
+| `layout` | text | `graph`, `pie` oder `xy`. Gilt fuer die Kinder dieser Ebene. Firmen-Knoten tragen den Standard `graph` und werten ihn nicht aus. |
 | `sort_order` | integer | Reihenfolge in Listen und Layout-Eingabe |
 | `created_at`, `updated_at` | timestamptz | |
 
@@ -79,6 +80,18 @@ Kleine Taxonomie mit `slug`, `name`, `color` (Hex), `directed` und
 Liefert an, Forschungspartner, Beteiligung. `directed` steuert ausschliesslich
 die Darstellung (Pfeilspitze); gespeichert wird eine Kante immer als Paar aus
 `source_id` und `target_id`, die Reihenfolge bleibt also erhalten.
+
+Die Wurzel hat keine Zeile in `graph_nodes`. Ihr Darstellungsmodus steht in
+`app_settings` unter dem Key `graph_root_layout` (Standard `graph`). Die
+oeffentliche und die Admin-Antwort legen ihn als `layout` auf den Scope, bei
+einer geoeffneten Ebene aus deren Spalte.
+
+Fuer das Portfolio liefert jeder Firmen-Knoten zusaetzlich `size_slug`,
+`size_name`, `size_sort_order` und `max_trl` (`MAX(trl)` aus
+`company_technologies`). `sizes` auf dem Scope ist die volle Groessen-Taxonomie,
+damit leere Klassen auf der X-Achse stehen bleiben. Fehlende Groesse oder
+fehlender TRL erscheinen als eigene Spalte beziehungsweise Zeile
+"keine Angabe".
 
 ## Invarianten
 

@@ -11,7 +11,7 @@ import {
 import "@xyflow/react/dist/style.css";
 import type { GraphCompanyNode, GraphLayer } from "@b2b/shared";
 import FloatingEdge from "./FloatingEdge.js";
-import { graphNodeTypes } from "./nodes.js";
+import { GraphActionsContext, graphNodeTypes } from "./nodes.js";
 import type { GraphEdgeData, GraphNodeData } from "./layout.js";
 
 const ZOOM_DURATION = 320;
@@ -63,17 +63,12 @@ export default function GraphScene({
     []
   );
 
-  const handleNodeClick = useCallback<NodeMouseHandler<Node<GraphNodeData>>>(
-    (_event, node) => {
-      if (node.data.kind === "company") {
-        onOpenCompany(node.data.node);
-        return;
-      }
-
-      const layer = node.data.layer;
-      setZoomingTo(node.id);
+  const openLayerNode = useCallback(
+    (nodeId: string, layer: GraphLayer) => {
+      if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
+      setZoomingTo(nodeId);
       void fitView({
-        nodes: [{ id: node.id }],
+        nodes: [{ id: nodeId }],
         duration: ZOOM_DURATION,
         padding: 0.8,
         maxZoom: 3,
@@ -83,12 +78,42 @@ export default function GraphScene({
         ZOOM_DURATION + 20
       );
     },
-    [fitView, onOpenCompany, onOpenLayer]
+    [fitView, onOpenLayer]
+  );
+
+  const actions = useMemo(
+    () => ({
+      openLayerNode,
+      prefetchLayer: onPrefetchLayer,
+      openCompany: onOpenCompany,
+    }),
+    [onOpenCompany, onPrefetchLayer, openLayerNode]
+  );
+
+  const handleNodeClick = useCallback<NodeMouseHandler<Node<GraphNodeData>>>(
+    (_event, node) => {
+      const data = node.data;
+      if (data.kind === "company") {
+        onOpenCompany(data.node);
+        return;
+      }
+      if (data.kind === "layer") {
+        openLayerNode(node.id, data.layer);
+        return;
+      }
+      if (data.kind === "pieSlice") {
+        if (data.company) onOpenCompany(data.company);
+        else if (data.layer) openLayerNode(node.id, data.layer);
+      }
+    },
+    [onOpenCompany, openLayerNode]
   );
 
   const handleNodeMouseEnter = useCallback<NodeMouseHandler<Node<GraphNodeData>>>(
     (_event, node) => {
-      if (node.data.kind === "layer") onPrefetchLayer(node.data.layer);
+      const data = node.data;
+      if (data.kind === "layer") onPrefetchLayer(data.layer);
+      else if (data.kind === "pieSlice" && data.layer) onPrefetchLayer(data.layer);
     },
     [onPrefetchLayer]
   );
@@ -121,6 +146,7 @@ export default function GraphScene({
 
   return (
     <div className="relative h-full w-full">
+      <GraphActionsContext.Provider value={actions}>
       <ReactFlow
         nodes={renderedNodes}
         edges={renderedEdges}
@@ -138,6 +164,7 @@ export default function GraphScene({
         <Background gap={24} color="#e2e8f0" />
         <Controls showInteractive={false} />
       </ReactFlow>
+      </GraphActionsContext.Provider>
 
       {isLoading && (
         <div className="pointer-events-none absolute inset-x-0 top-3 flex justify-center">

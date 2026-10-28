@@ -9,11 +9,14 @@ import type {
   GraphLayer,
   GraphLayerInput,
   GraphLayerUpdate,
+  GraphLayout,
   GraphOutwardEdge,
   GraphScope,
+  GraphSize,
   CompanyStatus,
 } from "@b2b/shared";
 import { query, withTransaction } from "../../db/client.js";
+import { SETTING_GRAPH_ROOT_LAYOUT, getSetting, setSetting } from "../../lib/settings.js";
 import { uniqueSlug } from "../../lib/slug.js";
 import { buildPublicLogoUrl } from "../../lib/uploads.js";
 
@@ -43,6 +46,7 @@ interface LayerRow {
   slug: string;
   description: string | null;
   color: string | null;
+  layout: string;
   sort_order: number;
   child_layer_count: number;
   child_company_count: number;
@@ -57,6 +61,10 @@ interface CompanyNodeRow {
   logo_path: string | null;
   status: CompanyStatus;
   sort_order: number;
+  size_slug: string | null;
+  size_name: string | null;
+  size_sort_order: number | null;
+  max_trl: number | null;
 }
 
 interface EdgeRow {
@@ -72,6 +80,11 @@ interface EdgeRow {
   label: string | null;
 }
 
+function parseLayout(value: string | null | undefined): GraphLayout {
+  if (value === "graph" || value === "pie" || value === "xy") return value;
+  return "graph";
+}
+
 function rowToLayer(row: LayerRow): GraphLayer {
   return {
     id: row.id,
@@ -80,6 +93,7 @@ function rowToLayer(row: LayerRow): GraphLayer {
     slug: row.slug,
     description: row.description,
     color: row.color,
+    layout: parseLayout(row.layout),
     sort_order: row.sort_order,
     child_layer_count: Number(row.child_layer_count),
     child_company_count: Number(row.child_company_count),
@@ -96,6 +110,11 @@ function rowToCompanyNode(row: CompanyNodeRow): GraphCompanyNode {
     logo_url: buildPublicLogoUrl(row.logo_path),
     status: row.status,
     sort_order: row.sort_order,
+    size_slug: row.size_slug,
+    size_name: row.size_name,
+    size_sort_order:
+      row.size_sort_order == null ? null : Number(row.size_sort_order),
+    max_trl: row.max_trl == null ? null : Number(row.max_trl),
   };
 }
 
@@ -118,7 +137,7 @@ function rowToEdge(row: EdgeRow): GraphEdge {
 // nur freigegebene Firmen mit, damit die angezeigte Zahl zu dem passt, was nach
 // dem Hineinzoomen sichtbar ist.
 const LAYER_COLUMNS = `
-  n.id, n.parent_id, n.name, n.slug, n.description, n.color, n.sort_order,
+  n.id, n.parent_id, n.name, n.slug, n.description, n.color, n.layout, n.sort_order,
   (SELECT count(*) FROM graph_nodes cl
     WHERE cl.parent_id = n.id AND cl.kind = 'layer')::int AS child_layer_count,
   (SELECT count(*) FROM graph_nodes cc
@@ -246,22 +265,46 @@ async function loadChildLayers(
   return result.rows.map(rowToLayer);
 }
 
+const COMPANY_NODE_FROM = `
+  SELECT n.id, n.parent_id, n.company_id, n.sort_order,
+         c.slug AS company_slug, c.name AS company_name,
+         c.logo_path, c.status,
+         cs.slug AS size_slug, cs.name AS size_name,
+         cs.sort_order AS size_sort_order,
+         (SELECT MAX(ct.trl)::int FROM company_technologies ct
+           WHERE ct.company_id = c.id) AS max_trl
+    FROM graph_nodes n
+    JOIN companies c ON c.id = n.company_id
+    LEFT JOIN company_sizes cs ON cs.id = c.size_id
+`;
+
 async function loadChildCompanies(
   parentId: string | null,
   publicOnly: boolean
 ): Promise<GraphCompanyNode[]> {
   const result = await query<CompanyNodeRow>(
-    `SELECT n.id, n.parent_id, n.company_id, n.sort_order,
-            c.slug AS company_slug, c.name AS company_name,
-            c.logo_path, c.status
-       FROM graph_nodes n
-       JOIN companies c ON c.id = n.company_id
+    `${COMPANY_NODE_FROM}
       WHERE n.kind = 'company' AND n.parent_id IS NOT DISTINCT FROM $1
         AND ($2::boolean IS NOT TRUE OR c.status = 'approved')
       ORDER BY n.sort_order, c.name`,
     [parentId, publicOnly]
   );
   return result.rows.map(rowToCompanyNode);
+}
+
+async function loadSizes(): Promise<GraphSize[]> {
+  const result = await query<GraphSize>(
+    `SELECT slug, name, sort_order FROM company_sizes ORDER BY sort_order, name`
+  );
+  return result.rows.map((row) => ({
+    slug: row.slug,
+    name: row.name,
+    sort_order: Number(row.sort_order),
+  }));
+}
+
+async function loadRootLayout(): Promise<GraphLayout> {
+  return parseLayout(await getSetting(SETTING_GRAPH_ROOT_LAYOUT));
 }
 
 async function loadScopeEdges(scopeId: string | null): Promise<GraphEdge[]> {
@@ -364,10 +407,12 @@ export async function loadScope(
     breadcrumb = (await loadBreadcrumb(layerId)) ?? [];
   }
 
-  const [layers, companies, edges] = await Promise.all([
+  const [layers, companies, edges, sizes, layout] = await Promise.all([
     loadChildLayers(layerId, publicOnly),
     loadChildCompanies(layerId, publicOnly),
     loadScopeEdges(layerId),
+    loadSizes(),
+    layer ? Promise.resolve(layer.layout) : loadRootLayout(),
   ]);
 
   // In der oeffentlichen Sicht koennen Firmen weggefiltert sein. Deren Kanten
@@ -389,10 +434,12 @@ export async function loadScope(
 
   return {
     layer,
+    layout,
     path,
     breadcrumb,
     layers,
     companies,
+    sizes,
     edges: visibleEdges,
     outward_edges: outwardEdges,
   };
@@ -541,8 +588,8 @@ export async function createLayer(input: GraphLayerInput): Promise<GraphLayer> {
   const sortOrder = await nextSortOrder(input.parent_id);
 
   const result = await query<{ id: string }>(
-    `INSERT INTO graph_nodes (parent_id, kind, name, slug, description, color, sort_order)
-     VALUES ($1, 'layer', $2, $3, $4, $5, $6)
+    `INSERT INTO graph_nodes (parent_id, kind, name, slug, description, color, layout, sort_order)
+     VALUES ($1, 'layer', $2, $3, $4, $5, $6, $7)
      RETURNING id`,
     [
       input.parent_id,
@@ -550,6 +597,7 @@ export async function createLayer(input: GraphLayerInput): Promise<GraphLayer> {
       slug,
       input.description,
       input.color,
+      input.layout,
       sortOrder,
     ]
   );
@@ -576,10 +624,18 @@ export async function updateLayer(
 
   await query(
     `UPDATE graph_nodes
-        SET name = $2, slug = $3, description = $4, color = $5,
-            sort_order = coalesce($6, sort_order), updated_at = now()
+        SET name = $2, slug = $3, description = $4, color = $5, layout = $6,
+            sort_order = coalesce($7, sort_order), updated_at = now()
       WHERE id = $1 AND kind = 'layer'`,
-    [id, input.name, slug, input.description, input.color, input.sort_order ?? null]
+    [
+      id,
+      input.name,
+      slug,
+      input.description,
+      input.color,
+      input.layout,
+      input.sort_order ?? null,
+    ]
   );
 
   return loadLayer(id, false);
@@ -664,14 +720,16 @@ export async function addCompanyNode(
   }
 
   const result = await query<CompanyNodeRow>(
-    `SELECT n.id, n.parent_id, n.company_id, n.sort_order,
-            c.slug AS company_slug, c.name AS company_name, c.logo_path, c.status
-       FROM graph_nodes n
-       JOIN companies c ON c.id = n.company_id
+    `${COMPANY_NODE_FROM}
       WHERE n.id = $1`,
     [nodeId]
   );
   return rowToCompanyNode(result.rows[0]!);
+}
+
+export async function updateRootLayout(layout: GraphLayout): Promise<GraphLayout> {
+  await setSetting(SETTING_GRAPH_ROOT_LAYOUT, layout);
+  return layout;
 }
 
 export async function deleteNode(id: string): Promise<boolean> {

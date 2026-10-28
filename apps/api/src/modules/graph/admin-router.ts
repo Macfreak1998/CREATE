@@ -12,6 +12,7 @@ import {
   GraphLayerUpdateSchema,
   GraphNodeMoveSchema,
   GraphNodeReorderSchema,
+  GraphRootLayoutUpdateSchema,
   type GraphAdminScopeQuery,
   type GraphCompanyNodeInput,
   type GraphCompanySearchQuery,
@@ -23,6 +24,7 @@ import {
   type GraphLayerUpdate,
   type GraphNodeMove,
   type GraphNodeReorder,
+  type GraphRootLayoutUpdate,
 } from "@b2b/shared";
 import { asyncHandler } from "../../middlewares/async-handler.js";
 import { validate } from "../../middlewares/validate.js";
@@ -44,6 +46,7 @@ import {
   updateEdge,
   updateEdgeKind,
   updateLayer,
+  updateRootLayout,
 } from "./repository.js";
 
 export const adminGraphRouter = Router();
@@ -83,6 +86,15 @@ adminGraphRouter.get(
   asyncHandler(async (req: Request, res: Response) => {
     const { q, parent_id } = req.query as unknown as GraphCompanySearchQuery;
     res.json(await searchCompanyOptions(q, parent_id ?? null));
+  })
+);
+
+adminGraphRouter.patch(
+  "/root-layout",
+  validate(GraphRootLayoutUpdateSchema),
+  asyncHandler(async (req: Request, res: Response) => {
+    const { layout } = req.body as GraphRootLayoutUpdate;
+    res.json({ layout: await updateRootLayout(layout) });
   })
 );
 

@@ -1,5 +1,6 @@
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import type { GraphLayer } from "@b2b/shared";
+import { layoutBadge } from "../../../../components/graph/layoutMode.js";
 import { DropInto, SortableRow } from "./DragDrop.js";
 
 export default function LayerList({
@@ -52,7 +53,7 @@ export default function LayerList({
                     </span>
                     <span className="block text-xs text-slate-500">
                       {layer.child_layer_count} Ebenen ·{" "}
-                      {layer.child_company_count} Firmen
+                      {layer.child_company_count} Firmen · {layoutBadge(layer.layout)}
                     </span>
                   </button>
                   <div className="flex shrink-0 flex-col items-end gap-1">

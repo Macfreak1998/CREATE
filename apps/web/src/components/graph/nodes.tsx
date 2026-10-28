@@ -1,5 +1,21 @@
+import { createContext, useContext } from "react";
 import { Handle, Position, type NodeProps, type Node } from "@xyflow/react";
-import type { CompanyNodeData, LayerNodeData } from "./layout.js";
+import type { GraphCompanyNode, GraphLayer } from "@b2b/shared";
+import type {
+  ChartBackdropNodeData,
+  CompanyNodeData,
+  LayerNodeData,
+  PieCenterNodeData,
+  PieSliceNodeData,
+} from "./layout.js";
+
+export interface GraphActions {
+  openLayerNode: (nodeId: string, layer: GraphLayer) => void;
+  prefetchLayer: (layer: GraphLayer) => void;
+  openCompany: (company: GraphCompanyNode) => void;
+}
+
+export const GraphActionsContext = createContext<GraphActions | null>(null);
 
 // Unsichtbare Handles in der Knotenmitte. Die Kanten werden als "floating"
 // gezeichnet und berechnen ihre Ansatzpunkte selbst.
@@ -75,7 +91,165 @@ export function CompanyNode({ data }: NodeProps<Node<CompanyNodeData>>) {
   );
 }
 
+export function PieSliceNode({ id, data }: NodeProps<Node<PieSliceNodeData>>) {
+  const actions = useContext(GraphActionsContext);
+
+  const activate = () => {
+    if (data.layer) actions?.openLayerNode(id, data.layer);
+    else if (data.company) actions?.openCompany(data.company);
+  };
+
+  return (
+    <div className="relative h-full w-full" style={{ pointerEvents: "none" }}>
+      <svg
+        width={data.width}
+        height={data.height}
+        className="absolute inset-0 overflow-visible"
+        style={{ pointerEvents: "none" }}
+      >
+        <path
+          d={data.path}
+          fill={data.color}
+          fillOpacity={0.9}
+          stroke="#ffffff"
+          strokeWidth={2}
+          style={{ pointerEvents: "auto", cursor: "pointer" }}
+          onMouseEnter={() => {
+            if (data.layer) actions?.prefetchLayer(data.layer);
+          }}
+          onClick={(event) => {
+            event.stopPropagation();
+            activate();
+          }}
+        >
+          <title>
+            {data.label}
+            {data.detail ? ` — ${data.detail}` : ""}
+          </title>
+        </path>
+      </svg>
+      <div
+        className="absolute max-w-[8.5rem] -translate-x-1/2 -translate-y-1/2 text-center"
+        style={{
+          left: data.labelX,
+          top: data.labelY,
+          pointerEvents: "none",
+          textShadow: "0 0 6px #fff, 0 0 6px #fff",
+        }}
+      >
+        <div className="line-clamp-3 text-xs font-semibold leading-tight text-ink">
+          {data.label}
+        </div>
+        {data.detail && (
+          <div className="text-[10px] leading-tight text-slate-600">{data.detail}</div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export function PieCenterNode({ data }: NodeProps<Node<PieCenterNodeData>>) {
+  return (
+    <div className="flex h-full w-full items-center justify-center px-6 text-center">
+      <span className="line-clamp-4 text-sm font-semibold leading-tight text-ink">
+        {data.title}
+      </span>
+    </div>
+  );
+}
+
+export function ChartBackdropNode({
+  data,
+}: NodeProps<Node<ChartBackdropNodeData>>) {
+  const { plot, columnWidth, rowHeight } = data;
+  const columns = Array.from({ length: data.columns + 1 }, (_, index) => index);
+  const rows = Array.from({ length: data.rows + 1 }, (_, index) => index);
+
+  return (
+    <svg width={data.width} height={data.height} className="overflow-visible">
+      <rect
+        x={plot.left}
+        y={plot.top}
+        width={plot.width}
+        height={plot.height}
+        fill="#f8fafc"
+        stroke="#e2e8f0"
+      />
+      {columns.map((index) => (
+        <line
+          key={`col-${index}`}
+          x1={plot.left + index * columnWidth}
+          x2={plot.left + index * columnWidth}
+          y1={plot.top}
+          y2={plot.top + plot.height}
+          stroke="#e2e8f0"
+        />
+      ))}
+      {rows.map((index) => (
+        <line
+          key={`row-${index}`}
+          x1={plot.left}
+          x2={plot.left + plot.width}
+          y1={plot.top + index * rowHeight}
+          y2={plot.top + index * rowHeight}
+          stroke="#e2e8f0"
+        />
+      ))}
+      {data.yLabels.map((label) => (
+        <text
+          key={label.text}
+          x={plot.left - 10}
+          y={label.y}
+          textAnchor="end"
+          dominantBaseline="middle"
+          fill="#64748b"
+          fontSize={11}
+        >
+          {label.text}
+        </text>
+      ))}
+      <text
+        x={18}
+        y={plot.top + plot.height / 2}
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fill="#334155"
+        fontSize={12}
+        fontWeight={600}
+        transform={`rotate(-90 18 ${plot.top + plot.height / 2})`}
+      >
+        {data.yTitle}
+      </text>
+      {data.xLabels.map((label) => (
+        <text
+          key={label.text}
+          x={label.x}
+          y={plot.top + plot.height + 18}
+          textAnchor="middle"
+          fill="#64748b"
+          fontSize={10}
+        >
+          {label.text}
+        </text>
+      ))}
+      <text
+        x={plot.left + plot.width / 2}
+        y={plot.top + plot.height + 56}
+        textAnchor="middle"
+        fill="#334155"
+        fontSize={12}
+        fontWeight={600}
+      >
+        {data.xTitle}
+      </text>
+    </svg>
+  );
+}
+
 export const graphNodeTypes = {
   graphLayer: LayerNode,
   graphCompany: CompanyNode,
+  graphPieSlice: PieSliceNode,
+  graphPieCenter: PieCenterNode,
+  graphChart: ChartBackdropNode,
 };

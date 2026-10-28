@@ -12,7 +12,11 @@ import {
   type DragStartEvent,
 } from "@dnd-kit/core";
 import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-import type { GraphEdge, GraphLayer } from "@b2b/shared";
+import type { GraphEdge, GraphLayer, GraphLayout } from "@b2b/shared";
+import {
+  GRAPH_LAYOUT_OPTIONS,
+  layoutHint,
+} from "../../components/graph/layoutMode.js";
 import AdminNav from "./AdminNav.js";
 import { parseDropInto } from "./components/graph/DragDrop.js";
 import ScopeBreadcrumb from "./components/graph/ScopeBreadcrumb.js";
@@ -246,7 +250,37 @@ export default function AdminGraph() {
               Diese Ebene bearbeiten
             </button>
           )}
+          {scope.data && !scope.data.layer && (
+            <div className="w-72">
+              <label className="label" htmlFor="root-layout">
+                Darstellung dieser Ebene
+              </label>
+              <select
+                id="root-layout"
+                className="input"
+                value={scope.data.layout}
+                onChange={(event) => {
+                  setError(null);
+                  mutations.updateRootLayout.mutate(
+                    event.target.value as GraphLayout
+                  );
+                }}
+              >
+                {GRAPH_LAYOUT_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
         </div>
+
+        {scope.data && !scope.data.layer && (
+          <p className="mt-2 max-w-3xl text-sm text-slate-600">
+            {layoutHint(scope.data.layout)}
+          </p>
+        )}
 
         {scope.data?.layer?.description && (
           <p className="mt-2 max-w-3xl text-sm text-slate-600">

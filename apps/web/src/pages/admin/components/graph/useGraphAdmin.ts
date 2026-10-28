@@ -6,6 +6,7 @@ import type {
   GraphEdgeKind,
   GraphEdgeKindInput,
   GraphLayer,
+  GraphLayout,
   GraphScope,
 } from "@b2b/shared";
 import { api, ApiError } from "../../../../lib/api.js";
@@ -92,6 +93,8 @@ export function useGraphMutations({ onError }: GraphMutationOptions) {
       parent_id: string | null;
       name: string;
       description: string | null;
+      color: string | null;
+      layout: GraphLayout;
     }) => api.post<GraphLayer>("/api/admin/graph/layers", input),
     ...mutationDefaults,
   });
@@ -104,7 +107,17 @@ export function useGraphMutations({ onError }: GraphMutationOptions) {
       id: string;
       name: string;
       description: string | null;
+      color: string | null;
+      layout: GraphLayout;
     }) => api.patch<GraphLayer>(`/api/admin/graph/layers/${id}`, input),
+    ...mutationDefaults,
+  });
+
+  const updateRootLayout = useMutation({
+    mutationFn: (layout: GraphLayout) =>
+      api.patch<{ layout: GraphLayout }>("/api/admin/graph/root-layout", {
+        layout,
+      }),
     ...mutationDefaults,
   });
 
@@ -185,6 +198,7 @@ export function useGraphMutations({ onError }: GraphMutationOptions) {
   return {
     createLayer,
     updateLayer,
+    updateRootLayout,
     addCompany,
     moveNode,
     reorderNodes,

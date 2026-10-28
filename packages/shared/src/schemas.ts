@@ -791,6 +791,18 @@ const HexColor = z
 export const GraphNodeKind = z.enum(["layer", "company"]);
 export type GraphNodeKind = z.infer<typeof GraphNodeKind>;
 
+// Wie die Kinder einer Ebene gezeichnet werden. `graph` ist das bisherige
+// Netzwerk, `pie` die Torte, `xy` das Portfolio aus Größe und Reifegrad.
+export const GraphLayoutSchema = z.enum(["graph", "pie", "xy"]);
+export type GraphLayout = z.infer<typeof GraphLayoutSchema>;
+
+export const GraphSizeSchema = z.object({
+  slug: z.string(),
+  name: z.string(),
+  sort_order: z.number().int(),
+});
+export type GraphSize = z.infer<typeof GraphSizeSchema>;
+
 export const GraphEdgeKindSchema = z.object({
   id: z.number().int().positive(),
   slug: z.string(),
@@ -816,6 +828,7 @@ export const GraphLayerSchema = z.object({
   slug: z.string(),
   description: z.string().nullable(),
   color: z.string().nullable(),
+  layout: GraphLayoutSchema,
   sort_order: z.number().int(),
   child_layer_count: z.number().int(),
   child_company_count: z.number().int(),
@@ -831,6 +844,10 @@ export const GraphCompanyNodeSchema = z.object({
   logo_url: z.string().nullable(),
   status: CompanyStatus,
   sort_order: z.number().int(),
+  size_slug: z.string().nullable(),
+  size_name: z.string().nullable(),
+  size_sort_order: z.number().int().nullable(),
+  max_trl: z.number().int().min(1).max(9).nullable(),
 });
 export type GraphCompanyNode = z.infer<typeof GraphCompanyNodeSchema>;
 
@@ -870,10 +887,12 @@ export type GraphOutwardEdge = z.infer<typeof GraphOutwardEdgeSchema>;
 
 export const GraphScopeSchema = z.object({
   layer: GraphLayerSchema.nullable(),
+  layout: GraphLayoutSchema,
   path: z.string(),
   breadcrumb: z.array(GraphBreadcrumbItemSchema),
   layers: z.array(GraphLayerSchema),
   companies: z.array(GraphCompanyNodeSchema),
+  sizes: z.array(GraphSizeSchema),
   edges: z.array(GraphEdgeSchema),
   outward_edges: z.array(GraphOutwardEdgeSchema),
 });
@@ -930,6 +949,7 @@ export const GraphLayerInputSchema = z.object({
   name: z.string().trim().min(2).max(120),
   description: z.string().trim().max(2000).nullable().optional().default(null),
   color: HexColor.nullable().optional().default(null),
+  layout: GraphLayoutSchema.optional().default("graph"),
 });
 export type GraphLayerInput = z.infer<typeof GraphLayerInputSchema>;
 
@@ -937,9 +957,15 @@ export const GraphLayerUpdateSchema = z.object({
   name: z.string().trim().min(2).max(120),
   description: z.string().trim().max(2000).nullable().optional().default(null),
   color: HexColor.nullable().optional().default(null),
+  layout: GraphLayoutSchema.optional().default("graph"),
   sort_order: z.number().int().min(0).max(9999).optional(),
 });
 export type GraphLayerUpdate = z.infer<typeof GraphLayerUpdateSchema>;
+
+export const GraphRootLayoutUpdateSchema = z.object({
+  layout: GraphLayoutSchema,
+});
+export type GraphRootLayoutUpdate = z.infer<typeof GraphRootLayoutUpdateSchema>;
 
 export const GraphCompanyNodeInputSchema = z.object({
   parent_id: z.string().uuid().nullable().optional().default(null),

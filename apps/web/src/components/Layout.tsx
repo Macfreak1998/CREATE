@@ -104,6 +104,27 @@ export default function Layout() {
 
       <footer className="border-t border-line bg-white mt-12">
         <div className="max-w-7xl mx-auto px-6 py-6 text-sm text-slate-500 flex flex-col items-center gap-3">
+          <a
+            href="https://www.bundeswirtschaftsministerium.de/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-white"
+          >
+            {/*
+              Offizielle Web2x-Bildwortmarke (Styleguide der Bundesregierung).
+              Anzeige in halber Pixelgröße (170×175), damit die 2x-Datei auf
+              hochauflösenden Schirmen 1:1 liegt. Die weiße Fläche der Datei
+              ist die Schutzzone und darf nicht beschnitten werden.
+              Mindesthöhe digital: 135 px inklusive Schutzzone.
+            */}
+            <img
+              src="/BMWi_Fz_2017_Web2x_de.gif"
+              alt="Gefördert durch das Bundesministerium für Wirtschaft und Energie aufgrund eines Beschlusses des Deutschen Bundestages"
+              width={170}
+              height={175}
+              className="block h-[175px] w-[170px]"
+            />
+          </a>
           <p>
             <a href="https://www.skz.de" target="_blank" rel="noopener noreferrer">
               &copy; {new Date().getFullYear()} SKZ

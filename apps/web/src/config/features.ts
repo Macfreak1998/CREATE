@@ -25,4 +25,4 @@ export const SHOW_MACHINES = false;
  * Flag jederzeit erreichbar; das Flag blendet nur die oeffentliche Ansicht und
  * den Navigationslink ein.
  */
-export const SHOW_NETWORK_GRAPH = false;
+export const SHOW_NETWORK_GRAPH = true;

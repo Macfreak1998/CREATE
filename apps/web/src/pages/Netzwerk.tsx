@@ -156,9 +156,11 @@ export default function Netzwerk() {
       )}
 
       <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-        <EdgeLegend edgeKinds={edgeKinds.data ?? []} />
+        {scope.data?.layout === "graph" && (
+          <EdgeLegend edgeKinds={edgeKinds.data ?? []} />
+        )}
         {scopePath && (
-          <button type="button" className="btn-secondary text-xs" onClick={goUp}>
+          <button type="button" className="btn-secondary ml-auto text-xs" onClick={goUp}>
             Eine Ebene zurück
           </button>
         )}

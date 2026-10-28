@@ -59,6 +59,12 @@ erreichbar, die Sortierpfeile bleiben deshalb erhalten.
 | Zeile auf die Zone einer Ebene ziehen | in diese Ebene verschieben | `POST /nodes/:id/move` |
 | Zeile auf eine Breadcrumb-Zone ziehen | eine oder mehrere Ebenen hoch verschieben | `POST /nodes/:id/move` |
 
+Im Ebenendialog liegen zusaetzlich Farbe und Darstellung der Inhalte
+(`graph`, `pie`, `xy`). Die Wurzel hat keinen Dialog; ihre Darstellung steht
+ueber dem Breadcrumb und geht an `PATCH /api/admin/graph/root-layout`. Die
+Ebenenliste zeigt den Modus als kurze Kennzeichnung. Umschalten loescht keine
+Verbindungen.
+
 Die Ablagezonen erscheinen erst waehrend eines Drags. Ohne sie waere die Geste
 mehrdeutig: Eine Zeile auf eine andere Ebene zu ziehen koennte "davor
 einsortieren" oder "hineinverschieben" bedeuten. Die Zone trennt beide Faelle
@@ -115,18 +121,30 @@ bereits im Cache.
 
 ### Layout
 
-`elkjs` mit dem Algorithmus `stress`, festem `randomSeed` und stabil nach
-`sort_order` sortierter Eingabe. Determinismus ist hier kein Detail: Wer eine
-Ebene zweimal oeffnet, muss dasselbe Bild sehen, sonst gibt es keine
-Wiedererkennung. Eine kraftbasierte Simulation mit zufaelliger Startlage waere
-genau deshalb ungeeignet.
+`scope.layout` entscheidet, welches Bild `computeLayout` baut. Die Signatur
+enthaelt den Modus, die Ebenenfarbe und Groesse sowie hoechsten TRL der Firmen,
+damit ein Umschalten oder ein geaendertes Profil neu gerechnet wird.
 
-Geschlossene Ebenen werden nach `child_layer_count + child_company_count`
-dimensioniert. Die Groesse eines Kreises zeigt so, wie viel dahinter steckt,
-ohne dass der Inhalt geladen wird.
+`graph` nutzt `elkjs` mit dem Algorithmus `stress`, festem `randomSeed` und
+stabil nach `sort_order` sortierter Eingabe. Determinismus ist hier kein
+Detail: Wer eine Ebene zweimal oeffnet, muss dasselbe Bild sehen, sonst gibt
+es keine Wiedererkennung. Eine kraftbasierte Simulation mit zufaelliger
+Startlage waere genau deshalb ungeeignet. Geschlossene Ebenen werden nach
+`child_layer_count + child_company_count` dimensioniert. Schlaegt die
+Berechnung fehl, greift ein Raster als Rueckfall.
 
-Schlaegt die Berechnung fehl, greift ein Raster als Rueckfall. Eine Ansicht mit
-unschoenem Layout ist besser als eine leere Ansicht.
+`pie` zeichnet jedes Kind als eigenes SVG-Segment (`graphPieSlice`). Der
+Winkel folgt dem Gewicht, Stuecke unter 8 Grad werden angehoben. Klick und
+Vorladen laufen weiter ueber die Knotenhierarchie, die Mitte zeigt den Namen
+der offenen Ebene. Kanten werden nicht gerendert.
+
+`xy` legt einen nicht klickbaren Hintergrund mit Achsen in das
+Flow-Koordinatensystem, Firmen auf Groessenklasse und hoechsten TRL, mehrere
+Firmen einer Zelle in einem festen Raster nach Knoten-Id. Unterebenen stehen
+als Kreise darueber. Kanten werden nicht gerendert. Die Legende der
+Verbindungstypen erscheint nur im Modus `graph`. Die Aussenkanten-Chips bleiben
+in jedem Modus, weil sie zur geoeffneten Ebene gehoeren und nicht zu ihren
+Kindern.
 
 ### Zoom-Uebergang
 

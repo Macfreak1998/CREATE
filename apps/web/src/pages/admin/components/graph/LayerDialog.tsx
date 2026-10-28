@@ -1,9 +1,14 @@
 import { FormEvent, useState } from "react";
-import type { GraphLayer } from "@b2b/shared";
+import type { GraphLayer, GraphLayout } from "@b2b/shared";
+import { GRAPH_LAYOUT_OPTIONS, layoutHint } from "../../../../components/graph/layoutMode.js";
+
+const DEFAULT_COLOR = "#81ae3d";
 
 export interface LayerFormValues {
   name: string;
   description: string | null;
+  color: string | null;
+  layout: GraphLayout;
 }
 
 export default function LayerDialog({
@@ -17,6 +22,8 @@ export default function LayerDialog({
 }) {
   const [name, setName] = useState(layer?.name ?? "");
   const [description, setDescription] = useState(layer?.description ?? "");
+  const [color, setColor] = useState(layer?.color ?? DEFAULT_COLOR);
+  const [layout, setLayout] = useState<GraphLayout>(layer?.layout ?? "graph");
   const [error, setError] = useState<string | null>(null);
 
   const submit = (event: FormEvent) => {
@@ -28,6 +35,8 @@ export default function LayerDialog({
     onSubmit({
       name: name.trim(),
       description: description.trim() ? description.trim() : null,
+      color,
+      layout,
     });
   };
 
@@ -63,6 +72,38 @@ export default function LayerDialog({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               maxLength={2000}
+            />
+          </div>
+
+          <div>
+            <label className="label" htmlFor="layer-layout">
+              Darstellung der Inhalte
+            </label>
+            <select
+              id="layer-layout"
+              className="input"
+              value={layout}
+              onChange={(e) => setLayout(e.target.value as GraphLayout)}
+            >
+              {GRAPH_LAYOUT_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            <p className="mt-1 text-xs text-slate-500">{layoutHint(layout)}</p>
+          </div>
+
+          <div>
+            <label className="label" htmlFor="layer-color">
+              Farbe
+            </label>
+            <input
+              id="layer-color"
+              type="color"
+              className="h-10 w-16 cursor-pointer rounded border border-line bg-white p-1"
+              value={color}
+              onChange={(e) => setColor(e.target.value)}
             />
           </div>
 

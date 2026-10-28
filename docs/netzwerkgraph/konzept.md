@@ -84,12 +84,27 @@ verbunden, dass ihre Ebenen eine Verbindung haben.
 
 ### Kein gespeichertes Layout
 
-Positionen werden nicht persistiert, sondern pro Scope mit `elkjs` berechnet.
-Da ein Scope selten mehr als einige Dutzend Knoten hat, ist das in
-Millisekunden erledigt. Wichtig ist Determinismus: Bei gleicher Eingabe muss
-dasselbe Bild entstehen, sonst geht die Wiedererkennung verloren. Deshalb ein
-deterministischer Algorithmus statt einer zufaellig initialisierten
-Kraftsimulation, und eine stabil nach `sort_order` sortierte Eingabe.
+Positionen werden nicht persistiert. Der Admin waehlt pro Ebene, wie ihre
+Kinder gezeichnet werden, sobald man die Ebene oeffnet:
+
+| Modus | Darstellung |
+| --- | --- |
+| `graph` | Netzwerk mit `elkjs`, Verbindungen sichtbar. Das ist der Standard. |
+| `pie` | Torte. Jedes Kind ein Stueck, Unterebenen nach Firmenzahl, einzelne Firmen mit Gewicht 1. Verbindungen bleiben gespeichert und werden nicht gezeichnet. |
+| `xy` | Portfolio. Firmen auf den Achsen Unternehmensgroesse und hoechster Technologie-Reifegrad (TRL). Unterebenen stehen als Kreise ueber dem Diagramm. Verbindungen ebenfalls nur gespeichert. |
+
+Die Wurzel hat keine Zeile in `graph_nodes`. Ihr Modus liegt in `app_settings`
+unter `graph_root_layout`. Inhalt und Modus sind unabhaengig: eine Ebene darf
+jedes der drei Bilder zeigen, egal ob darin Ebenen, Firmen oder beides liegen.
+
+Bei `graph` berechnet `elkjs` die Positionen. Da ein Scope selten mehr als
+einige Dutzend Knoten hat, ist das in Millisekunden erledigt. Wichtig ist
+Determinismus: Bei gleicher Eingabe muss dasselbe Bild entstehen, sonst geht
+die Wiedererkennung verloren. Deshalb ein deterministischer Algorithmus statt
+einer zufaellig initialisierten Kraftsimulation, und eine stabil nach
+`sort_order` sortierte Eingabe. Torte und Portfolio sind ebenfalls fest aus
+den Daten abgeleitet, inklusive eines festen Versatzes, wenn mehrere Firmen
+auf derselben Zelle liegen.
 
 Verworfen: manuelle Koordinaten pro Knoten. Das haette den Admin um eine
 Canvas-Interaktion erweitert und bei jeder Strukturaenderung Nachpflege
