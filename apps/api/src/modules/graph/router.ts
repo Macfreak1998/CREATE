@@ -5,7 +5,9 @@ import {
   type GraphFindQuery,
   type GraphScopeQuery,
 } from "@b2b/shared";
+import { requireAuth } from "../../middlewares/auth.js";
 import { asyncHandler } from "../../middlewares/async-handler.js";
+import { requireRole } from "../../middlewares/require-role.js";
 import { validate } from "../../middlewares/validate.js";
 import {
   findCompanyPlacements,
@@ -16,19 +18,17 @@ import {
 
 export const graphRouter = Router();
 
+graphRouter.use(requireAuth, requireRole("admin"));
+
 export function splitLayerPath(path: string): string[] {
   return path.split("/").filter(Boolean);
 }
-
-// Oeffentliche Sicht: nur freigegebene Firmen, deren Kanten werden in
-// loadScope zusammen mit ihnen ausgefiltert.
-const PUBLIC_OPTIONS = { publicOnly: true } as const;
 
 graphRouter.get(
   "/scope",
   validate(GraphScopeQuerySchema, "query"),
   asyncHandler(async (req: Request, res: Response) => {
-    const { path } = req.query as unknown as GraphScopeQuery;
+    const { path, include_unpublished } = req.query as unknown as GraphScopeQuery;
     const segments = splitLayerPath(path);
 
     const breadcrumb = await resolveLayerPath(segments);
@@ -38,7 +38,9 @@ graphRouter.get(
     }
 
     const layerId = breadcrumb.at(-1)?.id ?? null;
-    const scope = await loadScope(layerId, PUBLIC_OPTIONS);
+    const scope = await loadScope(layerId, {
+      publicOnly: !include_unpublished,
+    });
     if (!scope) {
       res.status(404).json({ error: "Ebene nicht gefunden." });
       return;
@@ -58,7 +60,9 @@ graphRouter.get(
   "/find",
   validate(GraphFindQuerySchema, "query"),
   asyncHandler(async (req: Request, res: Response) => {
-    const { q } = req.query as unknown as GraphFindQuery;
-    res.json(await findCompanyPlacements(q, PUBLIC_OPTIONS));
+    const { q, include_unpublished } = req.query as unknown as GraphFindQuery;
+    res.json(
+      await findCompanyPlacements(q, { publicOnly: !include_unpublished })
+    );
   })
 );

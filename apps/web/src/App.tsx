@@ -40,14 +40,6 @@ export default function App() {
         <Route element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="/suche" element={<Suche />} />
-          <Route
-            path="/netzwerk/*"
-            element={
-              <Suspense fallback={<PageLoading />}>
-                <Netzwerk />
-              </Suspense>
-            }
-          />
           <Route path="/firma/:slug" element={<Firma />} />
           <Route path="/login" element={<Login />} />
           <Route path="/registrieren" element={<Registrieren />} />
@@ -82,6 +74,14 @@ export default function App() {
               element={<AdminMailTemplates />}
             />
             <Route path="/admin/graph" element={<AdminGraph />} />
+            <Route
+              path="/netzwerk/*"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <Netzwerk />
+                </Suspense>
+              }
+            />
             <Route path="/admin/reporting" element={<AdminReporting />} />
             <Route path="/admin/tracker" element={<AdminTracker />} />
             <Route path="/admin/feedback" element={<AdminFeedback />} />

@@ -31,7 +31,9 @@ export default function OutwardEdgeChips({
             />
             <span>
               {DIRECTION_PREFIX[edge.direction]}{" "}
-              <span className="font-medium">{edge.other_name}</span>
+              <span className="font-medium">
+                {edge.other_name}
+              </span>
               <span className="text-slate-500"> · {edge.edge_kind_name}</span>
             </span>
           </>

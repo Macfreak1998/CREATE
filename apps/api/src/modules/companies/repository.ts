@@ -39,6 +39,7 @@ export interface CompanyRow {
   contact_email: string;
   contact_phone: string | null;
   status: CompanyStatus;
+  anonymous: boolean;
   size_id: number | null;
   last_reviewed_at: Date | null;
   last_reviewed_snapshot: unknown;
@@ -284,6 +285,7 @@ export function rowToAdmin(
   return {
     ...rowToOwn(row, aggregates),
     status: row.status,
+    anonymous: row.anonymous,
     user_email: userEmail,
     created_at: row.created_at.toISOString(),
     updated_at: row.updated_at.toISOString(),

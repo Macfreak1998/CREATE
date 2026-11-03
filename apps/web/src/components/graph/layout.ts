@@ -1,27 +1,20 @@
 import ELK from "elkjs/lib/elk.bundled.js";
 import type { Edge, Node } from "@xyflow/react";
-import type {
-  GraphCompanyNode,
-  GraphEdge,
-  GraphLayer,
-  GraphScope,
+import {
+  graphPaletteColor,
+  type GraphCompanyNode,
+  type GraphEdge,
+  type GraphLayer,
+  type GraphScope,
 } from "@b2b/shared";
 
 const elk = new ELK();
 
 export const COMPANY_NODE_SIZE = { width: 176, height: 68 };
-const PORTFOLIO_NODE_SIZE = { width: 148, height: 56 };
-
-const PIE_COLORS = [
-  "#81ae3d",
-  "#0d9488",
-  "#2563eb",
-  "#7c3aed",
-  "#ea580c",
-  "#db2777",
-  "#ca8a04",
-  "#0891b2",
-];
+const ANON_COMPANY_SIZE = { width: 60, height: 60 };
+const PORTFOLIO_LOGO_SIZE = 44;
+const PORTFOLIO_MIN_COLUMN = 148;
+const PORTFOLIO_MIN_ROW = 84;
 
 const PIE_CENTER = { x: 520, y: 520 };
 const PIE_OUTER = 360;
@@ -50,6 +43,15 @@ export interface LayerNodeData extends Record<string, unknown> {
 export interface CompanyNodeData extends Record<string, unknown> {
   kind: "company";
   node: GraphCompanyNode;
+  color: string;
+  anonymized: boolean;
+  compact: boolean;
+}
+
+export interface BubbleNodeData extends Record<string, unknown> {
+  kind: "bubble";
+  count: number;
+  color: string;
 }
 
 export interface PieSliceNodeData extends Record<string, unknown> {
@@ -59,6 +61,7 @@ export interface PieSliceNodeData extends Record<string, unknown> {
   color: string;
   label: string;
   detail: string;
+  anonymized: boolean;
   path: string;
   labelX: number;
   labelY: number;
@@ -76,10 +79,8 @@ export interface ChartBackdropNodeData extends Record<string, unknown> {
   width: number;
   height: number;
   plot: { left: number; top: number; width: number; height: number };
-  columnWidth: number;
-  rowHeight: number;
-  columns: number;
-  rows: number;
+  columnStops: number[];
+  rowStops: number[];
   xLabels: { x: number; text: string }[];
   yLabels: { y: number; text: string }[];
   xTitle: string;
@@ -89,6 +90,7 @@ export interface ChartBackdropNodeData extends Record<string, unknown> {
 export type GraphNodeData =
   | LayerNodeData
   | CompanyNodeData
+  | BubbleNodeData
   | PieSliceNodeData
   | PieCenterNodeData
   | ChartBackdropNodeData;
@@ -108,8 +110,10 @@ export interface LayoutResult {
  */
 export function scopeSignature(scope: GraphScope): string {
   return [
+    "portfolio-anon-bubble",
     scope.path,
     scope.layout,
+    scope.layer?.color ?? "",
     ...scope.sizes.map((size) => `S${size.slug}:${size.sort_order}:${size.name}`),
     ...scope.layers.map(
       (layer) =>
@@ -117,7 +121,7 @@ export function scopeSignature(scope: GraphScope): string {
     ),
     ...scope.companies.map(
       (company) =>
-        `C${company.id}:${company.size_slug ?? ""}:${company.max_trl ?? ""}:${company.sort_order}`
+        `C${company.id}:${company.size_slug ?? ""}:${company.max_trl ?? ""}:${company.sort_order}:${company.anonymous ? 1 : 0}`
     ),
     ...scope.edges.map((edge) => `E${edge.id}`),
   ].join("|");
@@ -143,7 +147,12 @@ export async function computeLayout(scope: GraphScope): Promise<LayoutResult> {
   return computeGraphLayout(scope);
 }
 
+function stageColor(scope: GraphScope): string {
+  return scope.layer?.color || graphPaletteColor(0);
+}
+
 async function computeGraphLayout(scope: GraphScope): Promise<LayoutResult> {
+  const color = stageColor(scope);
   const sized = [
     ...scope.layers.map((layer) => ({
       id: layer.id,
@@ -153,8 +162,14 @@ async function computeGraphLayout(scope: GraphScope): Promise<LayoutResult> {
     })),
     ...scope.companies.map((node) => ({
       id: node.id,
-      ...COMPANY_NODE_SIZE,
-      data: { kind: "company", node } as CompanyNodeData,
+      ...(node.anonymous ? ANON_COMPANY_SIZE : COMPANY_NODE_SIZE),
+      data: {
+        kind: "company",
+        node,
+        color,
+        anonymized: node.anonymous,
+        compact: false,
+      } as CompanyNodeData,
       type: "graphCompany",
     })),
   ];
@@ -191,9 +206,7 @@ async function computeGraphLayout(scope: GraphScope): Promise<LayoutResult> {
 function computePieLayout(scope: GraphScope): LayoutResult {
   const children = pieChildren(scope);
   const angles = sliceAngles(children.map((child) => child.weight));
-  children.forEach((child, index) => {
-    if (!child.color) child.color = PIE_COLORS[index % PIE_COLORS.length]!;
-  });
+  applyDiagramColors(scope, children);
 
   const nodes: Node<GraphNodeData>[] = children.map((child, index) => {
     const angle = angles[index] ?? { start: 0, end: 0 };
@@ -209,6 +222,7 @@ function computePieLayout(scope: GraphScope): LayoutResult {
         color: child.color,
         label: child.label,
         detail: child.detail,
+        anonymized: child.anonymized,
         path: geometry.path,
         labelX: geometry.labelX,
         labelY: geometry.labelY,
@@ -258,21 +272,18 @@ function computePortfolioLayout(scope: GraphScope): LayoutResult {
     ...sizes.map((size) => ({ key: size.slug, label: size.name })),
   ];
   const yCats = [
-    { trl: null as number | null, label: "keine Angabe" },
-    ...Array.from({ length: 9 }, (_, index) => ({
-      trl: index + 1,
-      label: `TRL ${index + 1}`,
-    })),
+    { label: "keine Angabe" },
+    { label: "Forschung" },
+    { label: "Entwicklung" },
+    { label: "Anwendung" },
   ];
 
-  const columnWidth = 168;
-  const rowHeight = 64;
   const plotLeft = 156;
   const plot = {
     left: plotLeft,
     top: 0,
-    width: xCats.length * columnWidth,
-    height: yCats.length * rowHeight,
+    width: 0,
+    height: 0,
   };
 
   const layerNodes: Node<GraphNodeData>[] = [];
@@ -309,37 +320,102 @@ function computePortfolioLayout(scope: GraphScope): LayoutResult {
     groups.set(key, list);
   }
 
+  const color = stageColor(scope);
+  const cellPadding = 14;
+  const grids = new Map<string, CellGrid>();
+  for (const [key, list] of groups) {
+    grids.set(key, cellGrid(list));
+  }
+
+  const columnWidths = xCats.map((_, xi) => {
+    let width = PORTFOLIO_MIN_COLUMN;
+    for (let yi = 0; yi < yCats.length; yi++) {
+      const grid = grids.get(`${xi}:${yi}`);
+      if (grid) width = Math.max(width, grid.width + cellPadding * 2);
+    }
+    return width;
+  });
+  const rowHeights = yCats.map((_, yi) => {
+    let height = PORTFOLIO_MIN_ROW;
+    for (let xi = 0; xi < xCats.length; xi++) {
+      const grid = grids.get(`${xi}:${yi}`);
+      if (grid) height = Math.max(height, grid.height + cellPadding * 2);
+    }
+    return height;
+  });
+
+  plot.width = columnWidths.reduce((sum, width) => sum + width, 0);
+  plot.height = rowHeights.reduce((sum, height) => sum + height, 0);
+
+  const columnStart = (xi: number) =>
+    columnWidths.slice(0, xi).reduce((sum, width) => sum + width, 0);
+  const rowCenterFromBottom = (yi: number) => {
+    const before = rowHeights.slice(0, yi).reduce((sum, height) => sum + height, 0);
+    return before + (rowHeights[yi] ?? 0) / 2;
+  };
+
   const companyNodes: Node<GraphNodeData>[] = [];
   for (const [key, list] of groups) {
+    const grid = grids.get(key);
+    if (!grid) continue;
     const [xi, yi] = key.split(":").map((part) => Number(part));
-    const ordered = [...list].sort((a, b) => a.id.localeCompare(b.id));
-    const cols = Math.ceil(Math.sqrt(ordered.length));
-    const rows = Math.ceil(ordered.length / cols);
-    const gap = 8;
-    const gridWidth = cols * PORTFOLIO_NODE_SIZE.width + (cols - 1) * gap;
-    const gridHeight = rows * PORTFOLIO_NODE_SIZE.height + (rows - 1) * gap;
-    const cellX = plot.left + ((xi ?? 0) + 0.5) * columnWidth;
-    const cellY = plot.top + plot.height - ((yi ?? 0) + 0.5) * rowHeight;
-    const originX = cellX - gridWidth / 2;
-    const originY = cellY - gridHeight / 2;
-    ordered.forEach((company, index) => {
-      const col = index % cols;
-      const row = Math.floor(index / cols);
+    const cellX = plot.left + columnStart(xi ?? 0) + (columnWidths[xi ?? 0] ?? 0) / 2;
+    const cellY = plot.top + plot.height - rowCenterFromBottom(yi ?? 0);
+    const named = list
+      .filter((company) => !company.anonymous)
+      .sort((a, b) => a.id.localeCompare(b.id));
+    const hidden = list.filter((company) => company.anonymous);
+    const originX = cellX - grid.width / 2;
+    if (hidden.length > 0) {
       companyNodes.push({
-        id: company.id,
-        type: "graphCompany",
+        id: `bubble-${key}`,
+        type: "graphBubble",
         position: {
-          x: originX + col * (PORTFOLIO_NODE_SIZE.width + gap),
-          y: originY + row * (PORTFOLIO_NODE_SIZE.height + gap),
+          x: originX + grid.logoGridWidth + (named.length > 0 ? grid.gap : 0),
+          y: cellY - grid.bubble / 2,
         },
-        data: { kind: "company", node: company },
-        width: PORTFOLIO_NODE_SIZE.width,
-        height: PORTFOLIO_NODE_SIZE.height,
+        data: { kind: "bubble", count: hidden.length, color },
+        width: grid.bubble,
+        height: grid.bubble,
         draggable: false,
         connectable: false,
         zIndex: 2,
       });
+    }
+    const originY = cellY - grid.logoGridHeight / 2;
+    named.forEach((company, index) => {
+      const col = index % grid.cols;
+      const row = Math.floor(index / grid.cols);
+      const slotX = originX + col * (grid.slot + grid.gap);
+      const slotY = originY + row * (grid.slot + grid.gap);
+      companyNodes.push({
+        id: company.id,
+        type: "graphCompany",
+        position: { x: slotX, y: slotY },
+        data: {
+          kind: "company",
+          node: company,
+          color,
+          anonymized: false,
+          compact: true,
+        },
+        width: PORTFOLIO_LOGO_SIZE,
+        height: PORTFOLIO_LOGO_SIZE,
+        draggable: false,
+        connectable: false,
+        zIndex: 3,
+        style: { overflow: "visible" },
+      });
     });
+  }
+
+  const columnStops = [plot.left];
+  for (const width of columnWidths) {
+    columnStops.push((columnStops.at(-1) ?? plot.left) + width);
+  }
+  const rowStops = [plot.top];
+  for (let yi = yCats.length - 1; yi >= 0; yi--) {
+    rowStops.push((rowStops.at(-1) ?? plot.top) + (rowHeights[yi] ?? 0));
   }
 
   const width = Math.max(plot.left + plot.width + 24, cursorX);
@@ -353,16 +429,14 @@ function computePortfolioLayout(scope: GraphScope): LayoutResult {
       width,
       height,
       plot,
-      columnWidth,
-      rowHeight,
-      columns: xCats.length,
-      rows: yCats.length,
+      columnStops,
+      rowStops,
       xLabels: xCats.map((cat, index) => ({
-        x: plot.left + (index + 0.5) * columnWidth,
+        x: plot.left + columnStart(index) + (columnWidths[index] ?? 0) / 2,
         text: cat.label,
       })),
       yLabels: yCats.map((cat, index) => ({
-        y: plot.top + plot.height - (index + 0.5) * rowHeight,
+        y: plot.top + plot.height - rowCenterFromBottom(index),
         text: cat.label,
       })),
       xTitle: "Unternehmensgröße",
@@ -380,6 +454,50 @@ function computePortfolioLayout(scope: GraphScope): LayoutResult {
   return { nodes: [backdrop, ...layerNodes, ...companyNodes], edges: [] };
 }
 
+interface CellGrid {
+  width: number;
+  height: number;
+  cols: number;
+  slot: number;
+  gap: number;
+  bubble: number;
+  logoGridWidth: number;
+  logoGridHeight: number;
+}
+
+function cellGrid(list: GraphCompanyNode[]): CellGrid {
+  const named = list.filter((company) => !company.anonymous);
+  const hidden = list.filter((company) => company.anonymous);
+  const bubble = hidden.length > 0 ? bubbleDiameter(hidden.length) : 0;
+  const gap = 8;
+  if (named.length === 0) {
+    return {
+      width: bubble,
+      height: bubble,
+      cols: 1,
+      slot: bubble,
+      gap: 0,
+      bubble,
+      logoGridWidth: 0,
+      logoGridHeight: 0,
+    };
+  }
+  const cols = Math.ceil(Math.sqrt(named.length));
+  const rows = Math.ceil(named.length / cols);
+  const logoGridWidth = cols * PORTFOLIO_LOGO_SIZE + (cols - 1) * gap;
+  const logoGridHeight = rows * PORTFOLIO_LOGO_SIZE + (rows - 1) * gap;
+  return {
+    width: bubble > 0 ? logoGridWidth + gap + bubble : logoGridWidth,
+    height: Math.max(logoGridHeight, bubble),
+    cols,
+    slot: PORTFOLIO_LOGO_SIZE,
+    gap,
+    bubble,
+    logoGridWidth,
+    logoGridHeight,
+  };
+}
+
 function xCategoryIndex(
   slug: string | null,
   cats: { key: string }[]
@@ -391,7 +509,13 @@ function xCategoryIndex(
 
 function yCategoryIndex(trl: number | null): number {
   if (trl == null || trl < 1 || trl > 9) return 0;
-  return trl;
+  if (trl <= 3) return 1;
+  if (trl <= 6) return 2;
+  return 3;
+}
+
+function bubbleDiameter(count: number): number {
+  return Math.round(Math.min(120, 40 + 20 * Math.sqrt(Math.max(count, 1))));
 }
 
 interface PieChild {
@@ -399,10 +523,26 @@ interface PieChild {
   sort: number;
   weight: number;
   color: string;
+  anonymized: boolean;
   label: string;
   detail: string;
   layer: GraphLayer | null;
   company: GraphCompanyNode | null;
+}
+
+function applyDiagramColors(scope: GraphScope, children: PieChild[]): void {
+  const companyColor = stageColor(scope);
+  let paletteIndex = 0;
+  for (const child of children) {
+    if (child.company) {
+      child.color = companyColor;
+      continue;
+    }
+    if (!child.color) {
+      child.color = graphPaletteColor(paletteIndex);
+      paletteIndex += 1;
+    }
+  }
 }
 
 function pieChildren(scope: GraphScope): PieChild[] {
@@ -412,6 +552,7 @@ function pieChildren(scope: GraphScope): PieChild[] {
       sort: layer.sort_order,
       weight: Math.max(layer.child_company_count, 1),
       color: layer.color ?? "",
+      anonymized: false,
       label: layer.name,
       detail: `${layer.child_company_count} Firmen`,
       layer,
@@ -422,8 +563,9 @@ function pieChildren(scope: GraphScope): PieChild[] {
       sort: company.sort_order,
       weight: 1,
       color: "",
-      label: company.company_name,
-      detail: company.size_name ?? "",
+      anonymized: company.anonymous,
+      label: company.anonymous ? "" : company.company_name,
+      detail: company.anonymous ? "" : (company.size_name ?? ""),
       layer: null,
       company,
     })),

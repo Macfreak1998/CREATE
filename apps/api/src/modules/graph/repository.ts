@@ -1,19 +1,21 @@
-import type {
-  GraphBreadcrumbItem,
-  GraphCompanyNode,
-  GraphCompanyOption,
-  GraphEdge,
-  GraphEdgeKind,
-  GraphEdgeKindInput,
-  GraphFindResult,
-  GraphLayer,
-  GraphLayerInput,
-  GraphLayerUpdate,
-  GraphLayout,
-  GraphOutwardEdge,
-  GraphScope,
-  GraphSize,
-  CompanyStatus,
+import {
+  graphPaletteColor,
+  type GraphBreadcrumbItem,
+  type GraphCompanyNode,
+  type GraphCompanyOption,
+  type GraphEdge,
+  type GraphEdgeKind,
+  type GraphEdgeKindInput,
+  type GraphFindResult,
+  type GraphLayer,
+  type GraphLayerInput,
+  type GraphLayerUpdate,
+  type GraphLayout,
+  type GraphOutwardEdge,
+  type GraphScope,
+  type GraphSeedIndustriesResult,
+  type GraphSize,
+  type CompanyStatus,
 } from "@b2b/shared";
 import { query, withTransaction } from "../../db/client.js";
 import { SETTING_GRAPH_ROOT_LAYOUT, getSetting, setSetting } from "../../lib/settings.js";
@@ -60,6 +62,7 @@ interface CompanyNodeRow {
   company_name: string;
   logo_path: string | null;
   status: CompanyStatus;
+  anonymous: boolean;
   sort_order: number;
   size_slug: string | null;
   size_name: string | null;
@@ -100,15 +103,20 @@ function rowToLayer(row: LayerRow): GraphLayer {
   };
 }
 
-function rowToCompanyNode(row: CompanyNodeRow): GraphCompanyNode {
+function rowToCompanyNode(
+  row: CompanyNodeRow,
+  redact: boolean
+): GraphCompanyNode {
+  const hide = redact && row.anonymous;
   return {
     id: row.id,
     parent_id: row.parent_id,
     company_id: row.company_id,
-    company_slug: row.company_slug,
-    company_name: row.company_name,
-    logo_url: buildPublicLogoUrl(row.logo_path),
+    company_slug: hide ? "" : row.company_slug,
+    company_name: hide ? "Firma" : row.company_name,
+    logo_url: hide ? null : buildPublicLogoUrl(row.logo_path),
     status: row.status,
+    anonymous: row.anonymous,
     sort_order: row.sort_order,
     size_slug: row.size_slug,
     size_name: row.size_name,
@@ -134,8 +142,7 @@ function rowToEdge(row: EdgeRow): GraphEdge {
 }
 
 // Zaehl-Subselects fuer geschlossene Ebenen. In der oeffentlichen Sicht zaehlen
-// nur freigegebene Firmen mit, damit die angezeigte Zahl zu dem passt, was nach
-// dem Hineinzoomen sichtbar ist.
+// freigegebene Firmen und zusaetzlich anonym markierte Entwuerfe mit.
 const LAYER_COLUMNS = `
   n.id, n.parent_id, n.name, n.slug, n.description, n.color, n.layout, n.sort_order,
   (SELECT count(*) FROM graph_nodes cl
@@ -143,7 +150,9 @@ const LAYER_COLUMNS = `
   (SELECT count(*) FROM graph_nodes cc
      JOIN companies cco ON cco.id = cc.company_id
     WHERE cc.parent_id = n.id AND cc.kind = 'company'
-      AND ($2::boolean IS NOT TRUE OR cco.status = 'approved'))::int AS child_company_count
+      AND ($2::boolean IS NOT TRUE
+           OR (cco.status <> 'suspended'
+               AND (cco.status = 'approved' OR cco.anonymous))))::int AS child_company_count
 `;
 
 export async function loadEdgeKinds(): Promise<GraphEdgeKind[]> {
@@ -268,7 +277,7 @@ async function loadChildLayers(
 const COMPANY_NODE_FROM = `
   SELECT n.id, n.parent_id, n.company_id, n.sort_order,
          c.slug AS company_slug, c.name AS company_name,
-         c.logo_path, c.status,
+         c.logo_path, c.status, c.anonymous,
          cs.slug AS size_slug, cs.name AS size_name,
          cs.sort_order AS size_sort_order,
          (SELECT MAX(ct.trl)::int FROM company_technologies ct
@@ -285,11 +294,13 @@ async function loadChildCompanies(
   const result = await query<CompanyNodeRow>(
     `${COMPANY_NODE_FROM}
       WHERE n.kind = 'company' AND n.parent_id IS NOT DISTINCT FROM $1
-        AND ($2::boolean IS NOT TRUE OR c.status = 'approved')
+        AND ($2::boolean IS NOT TRUE
+             OR (c.status <> 'suspended'
+                 AND (c.status = 'approved' OR c.anonymous)))
       ORDER BY n.sort_order, c.name`,
     [parentId, publicOnly]
   );
-  return result.rows.map(rowToCompanyNode);
+  return result.rows.map((row) => rowToCompanyNode(row, publicOnly));
 }
 
 async function loadSizes(): Promise<GraphSize[]> {
@@ -337,6 +348,7 @@ async function loadOutwardEdges(
       other_company_name: string | null;
       other_company_slug: string | null;
       other_status: CompanyStatus | null;
+      other_anonymous: boolean | null;
     }
   >(
     `SELECT e.id, e.scope_id, e.source_id, e.target_id, e.edge_kind_id, e.label,
@@ -345,7 +357,7 @@ async function loadOutwardEdges(
             o.id AS other_id, o.kind AS other_kind,
             o.name AS other_layer_name, o.slug AS other_layer_slug,
             c.name AS other_company_name, c.slug AS other_company_slug,
-            c.status AS other_status
+            c.status AS other_status, c.anonymous AS other_anonymous
        FROM graph_edges e
        JOIN graph_edge_kinds k ON k.id = e.edge_kind_id
        JOIN graph_nodes o
@@ -358,7 +370,14 @@ async function loadOutwardEdges(
 
   const edges: GraphOutwardEdge[] = [];
   for (const row of result.rows) {
-    if (publicOnly && row.other_kind === "company" && row.other_status !== "approved") {
+    const hideCompany =
+      publicOnly && row.other_kind === "company" && row.other_anonymous === true;
+    if (
+      publicOnly &&
+      row.other_kind === "company" &&
+      (row.other_status === "suspended" ||
+        (row.other_status !== "approved" && !hideCompany))
+    ) {
       continue;
     }
     const isLayer = row.other_kind === "layer";
@@ -366,11 +385,13 @@ async function loadOutwardEdges(
       ...rowToEdge(row),
       other_id: row.other_id,
       other_kind: row.other_kind,
-      other_name: (isLayer ? row.other_layer_name : row.other_company_name) ?? "",
+      other_name: hideCompany
+        ? "Firma"
+        : ((isLayer ? row.other_layer_name : row.other_company_name) ?? ""),
       other_path: isLayer
         ? [parentPath, row.other_layer_slug].filter(Boolean).join("/")
         : null,
-      other_company_slug: row.other_company_slug,
+      other_company_slug: hideCompany ? null : row.other_company_slug,
       direction: !row.directed
         ? "undirected"
         : row.source_id === layerId
@@ -488,6 +509,7 @@ export async function findCompanyPlacements(
          FROM graph_nodes n
          JOIN companies c ON c.id = n.company_id
         WHERE n.kind = 'company'
+          AND c.anonymous = false
           AND ($2::boolean IS NOT TRUE OR c.status = 'approved')
           AND c.name ILIKE '%' || $1 || '%'
         ORDER BY c.name
@@ -534,7 +556,7 @@ export async function searchCompanyOptions(
   parentId: string | null
 ): Promise<GraphCompanyOption[]> {
   const result = await query<GraphCompanyOption>(
-    `SELECT c.id, c.name, c.slug, c.status,
+    `SELECT c.id, c.name, c.slug, c.status, c.anonymous,
             EXISTS (
               SELECT 1 FROM graph_nodes n
                WHERE n.kind = 'company' AND n.company_id = c.id
@@ -724,7 +746,127 @@ export async function addCompanyNode(
       WHERE n.id = $1`,
     [nodeId]
   );
-  return rowToCompanyNode(result.rows[0]!);
+  return rowToCompanyNode(result.rows[0]!, false);
+}
+
+/**
+ * Legt in der angegebenen Ebene fuer jede Branchengruppe eine Kind-Ebene an
+ * und setzt die Firmen hinein, die eine Branche dieser Gruppe im Profil
+ * tragen. Ein erneuter Lauf ergaenzt nur noch Fehlendes.
+ */
+export async function seedIndustryLayers(
+  parentId: string | null
+): Promise<GraphSeedIndustriesResult> {
+  return withTransaction(async (client) => {
+    if (parentId) {
+      const parent = await client.query(
+        `SELECT 1 FROM graph_nodes WHERE id = $1 AND kind = 'layer'`,
+        [parentId]
+      );
+      if (parent.rowCount === 0) {
+        throw new GraphError(404, "Ebene nicht gefunden.");
+      }
+    }
+
+    const groups = await client.query<{
+      id: number;
+      name: string;
+      description: string | null;
+    }>(
+      `SELECT id, name, description
+         FROM industry_groups
+        ORDER BY sort_order, name`
+    );
+
+    const slugRows = await client.query<{ slug: string }>(
+      `SELECT slug FROM graph_nodes
+        WHERE kind = 'layer' AND parent_id IS NOT DISTINCT FROM $1`,
+      [parentId]
+    );
+    const slugs = new Set(slugRows.rows.map((row) => row.slug));
+
+    const sortRow = await client.query<{ next: number }>(
+      `SELECT coalesce(max(sort_order), -1) + 1 AS next
+         FROM graph_nodes WHERE parent_id IS NOT DISTINCT FROM $1`,
+      [parentId]
+    );
+    let sortOrder = sortRow.rows[0]?.next ?? 0;
+
+    let layersCreated = 0;
+    let companiesAdded = 0;
+    let companiesSkipped = 0;
+
+    for (const [index, group] of groups.rows.entries()) {
+      const existing = await client.query<{ id: string }>(
+        `SELECT id FROM graph_nodes
+          WHERE kind = 'layer'
+            AND industry_group_id = $1
+            AND parent_id IS NOT DISTINCT FROM $2`,
+        [group.id, parentId]
+      );
+
+      let layerId = existing.rows[0]?.id;
+      if (!layerId) {
+        const slug = uniqueSlug(group.name, slugs);
+        slugs.add(slug);
+        const inserted = await client.query<{ id: string }>(
+          `INSERT INTO graph_nodes
+             (parent_id, kind, name, slug, description, color, layout, sort_order, industry_group_id)
+           VALUES ($1, 'layer', $2, $3, $4, $5, 'graph', $6, $7)
+           RETURNING id`,
+          [
+            parentId,
+            group.name,
+            slug,
+            group.description,
+            graphPaletteColor(index),
+            sortOrder,
+            group.id,
+          ]
+        );
+        layerId = inserted.rows[0]!.id;
+        sortOrder += 1;
+        layersCreated += 1;
+      }
+
+      const placed = await client.query<{ total: number; added: number }>(
+        `WITH candidates AS (
+           SELECT DISTINCT ci.company_id
+             FROM company_industries ci
+             JOIN industries i ON i.id = ci.industry_id
+            WHERE i.group_id = $1
+         ),
+         inserted AS (
+           INSERT INTO graph_nodes (parent_id, kind, company_id, sort_order)
+           SELECT $2, 'company', c.company_id,
+                  (SELECT coalesce(max(sort_order), -1)
+                     FROM graph_nodes WHERE parent_id = $2)
+                  + row_number() OVER (ORDER BY c.company_id)
+             FROM candidates c
+            WHERE NOT EXISTS (
+              SELECT 1 FROM graph_nodes n
+               WHERE n.kind = 'company'
+                 AND n.parent_id = $2
+                 AND n.company_id = c.company_id
+            )
+           RETURNING 1
+         )
+         SELECT (SELECT count(*)::int FROM candidates) AS total,
+                (SELECT count(*)::int FROM inserted) AS added`,
+        [group.id, layerId]
+      );
+      const total = Number(placed.rows[0]?.total ?? 0);
+      const added = Number(placed.rows[0]?.added ?? 0);
+      companiesAdded += added;
+      companiesSkipped += total - added;
+    }
+
+    return {
+      layers_created: layersCreated,
+      companies_added: companiesAdded,
+      companies_skipped: companiesSkipped,
+    };
+  });
 }
 
 export async function updateRootLayout(layout: GraphLayout): Promise<GraphLayout> {

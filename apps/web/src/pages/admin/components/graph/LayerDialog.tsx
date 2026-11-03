@@ -1,8 +1,8 @@
 import { FormEvent, useState } from "react";
-import type { GraphLayer, GraphLayout } from "@b2b/shared";
+import { GRAPH_PALETTE, type GraphLayer, type GraphLayout } from "@b2b/shared";
 import { GRAPH_LAYOUT_OPTIONS, layoutHint } from "../../../../components/graph/layoutMode.js";
 
-const DEFAULT_COLOR = "#81ae3d";
+const DEFAULT_COLOR = GRAPH_PALETTE[0];
 
 export interface LayerFormValues {
   name: string;
@@ -105,6 +105,25 @@ export default function LayerDialog({
               value={color}
               onChange={(e) => setColor(e.target.value)}
             />
+            <div className="mt-2 flex flex-wrap gap-2">
+              {GRAPH_PALETTE.map((swatch) => {
+                const selected = color.toLowerCase() === swatch;
+                return (
+                  <button
+                    key={swatch}
+                    type="button"
+                    className={[
+                      "h-8 w-8 rounded-full border-2",
+                      selected ? "border-ink" : "border-transparent",
+                    ].join(" ")}
+                    style={{ backgroundColor: swatch }}
+                    aria-label={`Farbe ${swatch}`}
+                    aria-pressed={selected}
+                    onClick={() => setColor(swatch)}
+                  />
+                );
+              })}
+            </div>
           </div>
 
           {layer && (

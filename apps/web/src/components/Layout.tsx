@@ -51,7 +51,7 @@ export default function Layout() {
             <NavLinkItem to="/suche" onClick={guardClick}>
               Firmen suchen
             </NavLinkItem>
-            {SHOW_NETWORK_GRAPH && (
+            {SHOW_NETWORK_GRAPH && me?.user?.role === "admin" && (
               <NavLinkItem to="/netzwerk" onClick={guardClick}>
                 Netzwerk
               </NavLinkItem>

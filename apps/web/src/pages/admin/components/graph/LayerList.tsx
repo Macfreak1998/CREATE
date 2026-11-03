@@ -8,6 +8,8 @@ export default function LayerList({
   activeDragId,
   onOpen,
   onCreate,
+  onSeedIndustries,
+  seeding,
   onEdit,
   onDelete,
   onMove,
@@ -16,17 +18,29 @@ export default function LayerList({
   activeDragId: string | null;
   onOpen: (layerId: string) => void;
   onCreate: () => void;
+  onSeedIndustries: () => void;
+  seeding: boolean;
   onEdit: (layer: GraphLayer) => void;
   onDelete: (layer: GraphLayer) => void;
   onMove: (layerId: string, direction: -1 | 1) => void;
 }) {
   return (
     <section className="card p-4 flex flex-col">
-      <header className="flex items-center justify-between gap-2">
+      <header className="flex items-start justify-between gap-2">
         <h2 className="text-lg font-semibold">Ebenen</h2>
-        <button type="button" className="btn-primary text-xs" onClick={onCreate}>
-          Neue Ebene
-        </button>
+        <div className="flex flex-col items-end gap-1">
+          <button type="button" className="btn-primary text-xs" onClick={onCreate}>
+            Neue Ebene
+          </button>
+          <button
+            type="button"
+            className="btn-secondary text-xs"
+            onClick={onSeedIndustries}
+            disabled={seeding}
+          >
+            {seeding ? "Gruppen werden angelegt …" : "Branchengruppen als Ebenen"}
+          </button>
+        </div>
       </header>
 
       {layers.length === 0 ? (

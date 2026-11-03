@@ -20,6 +20,7 @@ import {
   TechnologySuggestionAcceptSchema,
   MailTemplatesInputSchema,
   TestMailInputSchema,
+  CompanyAnonymousUpdateSchema,
   UpdateStatusSchema,
   type AdminCreateCompanyInput,
   type AdminCreateCompanyResponse,
@@ -426,6 +427,27 @@ adminRouter.post(
       [id, logoPath]
     );
     res.json({ ok: true, logo_path: logoPath });
+  })
+);
+
+adminRouter.patch(
+  "/companies/:id/anonymous",
+  validate(CompanyAnonymousUpdateSchema),
+  asyncHandler(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const input = req.body as z.infer<typeof CompanyAnonymousUpdateSchema>;
+    const updated = await query<{ anonymous: boolean }>(
+      `UPDATE companies
+          SET anonymous = $2, updated_at = now()
+        WHERE id = $1
+        RETURNING anonymous`,
+      [id, input.anonymous]
+    );
+    if (updated.rowCount === 0) {
+      res.status(404).json({ error: "Firma nicht gefunden." });
+      return;
+    }
+    res.json({ anonymous: updated.rows[0].anonymous });
   })
 );
 

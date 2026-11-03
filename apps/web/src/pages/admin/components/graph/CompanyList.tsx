@@ -17,12 +17,14 @@ export default function CompanyList({
   onAdd,
   onRemove,
   onMove,
+  onAnonymous,
 }: {
   parentId: string | null;
   companies: GraphCompanyNode[];
   onAdd: (companyId: string) => void;
   onRemove: (node: GraphCompanyNode) => void;
   onMove: (nodeId: string, direction: -1 | 1) => void;
+  onAnonymous: (node: GraphCompanyNode, anonymous: boolean) => void;
 }) {
   const [search, setSearch] = useState("");
   const options = useCompanyOptions(parentId, search.trim());
@@ -33,6 +35,10 @@ export default function CompanyList({
         <h2 className="text-lg font-semibold">Firmen</h2>
         <span className="text-xs text-slate-500">{companies.length} in dieser Ebene</span>
       </header>
+      <p className="mt-1 text-xs text-slate-500">
+        Anonym gilt für die Firma insgesamt, auch für Entwürfe. Im Netzwerk
+        fehlt dann Name, Logo und Profil-Link.
+      </p>
 
       <div className="mt-3">
         <label className="label" htmlFor="graph-company-search">
@@ -57,6 +63,9 @@ export default function CompanyList({
             >
               <span className="flex-1 text-sm">
                 {option.name}
+                {option.anonymous && (
+                  <span className="ml-2 badge bg-slate-200 text-slate-700">Anonym</span>
+                )}
                 {option.status !== "approved" && (
                   <span className="ml-2 badge bg-amber-100 text-amber-800">
                     {STATUS_LABEL[option.status] ?? option.status}
@@ -97,6 +106,15 @@ export default function CompanyList({
                       </span>
                     )}
                   </span>
+                  <label className="flex items-center gap-1 text-xs text-slate-600">
+                    <input
+                      type="checkbox"
+                      className="h-4 w-4 accent-grass-600"
+                      checked={node.anonymous}
+                      onChange={(event) => onAnonymous(node, event.target.checked)}
+                    />
+                    Anonym
+                  </label>
                   <button
                     type="button"
                     className="btn-secondary px-2 py-1 text-xs"

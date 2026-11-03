@@ -12,7 +12,12 @@ import {
   type DragStartEvent,
 } from "@dnd-kit/core";
 import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-import type { GraphEdge, GraphLayer, GraphLayout } from "@b2b/shared";
+import type {
+  GraphEdge,
+  GraphLayer,
+  GraphLayout,
+  GraphSeedIndustriesResult,
+} from "@b2b/shared";
 import {
   GRAPH_LAYOUT_OPTIONS,
   layoutHint,
@@ -46,6 +51,7 @@ export default function AdminGraph() {
   const parentId = searchParams.get("ebene");
 
   const [error, setError] = useState<string | null>(null);
+  const [seedNotice, setSeedNotice] = useState<string | null>(null);
   const [layerDialog, setLayerDialog] = useState<LayerDialogState>({ open: false });
   const [edgeDialog, setEdgeDialog] = useState<EdgeDialogState>({ open: false });
   const [activeDragId, setActiveDragId] = useState<string | null>(null);
@@ -173,6 +179,18 @@ export default function AdminGraph() {
     );
   };
 
+  const seedIndustries = () => {
+    setError(null);
+    setSeedNotice(null);
+    mutations.seedIndustries.mutate(parentId, {
+      onSuccess: (result: GraphSeedIndustriesResult) => {
+        setSeedNotice(
+          `${result.layers_created} Ebenen angelegt, ${result.companies_added} Firmen zugeordnet, ${result.companies_skipped} bereits vorhanden.`
+        );
+      },
+    });
+  };
+
   const submitLayer = (values: LayerFormValues) => {
     if (!layerDialog.open) return;
     const existing = layerDialog.layer;
@@ -288,6 +306,12 @@ export default function AdminGraph() {
           </p>
         )}
 
+        {seedNotice && (
+          <p className="mt-4 rounded-md bg-lime-50 px-3 py-2 text-sm text-grass-700">
+            {seedNotice}
+          </p>
+        )}
+
         {error && (
           <p className="mt-4 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
             {error}
@@ -306,6 +330,8 @@ export default function AdminGraph() {
             activeDragId={activeDragId}
             onOpen={openLayer}
             onCreate={() => setLayerDialog({ open: true, layer: null })}
+            onSeedIndustries={seedIndustries}
+            seeding={mutations.seedIndustries.isPending}
             onEdit={(layer) => setLayerDialog({ open: true, layer })}
             onDelete={deleteLayer}
             onMove={reorderLayers}
@@ -327,6 +353,13 @@ export default function AdminGraph() {
               }
             }}
             onMove={reorderCompanies}
+            onAnonymous={(node, anonymous) => {
+              setError(null);
+              mutations.setAnonymous.mutate({
+                companyId: node.company_id,
+                anonymous,
+              });
+            }}
           />
 
           <EdgeList

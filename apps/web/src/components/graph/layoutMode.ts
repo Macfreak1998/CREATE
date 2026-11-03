@@ -22,7 +22,7 @@ export const GRAPH_LAYOUT_OPTIONS: {
     value: "xy",
     label: "Größe und Reifegrad",
     badge: "Portfolio",
-    hint: "Firmen liegen auf den Achsen Unternehmensgröße und höchster Technologie-Reifegrad. Unterebenen stehen darüber.",
+    hint: "Firmen liegen auf den Achsen Unternehmensgröße und Reifegrad (Forschung, Entwicklung, Anwendung). Unterebenen stehen darüber.",
   },
 ];
 

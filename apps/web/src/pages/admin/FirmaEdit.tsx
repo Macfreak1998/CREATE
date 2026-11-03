@@ -88,6 +88,7 @@ export default function AdminFirmaEdit() {
   const [userEmail, setUserEmail] = useState("");
   const [initialUserEmail, setInitialUserEmail] = useState<string | null>(null);
   const [status, setStatus] = useState<CompanyStatus>("pending");
+  const [anonymous, setAnonymous] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -100,6 +101,7 @@ export default function AdminFirmaEdit() {
     setUserEmail(c.user_email ?? "");
     setInitialUserEmail(c.user_email ?? "");
     setStatus(c.status);
+    setAnonymous(c.anonymous);
   }, [companyQuery.data]);
 
   const isDirty =
@@ -147,8 +149,30 @@ export default function AdminFirmaEdit() {
       setUserEmail(updated.user_email ?? "");
       setInitialUserEmail(updated.user_email ?? "");
       setStatus(updated.status);
+      setAnonymous(updated.anonymous);
     },
     onError: (err) => {
+      setMessage(null);
+      setError(err instanceof ApiError ? err.message : "Speichern fehlgeschlagen.");
+    },
+  });
+
+  const saveAnonymous = useMutation({
+    mutationFn: (value: boolean) =>
+      api.patch<{ anonymous: boolean }>(`/api/admin/companies/${id}/anonymous`, {
+        anonymous: value,
+      }),
+    onSuccess: (result) => {
+      setAnonymous(result.anonymous);
+      setMessage(result.anonymous ? "Firma wird anonym angezeigt." : "Anonymität aufgehoben.");
+      setError(null);
+      qc.invalidateQueries({ queryKey: ["admin", "company", id] });
+      qc.invalidateQueries({ queryKey: ["admin", "companies"] });
+      qc.invalidateQueries({ queryKey: ["admin", "graph"] });
+      qc.invalidateQueries({ queryKey: ["graph"] });
+    },
+    onError: (err) => {
+      setAnonymous(companyQuery.data?.anonymous ?? false);
       setMessage(null);
       setError(err instanceof ApiError ? err.message : "Speichern fehlgeschlagen.");
     },
@@ -445,6 +469,26 @@ export default function AdminFirmaEdit() {
           Bei Aenderung auf "Freigeschaltet" oder "Abgelehnt" wird die Firma per
           E-Mail informiert.
         </p>
+        <label className="mt-4 flex items-start gap-2 text-sm text-slate-700">
+          <input
+            type="checkbox"
+            className="mt-0.5 h-4 w-4 accent-grass-600"
+            checked={anonymous}
+            disabled={saveAnonymous.isPending}
+            onChange={(event) => {
+              const next = event.target.checked;
+              setAnonymous(next);
+              saveAnonymous.mutate(next);
+            }}
+          />
+          <span>
+            Im Netzwerk anonym anzeigen
+            <span className="mt-1 block text-xs text-slate-500">
+              Ohne Namen und ohne Profil-Link. Gilt auch für Entwürfe: die Firma
+              erscheint dann im Graphen, bleibt aber unerkannt.
+            </span>
+          </span>
+        </label>
         <button
           type="button"
           className="btn-secondary mt-4"

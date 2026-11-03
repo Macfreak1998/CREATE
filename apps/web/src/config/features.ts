@@ -18,11 +18,10 @@
 export const SHOW_MACHINES = false;
 
 /**
- * Steuert die Sichtbarkeit des oeffentlichen Netzwerkgraphen.
+ * Steuert, ob Admins die Netzwerkansicht unter /netzwerk sehen.
  *
- * Auf `true` setzen, sobald der Graph im Admin unter /admin/graph mit Ebenen,
- * Firmen und Verbindungen befuellt ist. Die Admin-Pflege ist unabhaengig vom
- * Flag jederzeit erreichbar; das Flag blendet nur die oeffentliche Ansicht und
- * den Navigationslink ein.
+ * Die Seite und /api/graph sind zusaetzlich nur nach Admin-Login erreichbar.
+ * Auf `false` setzen blendet den Navigationslink und die Ansicht auch fuer
+ * Admins aus. Die Pflege unter /admin/graph bleibt davon unberuehrt.
  */
 export const SHOW_NETWORK_GRAPH = true;

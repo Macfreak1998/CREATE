@@ -64,6 +64,7 @@ export default function Netzwerk() {
   // Firmenprofile oeffnen in einem neuen Tab, damit die aktuelle Position im
   // Graphen erhalten bleibt und nicht neu herangezoomt werden muss.
   const openCompany = useCallback((company: GraphCompanyNode) => {
+    if (company.anonymous || !company.company_slug) return;
     window.open(`/firma/${company.company_slug}`, "_blank", "noopener,noreferrer");
   }, []);
 

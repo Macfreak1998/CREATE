@@ -147,6 +147,7 @@ export type CompanyDetail = z.infer<typeof CompanyDetailSchema>;
 
 export const CompanyAdminSchema = CompanyDetailSchema.extend({
   status: CompanyStatus,
+  anonymous: z.boolean(),
   // Login-E-Mail des verknuepften Firmen-Accounts (users.email), nicht die
   // oeffentliche Kontakt-E-Mail (contact_email).
   user_email: z.string().email().nullable(),
@@ -390,6 +391,11 @@ export type AdminUpdateCompanyInput = z.infer<typeof AdminUpdateCompanySchema>;
 export const UpdateStatusSchema = z.object({
   status: CompanyStatus,
 });
+
+export const CompanyAnonymousUpdateSchema = z.object({
+  anonymous: z.boolean(),
+});
+export type CompanyAnonymousUpdate = z.infer<typeof CompanyAnonymousUpdateSchema>;
 
 export const TechnologySuggestionAcceptSchema = z.object({
   name: z.string().trim().min(1).max(120),
@@ -843,6 +849,7 @@ export const GraphCompanyNodeSchema = z.object({
   company_name: z.string(),
   logo_url: z.string().nullable(),
   status: CompanyStatus,
+  anonymous: z.boolean(),
   sort_order: z.number().int(),
   size_slug: z.string().nullable(),
   size_name: z.string().nullable(),
@@ -909,8 +916,14 @@ export const GraphFindResultSchema = z.object({
 });
 export type GraphFindResult = z.infer<typeof GraphFindResultSchema>;
 
+const IncludeUnpublished = z
+  .enum(["true", "false"])
+  .optional()
+  .transform((value) => value === "true");
+
 export const GraphScopeQuerySchema = z.object({
   path: z.string().max(400).optional().default(""),
+  include_unpublished: IncludeUnpublished,
 });
 export type GraphScopeQuery = z.infer<typeof GraphScopeQuerySchema>;
 
@@ -921,6 +934,7 @@ export type GraphAdminScopeQuery = z.infer<typeof GraphAdminScopeQuerySchema>;
 
 export const GraphFindQuerySchema = z.object({
   q: z.string().trim().min(2).max(80),
+  include_unpublished: IncludeUnpublished,
 });
 export type GraphFindQuery = z.infer<typeof GraphFindQuerySchema>;
 
@@ -932,6 +946,7 @@ export const GraphCompanyOptionSchema = z.object({
   name: z.string(),
   slug: z.string(),
   status: CompanyStatus,
+  anonymous: z.boolean(),
   already_placed: z.boolean(),
 });
 export type GraphCompanyOption = z.infer<typeof GraphCompanyOptionSchema>;
@@ -966,6 +981,22 @@ export const GraphRootLayoutUpdateSchema = z.object({
   layout: GraphLayoutSchema,
 });
 export type GraphRootLayoutUpdate = z.infer<typeof GraphRootLayoutUpdateSchema>;
+
+export const GraphSeedIndustriesInputSchema = z.object({
+  parent_id: z.string().uuid().nullable().optional().default(null),
+});
+export type GraphSeedIndustriesInput = z.infer<
+  typeof GraphSeedIndustriesInputSchema
+>;
+
+export const GraphSeedIndustriesResultSchema = z.object({
+  layers_created: z.number().int(),
+  companies_added: z.number().int(),
+  companies_skipped: z.number().int(),
+});
+export type GraphSeedIndustriesResult = z.infer<
+  typeof GraphSeedIndustriesResultSchema
+>;
 
 export const GraphCompanyNodeInputSchema = z.object({
   parent_id: z.string().uuid().nullable().optional().default(null),

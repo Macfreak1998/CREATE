@@ -212,6 +212,9 @@ export default function AdminFirmen() {
                   <div className="flex items-center gap-3">
                     <h3 className="font-semibold text-lg">{c.name}</h3>
                     <StatusBadge status={c.status} />
+                    {c.anonymous && (
+                      <span className="badge bg-slate-200 text-slate-700">Anonym</span>
+                    )}
                   </div>
                   <p className="text-sm text-slate-600 mt-1">
                     Kontakt: {c.contact_name ?? "-"} &lt;

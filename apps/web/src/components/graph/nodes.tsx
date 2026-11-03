@@ -1,7 +1,9 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState } from "react";
+import { createPortal } from "react-dom";
 import { Handle, Position, type NodeProps, type Node } from "@xyflow/react";
 import type { GraphCompanyNode, GraphLayer } from "@b2b/shared";
 import type {
+  BubbleNodeData,
   ChartBackdropNodeData,
   CompanyNodeData,
   LayerNodeData,
@@ -60,12 +62,35 @@ export function LayerNode({ data }: NodeProps<Node<LayerNodeData>>) {
   );
 }
 
+function raiseNode(event: { currentTarget: HTMLElement }, zIndex: string) {
+  const wrapper = event.currentTarget.parentElement;
+  if (wrapper) wrapper.style.zIndex = zIndex;
+}
+
 export function CompanyNode({ data }: NodeProps<Node<CompanyNodeData>>) {
-  const { node } = data;
+  const { node, anonymized, color, compact } = data;
+
+  if (anonymized) {
+    return (
+      <div
+        className="flex h-full w-full items-center justify-center rounded-full text-sm font-semibold text-white"
+        style={{ backgroundColor: color }}
+        aria-label="1 Firma"
+      >
+        1
+        <CenterHandles />
+      </div>
+    );
+  }
+
+  if (compact) {
+    return <CompactCompany node={node} color={color} />;
+  }
 
   return (
     <div
-      className="flex h-full w-full cursor-pointer items-center gap-2 rounded-lg border border-line bg-white px-3 shadow-card transition-colors hover:border-grass-500"
+      className="flex h-full w-full cursor-pointer items-center gap-2 rounded-lg border-2 bg-white px-3 shadow-card"
+      style={{ borderColor: color }}
       title={`${node.company_name} — Profil in neuem Tab öffnen`}
     >
       {node.logo_url ? (
@@ -91,12 +116,62 @@ export function CompanyNode({ data }: NodeProps<Node<CompanyNodeData>>) {
   );
 }
 
+function CompactCompany({
+  node,
+  color,
+}: {
+  node: GraphCompanyNode;
+  color: string;
+}) {
+  const [tip, setTip] = useState<{ x: number; y: number } | null>(null);
+  const initials = node.company_name.slice(0, 2).toUpperCase();
+
+  return (
+    <div
+      className="flex h-full w-full cursor-pointer items-center justify-center rounded-full border-2 bg-white shadow-card"
+      style={{ borderColor: color }}
+      aria-label={node.company_name}
+      onMouseEnter={(event) => {
+        raiseNode(event, "40");
+        const rect = event.currentTarget.getBoundingClientRect();
+        setTip({ x: rect.left + rect.width / 2, y: rect.bottom + 8 });
+      }}
+      onMouseLeave={(event) => {
+        raiseNode(event, "3");
+        setTip(null);
+      }}
+    >
+      {node.logo_url ? (
+        <img
+          src={node.logo_url}
+          alt=""
+          className="h-[68%] w-[68%] object-contain"
+          loading="lazy"
+        />
+      ) : (
+        <span className="text-[10px] font-semibold text-slate-500">{initials}</span>
+      )}
+      <CenterHandles />
+      {tip &&
+        createPortal(
+          <div
+            className="pointer-events-none fixed z-[80] max-w-[16rem] -translate-x-1/2 rounded-md bg-ink px-2 py-1 text-center text-xs font-medium leading-snug text-white shadow-card"
+            style={{ left: tip.x, top: tip.y }}
+          >
+            {node.company_name}
+          </div>,
+          document.body
+        )}
+    </div>
+  );
+}
+
 export function PieSliceNode({ id, data }: NodeProps<Node<PieSliceNodeData>>) {
   const actions = useContext(GraphActionsContext);
 
   const activate = () => {
     if (data.layer) actions?.openLayerNode(id, data.layer);
-    else if (data.company) actions?.openCompany(data.company);
+    else if (data.company && !data.anonymized) actions?.openCompany(data.company);
   };
 
   return (
@@ -113,7 +188,10 @@ export function PieSliceNode({ id, data }: NodeProps<Node<PieSliceNodeData>>) {
           fillOpacity={0.9}
           stroke="#ffffff"
           strokeWidth={2}
-          style={{ pointerEvents: "auto", cursor: "pointer" }}
+          style={{
+            pointerEvents: "auto",
+            cursor: data.company && data.anonymized ? "default" : "pointer",
+          }}
           onMouseEnter={() => {
             if (data.layer) actions?.prefetchLayer(data.layer);
           }}
@@ -158,12 +236,22 @@ export function PieCenterNode({ data }: NodeProps<Node<PieCenterNodeData>>) {
   );
 }
 
+export function BubbleNode({ data }: NodeProps<Node<BubbleNodeData>>) {
+  return (
+    <div
+      className="flex h-full w-full items-center justify-center rounded-full text-sm font-semibold text-white shadow-card"
+      style={{ backgroundColor: data.color }}
+      aria-label={data.count === 1 ? "1 Firma" : `${data.count} Firmen`}
+    >
+      {data.count}
+    </div>
+  );
+}
+
 export function ChartBackdropNode({
   data,
 }: NodeProps<Node<ChartBackdropNodeData>>) {
-  const { plot, columnWidth, rowHeight } = data;
-  const columns = Array.from({ length: data.columns + 1 }, (_, index) => index);
-  const rows = Array.from({ length: data.rows + 1 }, (_, index) => index);
+  const { plot, columnStops, rowStops } = data;
 
   return (
     <svg width={data.width} height={data.height} className="overflow-visible">
@@ -175,23 +263,23 @@ export function ChartBackdropNode({
         fill="#f8fafc"
         stroke="#e2e8f0"
       />
-      {columns.map((index) => (
+      {columnStops.map((x, index) => (
         <line
           key={`col-${index}`}
-          x1={plot.left + index * columnWidth}
-          x2={plot.left + index * columnWidth}
+          x1={x}
+          x2={x}
           y1={plot.top}
           y2={plot.top + plot.height}
           stroke="#e2e8f0"
         />
       ))}
-      {rows.map((index) => (
+      {rowStops.map((y, index) => (
         <line
           key={`row-${index}`}
           x1={plot.left}
           x2={plot.left + plot.width}
-          y1={plot.top + index * rowHeight}
-          y2={plot.top + index * rowHeight}
+          y1={y}
+          y2={y}
           stroke="#e2e8f0"
         />
       ))}
@@ -249,6 +337,7 @@ export function ChartBackdropNode({
 export const graphNodeTypes = {
   graphLayer: LayerNode,
   graphCompany: CompanyNode,
+  graphBubble: BubbleNode,
   graphPieSlice: PieSliceNode,
   graphPieCenter: PieCenterNode,
   graphChart: ChartBackdropNode,

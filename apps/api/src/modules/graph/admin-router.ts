@@ -13,6 +13,7 @@ import {
   GraphNodeMoveSchema,
   GraphNodeReorderSchema,
   GraphRootLayoutUpdateSchema,
+  GraphSeedIndustriesInputSchema,
   type GraphAdminScopeQuery,
   type GraphCompanyNodeInput,
   type GraphCompanySearchQuery,
@@ -25,6 +26,7 @@ import {
   type GraphNodeMove,
   type GraphNodeReorder,
   type GraphRootLayoutUpdate,
+  type GraphSeedIndustriesInput,
 } from "@b2b/shared";
 import { asyncHandler } from "../../middlewares/async-handler.js";
 import { validate } from "../../middlewares/validate.js";
@@ -43,6 +45,7 @@ import {
   moveNode,
   reorderNodes,
   searchCompanyOptions,
+  seedIndustryLayers,
   updateEdge,
   updateEdgeKind,
   updateLayer,
@@ -95,6 +98,15 @@ adminGraphRouter.patch(
   asyncHandler(async (req: Request, res: Response) => {
     const { layout } = req.body as GraphRootLayoutUpdate;
     res.json({ layout: await updateRootLayout(layout) });
+  })
+);
+
+adminGraphRouter.post(
+  "/seed-industries",
+  validate(GraphSeedIndustriesInputSchema),
+  asyncHandler(async (req: Request, res: Response) => {
+    const { parent_id } = req.body as GraphSeedIndustriesInput;
+    res.json(await seedIndustryLayers(parent_id));
   })
 );
 

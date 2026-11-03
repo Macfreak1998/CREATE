@@ -94,7 +94,7 @@ export default function GraphScene({
     (_event, node) => {
       const data = node.data;
       if (data.kind === "company") {
-        onOpenCompany(data.node);
+        if (!data.anonymized) onOpenCompany(data.node);
         return;
       }
       if (data.kind === "layer") {
@@ -102,7 +102,7 @@ export default function GraphScene({
         return;
       }
       if (data.kind === "pieSlice") {
-        if (data.company) onOpenCompany(data.company);
+        if (data.company && !data.anonymized) onOpenCompany(data.company);
         else if (data.layer) openLayerNode(node.id, data.layer);
       }
     },

@@ -8,6 +8,7 @@ import type {
   GraphLayer,
   GraphLayout,
   GraphScope,
+  GraphSeedIndustriesResult,
 } from "@b2b/shared";
 import { api, ApiError } from "../../../../lib/api.js";
 
@@ -87,6 +88,14 @@ export function useGraphMutations({ onError }: GraphMutationOptions) {
     onSuccess: invalidate,
     onError: handleError,
   };
+
+  const seedIndustries = useMutation({
+    mutationFn: (parentId: string | null) =>
+      api.post<GraphSeedIndustriesResult>("/api/admin/graph/seed-industries", {
+        parent_id: parentId,
+      }),
+    ...mutationDefaults,
+  });
 
   const createLayer = useMutation({
     mutationFn: (input: {
@@ -189,6 +198,42 @@ export function useGraphMutations({ onError }: GraphMutationOptions) {
     ...mutationDefaults,
   });
 
+  const setAnonymous = useMutation({
+    mutationFn: ({
+      companyId,
+      anonymous,
+    }: {
+      companyId: string;
+      anonymous: boolean;
+    }) =>
+      api.patch<{ anonymous: boolean }>(
+        `/api/admin/companies/${companyId}/anonymous`,
+        { anonymous }
+      ),
+    onMutate: async ({ companyId, anonymous }) => {
+      await qc.cancelQueries({ queryKey: ["admin", "graph", "scope"] });
+      qc.setQueriesData<GraphScope>(
+        { queryKey: ["admin", "graph", "scope"] },
+        (current) => {
+          if (!current) return current;
+          return {
+            ...current,
+            companies: current.companies.map((company) =>
+              company.company_id === companyId
+                ? { ...company, anonymous }
+                : company
+            ),
+          };
+        }
+      );
+    },
+    ...mutationDefaults,
+    onError: (err) => {
+      qc.invalidateQueries({ queryKey: ["admin", "graph", "scope"] });
+      handleError(err);
+    },
+  });
+
   const deleteEdgeKind = useMutation({
     mutationFn: (id: number) =>
       api.delete<{ ok: true }>(`/api/admin/graph/edge-kinds/${id}`),
@@ -196,6 +241,7 @@ export function useGraphMutations({ onError }: GraphMutationOptions) {
   });
 
   return {
+    seedIndustries,
     createLayer,
     updateLayer,
     updateRootLayout,
@@ -206,6 +252,7 @@ export function useGraphMutations({ onError }: GraphMutationOptions) {
     createEdge,
     updateEdge,
     deleteEdge,
+    setAnonymous,
     createEdgeKind,
     updateEdgeKind,
     deleteEdgeKind,
