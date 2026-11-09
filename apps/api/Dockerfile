@@ -13,12 +13,12 @@ FROM deps AS dev
 COPY tsconfig.base.json ./
 COPY packages/shared packages/shared
 COPY apps/api apps/api
-# Shared einmal bauen, damit das Paket auch ohne aktive "development"-Condition
-# (Fallback auf dist) aufloesbar ist.
+# tsx laedt @b2b/shared ueber "main" aus dist, nicht aus dem gemounteten src.
+# Deshalb dist bei jedem Start aus dem aktuellen Quellstand neu bauen.
 RUN npm --workspace packages/shared run build
 WORKDIR /app/apps/api
 EXPOSE 4000
-CMD ["npm", "run", "dev"]
+CMD sh -c "cd /app && npm --workspace packages/shared run build && npm --workspace @b2b/api run dev"
 
 FROM deps AS build
 COPY tsconfig.base.json ./

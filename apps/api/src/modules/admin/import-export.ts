@@ -300,7 +300,15 @@ async function ensureIndustryGroup(
   value: IndustryGroupCatalogEntry,
   map: Map<string, number>
 ): Promise<boolean> {
-  if (map.has(slug)) return false;
+  if (map.has(slug)) {
+    await client.query(
+      `UPDATE industry_groups
+          SET name = $2, description = $3, sort_order = $4
+        WHERE slug = $1`,
+      [slug, value.name, value.description, value.sort_order]
+    );
+    return false;
+  }
 
   const inserted = await client.query<{ id: number }>(
     `INSERT INTO industry_groups (slug, name, description, sort_order)
@@ -320,6 +328,12 @@ async function ensureIndustryGroup(
   );
   if (existing.rowCount && existing.rowCount > 0) {
     map.set(slug, existing.rows[0].id);
+    await client.query(
+      `UPDATE industry_groups
+          SET name = $2, description = $3, sort_order = $4
+        WHERE slug = $1`,
+      [slug, value.name, value.description, value.sort_order]
+    );
   }
   return false;
 }
@@ -330,11 +344,20 @@ async function ensureIndustry(
   value: IndustryCatalogEntry,
   maps: TaxonomyMaps
 ): Promise<boolean> {
-  if (maps.industries.has(slug)) return false;
-
   const groupId = value.group_slug
     ? maps.industryGroups.get(value.group_slug) ?? null
     : null;
+
+  if (maps.industries.has(slug)) {
+    await client.query(
+      `UPDATE industries
+          SET group_id = $2, sort_order = $3
+        WHERE slug = $1`,
+      [slug, groupId, value.sort_order]
+    );
+    return false;
+  }
+
   const inserted = await client.query<{ id: number }>(
     `INSERT INTO industries (slug, name, group_id, sort_order)
      VALUES ($1, $2, $3, $4)
@@ -353,6 +376,12 @@ async function ensureIndustry(
   );
   if (existing.rowCount && existing.rowCount > 0) {
     maps.industries.set(slug, existing.rows[0].id);
+    await client.query(
+      `UPDATE industries
+          SET group_id = $2, sort_order = $3
+        WHERE slug = $1`,
+      [slug, groupId, value.sort_order]
+    );
   }
   return false;
 }
@@ -742,6 +771,7 @@ export async function exportCompanies(
           notes: s.notes,
           trl: s.trl,
         })),
+      status: admin.status,
     });
   }
 
@@ -862,7 +892,11 @@ async function importSingleCompany(
       })),
     },
     user: { email: entry.user_email, password_hash: passwordHash },
-    status: "draft",
+    // Direkt anlegen, ohne handleCompanyStatusTransition: der Import
+    // verschickt weder Zugangsdaten noch eine Status-Mail. Das Zufallspasswort
+    // wird nur gehasht gespeichert; die Person setzt es bei Bedarf selbst zurück.
+    // Fallback, falls eine alte Datei kein status-Feld mitbringt.
+    status: entry.status ?? "draft",
   });
 
   return { ok: true };

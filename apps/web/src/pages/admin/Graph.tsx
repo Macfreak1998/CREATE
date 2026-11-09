@@ -42,6 +42,7 @@ import {
   useGraphMutations,
   useGraphScope,
 } from "./components/graph/useGraphAdmin.js";
+import { useIndustryGroups } from "../../hooks/useTaxonomies.js";
 
 type LayerDialogState = { open: false } | { open: true; layer: GraphLayer | null };
 type EdgeDialogState = { open: false } | { open: true; edge: GraphEdge | null };
@@ -58,6 +59,7 @@ export default function AdminGraph() {
 
   const scope = useGraphScope(parentId);
   const edgeKinds = useGraphEdgeKinds();
+  const industryGroups = useIndustryGroups();
   const mutations = useGraphMutations({ onError: setError });
 
   const openLayer = (layerId: string | null) => {
@@ -269,27 +271,58 @@ export default function AdminGraph() {
             </button>
           )}
           {scope.data && !scope.data.layer && (
-            <div className="w-72">
-              <label className="label" htmlFor="root-layout">
-                Darstellung dieser Ebene
-              </label>
-              <select
-                id="root-layout"
-                className="input"
-                value={scope.data.layout}
-                onChange={(event) => {
-                  setError(null);
-                  mutations.updateRootLayout.mutate(
-                    event.target.value as GraphLayout
-                  );
-                }}
-              >
-                {GRAPH_LAYOUT_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
+            <div className="w-72 space-y-2">
+              <div>
+                <label className="label" htmlFor="root-layout">
+                  Darstellung dieser Ebene
+                </label>
+                <select
+                  id="root-layout"
+                  className="input"
+                  value={scope.data.layout}
+                  onChange={(event) => {
+                    setError(null);
+                    mutations.updateRootLayout.mutate({
+                      layout: event.target.value as GraphLayout,
+                      radial_industry_group_id:
+                        scope.data?.radial_industry_group?.id ?? null,
+                    });
+                  }}
+                >
+                  {GRAPH_LAYOUT_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {scope.data.layout === "radial" && (
+                <div>
+                  <label className="label" htmlFor="root-radial-group">
+                    Anwendungsbereich
+                  </label>
+                  <select
+                    id="root-radial-group"
+                    className="input"
+                    value={scope.data.radial_industry_group?.id ?? ""}
+                    onChange={(event) => {
+                      setError(null);
+                      const value = event.target.value;
+                      mutations.updateRootLayout.mutate({
+                        layout: "radial",
+                        radial_industry_group_id: value ? Number(value) : null,
+                      });
+                    }}
+                  >
+                    <option value="">Bitte wählen</option>
+                    {(industryGroups.data ?? []).map((group) => (
+                      <option key={group.id} value={group.id}>
+                        {group.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
             </div>
           )}
         </div>

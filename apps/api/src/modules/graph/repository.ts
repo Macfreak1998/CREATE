@@ -10,15 +10,24 @@ import {
   type GraphLayer,
   type GraphLayerInput,
   type GraphLayerUpdate,
+  type GraphIndustryGroupRef,
   type GraphLayout,
   type GraphOutwardEdge,
+  type GraphRadialIndustry,
   type GraphScope,
   type GraphSeedIndustriesResult,
   type GraphSize,
+  type GraphTreeIndustry,
+  type GraphTreeNode,
   type CompanyStatus,
 } from "@b2b/shared";
 import { query, withTransaction } from "../../db/client.js";
-import { SETTING_GRAPH_ROOT_LAYOUT, getSetting, setSetting } from "../../lib/settings.js";
+import {
+  SETTING_GRAPH_ROOT_LAYOUT,
+  SETTING_GRAPH_ROOT_RADIAL_GROUP,
+  getSetting,
+  setSetting,
+} from "../../lib/settings.js";
 import { uniqueSlug } from "../../lib/slug.js";
 import { buildPublicLogoUrl } from "../../lib/uploads.js";
 
@@ -52,6 +61,7 @@ interface LayerRow {
   sort_order: number;
   child_layer_count: number;
   child_company_count: number;
+  radial_industry_group_id: number | null;
 }
 
 interface CompanyNodeRow {
@@ -84,7 +94,15 @@ interface EdgeRow {
 }
 
 function parseLayout(value: string | null | undefined): GraphLayout {
-  if (value === "graph" || value === "pie" || value === "xy") return value;
+  if (
+    value === "graph" ||
+    value === "pie" ||
+    value === "xy" ||
+    value === "pack" ||
+    value === "radial"
+  ) {
+    return value;
+  }
   return "graph";
 }
 
@@ -100,6 +118,10 @@ function rowToLayer(row: LayerRow): GraphLayer {
     sort_order: row.sort_order,
     child_layer_count: Number(row.child_layer_count),
     child_company_count: Number(row.child_company_count),
+    radial_industry_group_id:
+      row.radial_industry_group_id == null
+        ? null
+        : Number(row.radial_industry_group_id),
   };
 }
 
@@ -145,6 +167,7 @@ function rowToEdge(row: EdgeRow): GraphEdge {
 // freigegebene Firmen und zusaetzlich anonym markierte Entwuerfe mit.
 const LAYER_COLUMNS = `
   n.id, n.parent_id, n.name, n.slug, n.description, n.color, n.layout, n.sort_order,
+  n.radial_industry_group_id,
   (SELECT count(*) FROM graph_nodes cl
     WHERE cl.parent_id = n.id AND cl.kind = 'layer')::int AS child_layer_count,
   (SELECT count(*) FROM graph_nodes cc
@@ -406,6 +429,212 @@ export interface LoadScopeOptions {
   publicOnly: boolean;
 }
 
+function scopeKey(parentId: string | null): string {
+  return parentId ?? "root";
+}
+
+interface TreeRow {
+  id: string;
+  parent_id: string | null;
+  kind: "layer" | "company";
+  name: string | null;
+  slug: string | null;
+  color: string | null;
+  industry_id: number | null;
+  sort_order: number;
+  company_id: string | null;
+  company_slug: string | null;
+  company_name: string | null;
+  anonymous: boolean | null;
+  status: CompanyStatus | null;
+  size_slug: string | null;
+  size_name: string | null;
+  size_sort_order: number | null;
+}
+
+async function assertIndustryGroup(groupId: number | null): Promise<void> {
+  if (groupId == null) return;
+  const result = await query(
+    `SELECT 1 FROM industry_groups WHERE id = $1`,
+    [groupId]
+  );
+  if (result.rowCount === 0) {
+    throw new GraphError(400, "Anwendungsbereich nicht gefunden.");
+  }
+}
+
+async function loadRadialGroup(
+  layerId: string | null
+): Promise<GraphIndustryGroupRef | null> {
+  if (layerId) {
+    const result = await query<GraphIndustryGroupRef>(
+      `SELECT g.id, g.name
+         FROM graph_nodes n
+         JOIN industry_groups g ON g.id = n.radial_industry_group_id
+        WHERE n.id = $1 AND n.kind = 'layer'`,
+      [layerId]
+    );
+    const row = result.rows[0];
+    return row ? { id: Number(row.id), name: row.name } : null;
+  }
+
+  const raw = await getSetting(SETTING_GRAPH_ROOT_RADIAL_GROUP);
+  const id = raw ? Number(raw) : NaN;
+  if (!Number.isInteger(id) || id <= 0) return null;
+  const result = await query<GraphIndustryGroupRef>(
+    `SELECT id, name FROM industry_groups WHERE id = $1`,
+    [id]
+  );
+  const row = result.rows[0];
+  return row ? { id: Number(row.id), name: row.name } : null;
+}
+
+async function loadRadialIndustries(
+  groupId: number
+): Promise<GraphRadialIndustry[]> {
+  const result = await query<GraphRadialIndustry>(
+    `SELECT id, name, sort_order
+       FROM industries
+      WHERE group_id = $1
+      ORDER BY sort_order, name`,
+    [groupId]
+  );
+  return result.rows.map((row) => ({
+    id: Number(row.id),
+    name: row.name,
+    sort_order: Number(row.sort_order),
+  }));
+}
+
+/**
+ * Unterbaum der geoeffneten Ebene fuer Kreispackung und radialen Ring.
+ * Ebenen bleiben erhalten, nicht sichtbare Firmen fallen weg.
+ */
+async function loadViewTree(
+  layerId: string | null,
+  publicOnly: boolean
+): Promise<GraphTreeNode[]> {
+  const result = await query<TreeRow>(
+    `WITH RECURSIVE subtree AS (
+       SELECT n.id, n.parent_id, n.kind, n.name, n.slug, n.color, n.industry_id,
+              n.sort_order, n.company_id, 0 AS depth
+         FROM graph_nodes n
+        WHERE n.parent_id IS NOT DISTINCT FROM $1
+       UNION ALL
+       SELECT c.id, c.parent_id, c.kind, c.name, c.slug, c.color, c.industry_id,
+              c.sort_order, c.company_id, s.depth + 1
+         FROM graph_nodes c
+         JOIN subtree s ON c.parent_id = s.id
+        WHERE s.kind = 'layer' AND s.depth < 16
+     )
+     SELECT s.id, s.parent_id, s.kind, s.name, s.slug, s.color, s.industry_id,
+            s.sort_order, s.company_id,
+            c.slug AS company_slug, c.name AS company_name,
+            c.anonymous, c.status,
+            cs.slug AS size_slug, cs.name AS size_name,
+            cs.sort_order AS size_sort_order
+       FROM subtree s
+       LEFT JOIN companies c ON c.id = s.company_id
+       LEFT JOIN company_sizes cs ON cs.id = c.size_id
+      WHERE s.kind = 'layer'
+         OR ($2::boolean IS NOT TRUE
+             OR (c.status <> 'suspended'
+                 AND (c.status = 'approved' OR c.anonymous)))`,
+    [layerId, publicOnly]
+  );
+
+  const companyIds = [
+    ...new Set(
+      result.rows
+        .map((row) => row.company_id)
+        .filter((id): id is string => Boolean(id))
+    ),
+  ];
+
+  const industriesByCompany = new Map<string, GraphTreeIndustry[]>();
+  if (companyIds.length > 0) {
+    const industries = await query<{
+      company_id: string;
+      id: number;
+      name: string;
+      group_id: number | null;
+      sort_order: number;
+    }>(
+      `SELECT ci.company_id, i.id, i.name, i.group_id, i.sort_order
+         FROM company_industries ci
+         JOIN industries i ON i.id = ci.industry_id
+        WHERE ci.company_id = ANY($1::uuid[])
+        ORDER BY i.sort_order, i.name`,
+      [companyIds]
+    );
+    for (const row of industries.rows) {
+      const list = industriesByCompany.get(row.company_id) ?? [];
+      list.push({
+        id: Number(row.id),
+        name: row.name,
+        group_id: row.group_id == null ? null : Number(row.group_id),
+        sort_order: Number(row.sort_order),
+      });
+      industriesByCompany.set(row.company_id, list);
+    }
+  }
+
+  const byParent = new Map<string, TreeRow[]>();
+  for (const row of result.rows) {
+    const key = scopeKey(row.parent_id);
+    const list = byParent.get(key) ?? [];
+    list.push(row);
+    byParent.set(key, list);
+  }
+
+  function toNode(row: TreeRow): GraphTreeNode {
+    const isCompany = row.kind === "company";
+    const hide = publicOnly && isCompany && row.anonymous === true;
+    return {
+      id: row.id,
+      kind: row.kind,
+      name: isCompany
+        ? hide
+          ? "Firma"
+          : (row.company_name ?? "")
+        : (row.name ?? ""),
+      sort_order: Number(row.sort_order),
+      color: isCompany ? null : row.color,
+      industry_id:
+        !isCompany && row.industry_id != null ? Number(row.industry_id) : null,
+      company_id: isCompany ? row.company_id : null,
+      company_slug: isCompany && !hide ? row.company_slug : null,
+      anonymous: isCompany ? row.anonymous === true : false,
+      size_slug: isCompany ? row.size_slug : null,
+      size_name: isCompany ? row.size_name : null,
+      size_sort_order:
+        isCompany && row.size_sort_order != null
+          ? Number(row.size_sort_order)
+          : null,
+      industries: isCompany
+        ? (industriesByCompany.get(row.company_id ?? "") ?? [])
+        : [],
+      children: isCompany ? [] : childrenOf(row.id),
+    };
+  }
+
+  function childrenOf(parentId: string | null): GraphTreeNode[] {
+    const rows = byParent.get(scopeKey(parentId)) ?? [];
+    return rows
+      .slice()
+      .sort((a, b) => {
+        const order = Number(a.sort_order) - Number(b.sort_order);
+        if (order !== 0) return order;
+        const nameA = a.kind === "company" ? (a.company_name ?? "") : (a.name ?? "");
+        const nameB = b.kind === "company" ? (b.company_name ?? "") : (b.name ?? "");
+        return nameA.localeCompare(nameB, "de");
+      })
+      .map(toNode);
+  }
+
+  return childrenOf(layerId);
+}
+
 /**
  * Laedt den vollstaendigen Inhalt genau einer Ebene: Unter-Ebenen, Firmen,
  * Verbindungen zwischen ihnen sowie die Verbindungen der Ebene selbst nach
@@ -428,12 +657,13 @@ export async function loadScope(
     breadcrumb = (await loadBreadcrumb(layerId)) ?? [];
   }
 
-  const [layers, companies, edges, sizes, layout] = await Promise.all([
+  const [layers, companies, edges, sizes, layout, radialGroup] = await Promise.all([
     loadChildLayers(layerId, publicOnly),
     loadChildCompanies(layerId, publicOnly),
     loadScopeEdges(layerId),
     loadSizes(),
     layer ? Promise.resolve(layer.layout) : loadRootLayout(),
+    loadRadialGroup(layerId),
   ]);
 
   // In der oeffentlichen Sicht koennen Firmen weggefiltert sein. Deren Kanten
@@ -453,6 +683,14 @@ export async function loadScope(
     ? await loadOutwardEdges(layerId, parentPath, publicOnly)
     : [];
 
+  const viewLayout = layout === "pack" || layout === "radial";
+  const [tree, radialIndustries] = await Promise.all([
+    viewLayout ? loadViewTree(layerId, publicOnly) : Promise.resolve(null),
+    layout === "radial" && radialGroup
+      ? loadRadialIndustries(radialGroup.id)
+      : Promise.resolve([]),
+  ]);
+
   return {
     layer,
     layout,
@@ -463,6 +701,9 @@ export async function loadScope(
     sizes,
     edges: visibleEdges,
     outward_edges: outwardEdges,
+    tree,
+    radial_industry_group: radialGroup,
+    radial_industries: radialIndustries,
   };
 }
 
@@ -606,12 +847,15 @@ async function siblingLayerSlugs(
 
 export async function createLayer(input: GraphLayerInput): Promise<GraphLayer> {
   await assertLayerExists(input.parent_id);
+  await assertIndustryGroup(input.radial_industry_group_id);
   const slug = uniqueSlug(input.name, await siblingLayerSlugs(input.parent_id));
   const sortOrder = await nextSortOrder(input.parent_id);
 
   const result = await query<{ id: string }>(
-    `INSERT INTO graph_nodes (parent_id, kind, name, slug, description, color, layout, sort_order)
-     VALUES ($1, 'layer', $2, $3, $4, $5, $6, $7)
+    `INSERT INTO graph_nodes
+       (parent_id, kind, name, slug, description, color, layout, sort_order,
+        radial_industry_group_id)
+     VALUES ($1, 'layer', $2, $3, $4, $5, $6, $7, $8)
      RETURNING id`,
     [
       input.parent_id,
@@ -621,6 +865,7 @@ export async function createLayer(input: GraphLayerInput): Promise<GraphLayer> {
       input.color,
       input.layout,
       sortOrder,
+      input.radial_industry_group_id,
     ]
   );
 
@@ -644,10 +889,19 @@ export async function updateLayer(
     await siblingLayerSlugs(current.rows[0]!.parent_id, id)
   );
 
+  if (input.radial_industry_group_id !== undefined) {
+    await assertIndustryGroup(input.radial_industry_group_id);
+  }
+
   await query(
     `UPDATE graph_nodes
         SET name = $2, slug = $3, description = $4, color = $5, layout = $6,
-            sort_order = coalesce($7, sort_order), updated_at = now()
+            sort_order = coalesce($7, sort_order),
+            radial_industry_group_id = CASE
+              WHEN $8::boolean THEN $9::int
+              ELSE radial_industry_group_id
+            END,
+            updated_at = now()
       WHERE id = $1 AND kind = 'layer'`,
     [
       id,
@@ -657,6 +911,8 @@ export async function updateLayer(
       input.color,
       input.layout,
       input.sort_order ?? null,
+      input.radial_industry_group_id !== undefined,
+      input.radial_industry_group_id ?? null,
     ]
   );
 
@@ -750,9 +1006,10 @@ export async function addCompanyNode(
 }
 
 /**
- * Legt in der angegebenen Ebene fuer jede Branchengruppe eine Kind-Ebene an
- * und setzt die Firmen hinein, die eine Branche dieser Gruppe im Profil
- * tragen. Ein erneuter Lauf ergaenzt nur noch Fehlendes.
+ * Legt unter der offenen Ebene die Branchenstruktur an:
+ * Branchengruppen (Torte ihrer Branchen), darunter je Branche eine Ebene
+ * (Portfolio der Firmen). Ein erneuter Lauf ergaenzt nur noch Fehlendes und
+ * zieht Firmen, die noch direkt an der Gruppe haengen, in die Branchen-Ebene.
  */
 export async function seedIndustryLayers(
   parentId: string | null
@@ -805,14 +1062,14 @@ export async function seedIndustryLayers(
         [group.id, parentId]
       );
 
-      let layerId = existing.rows[0]?.id;
-      if (!layerId) {
+      let groupLayerId = existing.rows[0]?.id;
+      if (!groupLayerId) {
         const slug = uniqueSlug(group.name, slugs);
         slugs.add(slug);
         const inserted = await client.query<{ id: string }>(
           `INSERT INTO graph_nodes
              (parent_id, kind, name, slug, description, color, layout, sort_order, industry_group_id)
-           VALUES ($1, 'layer', $2, $3, $4, $5, 'graph', $6, $7)
+           VALUES ($1, 'layer', $2, $3, $4, $5, 'pie', $6, $7)
            RETURNING id`,
           [
             parentId,
@@ -824,41 +1081,120 @@ export async function seedIndustryLayers(
             group.id,
           ]
         );
-        layerId = inserted.rows[0]!.id;
+        groupLayerId = inserted.rows[0]!.id;
         sortOrder += 1;
         layersCreated += 1;
+      } else {
+        await client.query(
+          `UPDATE graph_nodes
+              SET layout = 'pie', updated_at = now()
+            WHERE id = $1 AND layout IS DISTINCT FROM 'pie'`,
+          [groupLayerId]
+        );
       }
 
-      const placed = await client.query<{ total: number; added: number }>(
-        `WITH candidates AS (
-           SELECT DISTINCT ci.company_id
-             FROM company_industries ci
-             JOIN industries i ON i.id = ci.industry_id
-            WHERE i.group_id = $1
-         ),
-         inserted AS (
-           INSERT INTO graph_nodes (parent_id, kind, company_id, sort_order)
-           SELECT $2, 'company', c.company_id,
-                  (SELECT coalesce(max(sort_order), -1)
-                     FROM graph_nodes WHERE parent_id = $2)
-                  + row_number() OVER (ORDER BY c.company_id)
-             FROM candidates c
-            WHERE NOT EXISTS (
-              SELECT 1 FROM graph_nodes n
-               WHERE n.kind = 'company'
-                 AND n.parent_id = $2
-                 AND n.company_id = c.company_id
-            )
-           RETURNING 1
-         )
-         SELECT (SELECT count(*)::int FROM candidates) AS total,
-                (SELECT count(*)::int FROM inserted) AS added`,
-        [group.id, layerId]
+      const industries = await client.query<{ id: number; name: string }>(
+        `SELECT id, name FROM industries
+          WHERE group_id = $1
+          ORDER BY sort_order, name`,
+        [group.id]
       );
-      const total = Number(placed.rows[0]?.total ?? 0);
-      const added = Number(placed.rows[0]?.added ?? 0);
-      companiesAdded += added;
-      companiesSkipped += total - added;
+
+      const childSlugRows = await client.query<{ slug: string }>(
+        `SELECT slug FROM graph_nodes
+          WHERE kind = 'layer' AND parent_id = $1`,
+        [groupLayerId]
+      );
+      const childSlugs = new Set(childSlugRows.rows.map((row) => row.slug));
+      const childSortRow = await client.query<{ next: number }>(
+        `SELECT coalesce(max(sort_order), -1) + 1 AS next
+           FROM graph_nodes WHERE parent_id = $1`,
+        [groupLayerId]
+      );
+      let childSort = childSortRow.rows[0]?.next ?? 0;
+
+      for (const [industryIndex, industry] of industries.rows.entries()) {
+        const existingIndustry = await client.query<{ id: string }>(
+          `SELECT id FROM graph_nodes
+            WHERE kind = 'layer'
+              AND industry_id = $1
+              AND parent_id = $2`,
+          [industry.id, groupLayerId]
+        );
+        let industryLayerId = existingIndustry.rows[0]?.id;
+        if (!industryLayerId) {
+          const slug = uniqueSlug(industry.name, childSlugs);
+          childSlugs.add(slug);
+          const inserted = await client.query<{ id: string }>(
+            `INSERT INTO graph_nodes
+               (parent_id, kind, name, slug, color, layout, sort_order, industry_id)
+             VALUES ($1, 'layer', $2, $3, $4, 'xy', $5, $6)
+             RETURNING id`,
+            [
+              groupLayerId,
+              industry.name,
+              slug,
+              graphPaletteColor(industryIndex),
+              childSort,
+              industry.id,
+            ]
+          );
+          industryLayerId = inserted.rows[0]!.id;
+          childSort += 1;
+          layersCreated += 1;
+        } else {
+          await client.query(
+            `UPDATE graph_nodes
+                SET layout = 'xy', updated_at = now()
+              WHERE id = $1 AND layout IS DISTINCT FROM 'xy'`,
+            [industryLayerId]
+          );
+        }
+
+        const placed = await client.query<{ total: number; added: number }>(
+          `WITH candidates AS (
+             SELECT DISTINCT ci.company_id
+               FROM company_industries ci
+              WHERE ci.industry_id = $1
+           ),
+           inserted AS (
+             INSERT INTO graph_nodes (parent_id, kind, company_id, sort_order)
+             SELECT $2, 'company', c.company_id,
+                    (SELECT coalesce(max(sort_order), -1)
+                       FROM graph_nodes WHERE parent_id = $2)
+                    + row_number() OVER (ORDER BY c.company_id)
+               FROM candidates c
+              WHERE NOT EXISTS (
+                SELECT 1 FROM graph_nodes n
+                 WHERE n.kind = 'company'
+                   AND n.parent_id = $2
+                   AND n.company_id = c.company_id
+              )
+             RETURNING 1
+           )
+           SELECT (SELECT count(*)::int FROM candidates) AS total,
+                  (SELECT count(*)::int FROM inserted) AS added`,
+          [industry.id, industryLayerId]
+        );
+        const total = Number(placed.rows[0]?.total ?? 0);
+        const added = Number(placed.rows[0]?.added ?? 0);
+        companiesAdded += added;
+        companiesSkipped += total - added;
+      }
+
+      await client.query(
+        `DELETE FROM graph_nodes n
+          WHERE n.kind = 'company'
+            AND n.parent_id = $1
+            AND EXISTS (
+              SELECT 1
+                FROM company_industries ci
+                JOIN industries i ON i.id = ci.industry_id
+               WHERE ci.company_id = n.company_id
+                 AND i.group_id = $2
+            )`,
+        [groupLayerId, group.id]
+      );
     }
 
     return {
@@ -869,7 +1205,17 @@ export async function seedIndustryLayers(
   });
 }
 
-export async function updateRootLayout(layout: GraphLayout): Promise<GraphLayout> {
+export async function updateRootLayout(
+  layout: GraphLayout,
+  radialIndustryGroupId?: number | null
+): Promise<GraphLayout> {
+  if (radialIndustryGroupId !== undefined) {
+    await assertIndustryGroup(radialIndustryGroupId);
+    await setSetting(
+      SETTING_GRAPH_ROOT_RADIAL_GROUP,
+      radialIndustryGroupId == null ? null : String(radialIndustryGroupId)
+    );
+  }
   await setSetting(SETTING_GRAPH_ROOT_LAYOUT, layout);
   return layout;
 }

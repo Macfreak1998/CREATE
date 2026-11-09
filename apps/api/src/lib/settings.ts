@@ -54,5 +54,6 @@ export function invalidateSettingCache(key?: string): void {
 
 export const SETTING_ADMIN_NOTIFICATION_EMAIL = "admin_notification_email";
 export const SETTING_GRAPH_ROOT_LAYOUT = "graph_root_layout";
+export const SETTING_GRAPH_ROOT_RADIAL_GROUP = "graph_root_radial_industry_group_id";
 export const SETTING_SECTION_DESCRIPTION_PREFIX = "section_description.";
 export const SETTING_MAIL_TEMPLATE_PREFIX = "mail_template.";

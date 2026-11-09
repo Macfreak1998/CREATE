@@ -142,9 +142,14 @@ der offenen Ebene. Kanten werden nicht gerendert.
 Flow-Koordinatensystem, Firmen auf Groessenklasse und hoechsten TRL, mehrere
 Firmen einer Zelle in einem festen Raster nach Knoten-Id. Unterebenen stehen
 als Kreise darueber. Kanten werden nicht gerendert. Die Legende der
-Verbindungstypen erscheint nur im Modus `graph`. Die Aussenkanten-Chips bleiben
-in jedem Modus, weil sie zur geoeffneten Ebene gehoeren und nicht zu ihren
-Kindern.
+Verbindungstypen und die Aussenkanten-Chips erscheinen nur im Modus `graph`.
+
+`pack` und `radial` ersetzen die React-Flow-Szene durch ein eigenes SVG. Der
+Scope liefert dafuer den Unterbaum der Ebene. `pack` zeichnet nur
+Branchen-Ebenen als farbige Kreise und die Firmen darin; dieselbe Firma kann
+mehrfach vorkommen. `radial` setzt jede Firma einmal auf einen Ring, dessen
+Segmente die direkten Kind-Ebenen sind, und verbindet sie mit den Branchen des
+gespeicherten Anwendungsbereichs. Beide rechnen kein elkjs-Layout.
 
 ### Zoom-Uebergang
 

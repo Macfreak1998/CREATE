@@ -440,8 +440,8 @@ function ImportExportPanel() {
         <h3 className="font-semibold text-lg">Import / Export</h3>
         <p className="text-sm text-slate-600 mt-1">
           Firmen lokal anlegen, exportieren und auf der Live-Plattform importieren.
-          Importierte Firmen werden als Entwürfe angelegt — der E-Mail-Versand
-          mit Zugangsdaten erfolgt erst nach Freigabe.
+          Der Veröffentlichungsstatus aus der Datei wird übernommen. Es geht
+          keine E-Mail raus; das Passwort setzt die Person bei Bedarf selbst zurück.
         </p>
       </div>
 

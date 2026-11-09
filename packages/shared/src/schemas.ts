@@ -711,6 +711,10 @@ export const CompanyExportEntrySchema = z.object({
   demos: z.array(ExportDemoSchema).default([]),
   services: z.array(ExportServiceSchema).default([]),
   technology_suggestions: z.array(ExportTechSuggestionSchema).default([]),
+  // Fehlender oder leerer Status in alten Dateien bleibt Entwurf.
+  // nullish, weil ein explizites null sonst die ganze Datei ablehnt
+  // und .default() nur bei undefined greift.
+  status: CompanyStatus.nullish().transform((value) => value ?? "draft"),
 });
 export type CompanyExportEntry = z.infer<typeof CompanyExportEntrySchema>;
 
@@ -798,8 +802,9 @@ export const GraphNodeKind = z.enum(["layer", "company"]);
 export type GraphNodeKind = z.infer<typeof GraphNodeKind>;
 
 // Wie die Kinder einer Ebene gezeichnet werden. `graph` ist das bisherige
-// Netzwerk, `pie` die Torte, `xy` das Portfolio aus Größe und Reifegrad.
-export const GraphLayoutSchema = z.enum(["graph", "pie", "xy"]);
+// Netzwerk, `pie` die Torte, `xy` das Portfolio aus Größe und Reifegrad,
+// `pack` die Kreispackung und `radial` der Ring mit gebündelten Kanten.
+export const GraphLayoutSchema = z.enum(["graph", "pie", "xy", "pack", "radial"]);
 export type GraphLayout = z.infer<typeof GraphLayoutSchema>;
 
 export const GraphSizeSchema = z.object({
@@ -838,8 +843,66 @@ export const GraphLayerSchema = z.object({
   sort_order: z.number().int(),
   child_layer_count: z.number().int(),
   child_company_count: z.number().int(),
+  radial_industry_group_id: z.number().int().positive().nullable(),
 });
 export type GraphLayer = z.infer<typeof GraphLayerSchema>;
+
+export const GraphTreeIndustrySchema = z.object({
+  id: z.number().int().positive(),
+  name: z.string(),
+  group_id: z.number().int().positive().nullable(),
+  sort_order: z.number().int(),
+});
+export type GraphTreeIndustry = z.infer<typeof GraphTreeIndustrySchema>;
+
+export interface GraphTreeNode {
+  id: string;
+  kind: GraphNodeKind;
+  name: string;
+  sort_order: number;
+  color: string | null;
+  industry_id: number | null;
+  company_id: string | null;
+  company_slug: string | null;
+  anonymous: boolean;
+  size_slug: string | null;
+  size_name: string | null;
+  size_sort_order: number | null;
+  industries: GraphTreeIndustry[];
+  children: GraphTreeNode[];
+}
+
+export const GraphTreeNodeSchema: z.ZodType<GraphTreeNode> = z.lazy(() =>
+  z.object({
+    id: z.string().uuid(),
+    kind: GraphNodeKind,
+    name: z.string(),
+    sort_order: z.number().int(),
+    color: z.string().nullable(),
+    industry_id: z.number().int().positive().nullable(),
+    company_id: z.string().uuid().nullable(),
+    company_slug: z.string().nullable(),
+    anonymous: z.boolean(),
+    size_slug: z.string().nullable(),
+    size_name: z.string().nullable(),
+    size_sort_order: z.number().int().nullable(),
+    industries: z.array(GraphTreeIndustrySchema),
+    children: z.array(GraphTreeNodeSchema),
+  })
+);
+
+export const GraphIndustryGroupRefSchema = z.object({
+  id: z.number().int().positive(),
+  name: z.string(),
+});
+export type GraphIndustryGroupRef = z.infer<typeof GraphIndustryGroupRefSchema>;
+
+export const GraphRadialIndustrySchema = z.object({
+  id: z.number().int().positive(),
+  name: z.string(),
+  sort_order: z.number().int(),
+});
+export type GraphRadialIndustry = z.infer<typeof GraphRadialIndustrySchema>;
 
 export const GraphCompanyNodeSchema = z.object({
   id: z.string().uuid(),
@@ -902,6 +965,10 @@ export const GraphScopeSchema = z.object({
   sizes: z.array(GraphSizeSchema),
   edges: z.array(GraphEdgeSchema),
   outward_edges: z.array(GraphOutwardEdgeSchema),
+  // Unterbaum nur fuer Kreispackung und radialen Ring. Sonst null.
+  tree: z.array(GraphTreeNodeSchema).nullable(),
+  radial_industry_group: GraphIndustryGroupRefSchema.nullable(),
+  radial_industries: z.array(GraphRadialIndustrySchema),
 });
 export type GraphScope = z.infer<typeof GraphScopeSchema>;
 
@@ -965,6 +1032,7 @@ export const GraphLayerInputSchema = z.object({
   description: z.string().trim().max(2000).nullable().optional().default(null),
   color: HexColor.nullable().optional().default(null),
   layout: GraphLayoutSchema.optional().default("graph"),
+  radial_industry_group_id: z.number().int().positive().nullable().optional().default(null),
 });
 export type GraphLayerInput = z.infer<typeof GraphLayerInputSchema>;
 
@@ -974,11 +1042,13 @@ export const GraphLayerUpdateSchema = z.object({
   color: HexColor.nullable().optional().default(null),
   layout: GraphLayoutSchema.optional().default("graph"),
   sort_order: z.number().int().min(0).max(9999).optional(),
+  radial_industry_group_id: z.number().int().positive().nullable().optional(),
 });
 export type GraphLayerUpdate = z.infer<typeof GraphLayerUpdateSchema>;
 
 export const GraphRootLayoutUpdateSchema = z.object({
   layout: GraphLayoutSchema,
+  radial_industry_group_id: z.number().int().positive().nullable().optional(),
 });
 export type GraphRootLayoutUpdate = z.infer<typeof GraphRootLayoutUpdateSchema>;
 

@@ -96,8 +96,10 @@ adminGraphRouter.patch(
   "/root-layout",
   validate(GraphRootLayoutUpdateSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const { layout } = req.body as GraphRootLayoutUpdate;
-    res.json({ layout: await updateRootLayout(layout) });
+    const { layout, radial_industry_group_id } = req.body as GraphRootLayoutUpdate;
+    res.json({
+      layout: await updateRootLayout(layout, radial_industry_group_id),
+    });
   })
 );
 

@@ -37,8 +37,9 @@ export default function LayerList({
             className="btn-secondary text-xs"
             onClick={onSeedIndustries}
             disabled={seeding}
+            title="Branchengruppen, darunter die Branchen als Torte, darin die Firmen im Portfolio"
           >
-            {seeding ? "Gruppen werden angelegt …" : "Branchengruppen als Ebenen"}
+            {seeding ? "Struktur wird angelegt …" : "Branchenstruktur anlegen"}
           </button>
         </div>
       </header>

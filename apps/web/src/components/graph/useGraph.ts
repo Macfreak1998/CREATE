@@ -1,6 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { GraphEdgeKind, GraphFindResult, GraphScope } from "@b2b/shared";
 import { api } from "../../lib/api.js";
+import { isGraphSceneLayout } from "./layoutMode.js";
 import { computeLayout, scopeSignature, type LayoutResult } from "./layout.js";
 
 export const scopeQueryKey = (path: string) => ["graph", "scope", path] as const;
@@ -58,7 +59,7 @@ export function useScopeLayout(scope: GraphScope | undefined) {
   return useQuery<LayoutResult>({
     queryKey: ["graph", "layout", scope ? scopeSignature(scope) : ""],
     queryFn: () => computeLayout(scope as GraphScope),
-    enabled: Boolean(scope),
+    enabled: Boolean(scope && isGraphSceneLayout(scope.layout)),
     staleTime: Number.POSITIVE_INFINITY,
   });
 }

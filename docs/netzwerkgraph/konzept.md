@@ -92,10 +92,15 @@ Kinder gezeichnet werden, sobald man die Ebene oeffnet:
 | `graph` | Netzwerk mit `elkjs`, Verbindungen sichtbar. Das ist der Standard. |
 | `pie` | Torte. Jedes Kind ein Stueck, Unterebenen nach Firmenzahl, einzelne Firmen mit Gewicht 1. Verbindungen bleiben gespeichert und werden nicht gezeichnet. |
 | `xy` | Portfolio. Firmen auf den Achsen Unternehmensgroesse und hoechster Technologie-Reifegrad (TRL). Unterebenen stehen als Kreise ueber dem Diagramm. Verbindungen ebenfalls nur gespeichert. |
+| `pack` | Kreispackung. Branchen-Ebenen sind farbige Kreise, Firmen sitzen darin und folgen der Groessenklasse. Dieselbe Firma erscheint in jeder ihrer Branchen. |
+| `radial` | Radialer Ring. Jede Firma einmal auf einem Ring, Segmente sind die direkten Kind-Ebenen. Kanten verbinden sie mit den Branchen der Branchengruppe, die der Admin als Anwendungsbereich gewaehlt hat. |
 
 Die Wurzel hat keine Zeile in `graph_nodes`. Ihr Modus liegt in `app_settings`
-unter `graph_root_layout`. Inhalt und Modus sind unabhaengig: eine Ebene darf
-jedes der drei Bilder zeigen, egal ob darin Ebenen, Firmen oder beides liegen.
+unter `graph_root_layout`, der Anwendungsbereich des Rings unter
+`graph_root_radial_industry_group_id`. Inhalt und Modus sind unabhaengig: eine
+Ebene darf jedes dieser Bilder zeigen, egal ob darin Ebenen, Firmen oder beides
+liegen. Bei `radial` speichert die Ebene zusaetzlich die Branchengruppe, deren
+Branchen im Zentrum stehen.
 
 Bei `graph` berechnet `elkjs` die Positionen. Da ein Scope selten mehr als
 einige Dutzend Knoten hat, ist das in Millisekunden erledigt. Wichtig ist

@@ -14,7 +14,8 @@ const { pool } = await import("../db/client.js");
 const { importCompanies } = await import("../modules/admin/import-export.js");
 
 // Importiert Firmen aus apps/api/data/partner-import.json (oder --file).
-// Nutzt denselben Import-Pfad wie die Admin-API; Status der Firmen: draft.
+// Nutzt denselben Import-Pfad wie die Admin-API. Der Status kommt aus der
+// Datei, sonst Entwurf. Es wird keine E-Mail verschickt.
 
 async function main(): Promise<void> {
   const { values } = parseArgs({

@@ -6,6 +6,8 @@ import GraphScene from "../components/graph/GraphScene.js";
 import GraphSearch from "../components/graph/GraphSearch.js";
 import EdgeLegend from "../components/graph/EdgeLegend.js";
 import OutwardEdgeChips from "../components/graph/OutwardEdgeChips.js";
+import CirclePackView from "../components/graph/CirclePackView.js";
+import RadialRingView from "../components/graph/RadialRingView.js";
 import {
   useGraphEdgeKinds,
   useGraphScope,
@@ -88,8 +90,11 @@ export default function Netzwerk() {
         <div>
           <h1 className="text-3xl font-semibold">Netzwerk</h1>
           <p className="mt-1 max-w-2xl text-sm text-slate-600">
-            Klicken Sie auf eine Ebene, um hineinzuzoomen. Mit Escape oder über
-            den Pfad geht es zurück.
+            {scope.data?.layout === "pack"
+              ? "Jede Branche ist ein Kreis, Firmen sitzen darin. Ein Klick hebt alle Stellen derselben Firma hervor."
+              : scope.data?.layout === "radial"
+                ? "Jede Firma steht einmal auf dem Ring. Ein Segment filtert auf diese Stufe."
+                : "Klicken Sie auf eine Ebene, um hineinzuzoomen. Mit Escape oder über den Pfad geht es zurück."}
           </p>
         </div>
         <GraphSearch onSelect={(result) => openPath(result.parent_path)} />
@@ -141,18 +146,30 @@ export default function Netzwerk() {
         </div>
       ) : (
         <div className="relative mt-4 h-[70vh] overflow-hidden rounded-lg border border-line bg-white">
-          <ReactFlowProvider>
-            <GraphScene
-              scopePath={scopePath}
-              nodes={layout.data?.nodes ?? []}
-              edges={layout.data?.edges ?? []}
-              isLoading={scope.isLoading || layout.isLoading}
-              onOpenLayer={openLayer}
-              onPrefetchLayer={(layer) => void prefetchScope(childPath(layer))}
-              onOpenCompany={openCompany}
+          {scope.data?.layout === "pack" ? (
+            <CirclePackView tree={scope.data.tree ?? []} />
+          ) : scope.data?.layout === "radial" ? (
+            <RadialRingView
+              tree={scope.data.tree ?? []}
+              group={scope.data.radial_industry_group}
+              industries={scope.data.radial_industries}
             />
-          </ReactFlowProvider>
-          <OutwardEdgeChips edges={scope.data?.outward_edges ?? []} />
+          ) : (
+            <ReactFlowProvider>
+              <GraphScene
+                scopePath={scopePath}
+                nodes={layout.data?.nodes ?? []}
+                edges={layout.data?.edges ?? []}
+                isLoading={scope.isLoading || layout.isLoading}
+                onOpenLayer={openLayer}
+                onPrefetchLayer={(layer) => void prefetchScope(childPath(layer))}
+                onOpenCompany={openCompany}
+              />
+            </ReactFlowProvider>
+          )}
+          {scope.data?.layout === "graph" && (
+            <OutwardEdgeChips edges={scope.data.outward_edges} />
+          )}
         </div>
       )}
 

@@ -104,6 +104,7 @@ export function useGraphMutations({ onError }: GraphMutationOptions) {
       description: string | null;
       color: string | null;
       layout: GraphLayout;
+      radial_industry_group_id: number | null;
     }) => api.post<GraphLayer>("/api/admin/graph/layers", input),
     ...mutationDefaults,
   });
@@ -118,15 +119,17 @@ export function useGraphMutations({ onError }: GraphMutationOptions) {
       description: string | null;
       color: string | null;
       layout: GraphLayout;
+      radial_industry_group_id: number | null;
     }) => api.patch<GraphLayer>(`/api/admin/graph/layers/${id}`, input),
     ...mutationDefaults,
   });
 
   const updateRootLayout = useMutation({
-    mutationFn: (layout: GraphLayout) =>
-      api.patch<{ layout: GraphLayout }>("/api/admin/graph/root-layout", {
-        layout,
-      }),
+    mutationFn: (input: {
+      layout: GraphLayout;
+      radial_industry_group_id?: number | null;
+    }) =>
+      api.patch<{ layout: GraphLayout }>("/api/admin/graph/root-layout", input),
     ...mutationDefaults,
   });
 

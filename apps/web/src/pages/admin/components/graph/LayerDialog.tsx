@@ -1,6 +1,7 @@
 import { FormEvent, useState } from "react";
 import { GRAPH_PALETTE, type GraphLayer, type GraphLayout } from "@b2b/shared";
 import { GRAPH_LAYOUT_OPTIONS, layoutHint } from "../../../../components/graph/layoutMode.js";
+import { useIndustryGroups } from "../../../../hooks/useTaxonomies.js";
 
 const DEFAULT_COLOR = GRAPH_PALETTE[0];
 
@@ -9,6 +10,7 @@ export interface LayerFormValues {
   description: string | null;
   color: string | null;
   layout: GraphLayout;
+  radial_industry_group_id: number | null;
 }
 
 export default function LayerDialog({
@@ -24,7 +26,11 @@ export default function LayerDialog({
   const [description, setDescription] = useState(layer?.description ?? "");
   const [color, setColor] = useState(layer?.color ?? DEFAULT_COLOR);
   const [layout, setLayout] = useState<GraphLayout>(layer?.layout ?? "graph");
+  const [groupId, setGroupId] = useState<number | null>(
+    layer?.radial_industry_group_id ?? null
+  );
   const [error, setError] = useState<string | null>(null);
+  const groups = useIndustryGroups();
 
   const submit = (event: FormEvent) => {
     event.preventDefault();
@@ -32,11 +38,16 @@ export default function LayerDialog({
       setError("Der Name braucht mindestens zwei Zeichen.");
       return;
     }
+    if (layout === "radial" && groupId == null) {
+      setError("Der radiale Ring braucht einen Anwendungsbereich.");
+      return;
+    }
     onSubmit({
       name: name.trim(),
       description: description.trim() ? description.trim() : null,
       color,
       layout,
+      radial_industry_group_id: groupId,
     });
   };
 
@@ -93,6 +104,34 @@ export default function LayerDialog({
             </select>
             <p className="mt-1 text-xs text-slate-500">{layoutHint(layout)}</p>
           </div>
+
+          {layout === "radial" && (
+            <div>
+              <label className="label" htmlFor="layer-radial-group">
+                Anwendungsbereich
+              </label>
+              <select
+                id="layer-radial-group"
+                className="input"
+                value={groupId ?? ""}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  setGroupId(value ? Number(value) : null);
+                }}
+              >
+                <option value="">Bitte wählen</option>
+                {(groups.data ?? []).map((group) => (
+                  <option key={group.id} value={group.id}>
+                    {group.name}
+                  </option>
+                ))}
+              </select>
+              <p className="mt-1 text-xs text-slate-500">
+                Die Branchen dieser Gruppe stehen im Zentrum des Rings. Die Kanten
+                übernehmen ihre Farbe.
+              </p>
+            </div>
+          )}
 
           <div>
             <label className="label" htmlFor="layer-color">
