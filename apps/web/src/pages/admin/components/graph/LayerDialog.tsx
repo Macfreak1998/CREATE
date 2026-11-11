@@ -1,7 +1,7 @@
 import { FormEvent, useState } from "react";
 import { GRAPH_PALETTE, type GraphLayer, type GraphLayout } from "@b2b/shared";
 import { GRAPH_LAYOUT_OPTIONS, layoutHint } from "../../../../components/graph/layoutMode.js";
-import { useIndustryGroups } from "../../../../hooks/useTaxonomies.js";
+import { useAdminIndustryGroups } from "../../../../hooks/useTaxonomies.js";
 
 const DEFAULT_COLOR = GRAPH_PALETTE[0];
 
@@ -30,7 +30,7 @@ export default function LayerDialog({
     layer?.radial_industry_group_id ?? null
   );
   const [error, setError] = useState<string | null>(null);
-  const groups = useIndustryGroups();
+  const groups = useAdminIndustryGroups();
 
   const submit = (event: FormEvent) => {
     event.preventDefault();
@@ -122,7 +122,7 @@ export default function LayerDialog({
                 <option value="">Bitte wählen</option>
                 {(groups.data ?? []).map((group) => (
                   <option key={group.id} value={group.id}>
-                    {group.name}
+                    {group.hidden ? `${group.name} (nur Graph)` : group.name}
                   </option>
                 ))}
               </select>

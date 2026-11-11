@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { arc } from "d3-shape";
 import {
   graphCategoryColor,
@@ -10,9 +10,11 @@ import {
   RING,
   collectRadial,
   layoutRing,
+  placeCompanyLabels,
   ringPoint,
   stageDistribution,
 } from "./viewModel.js";
+import { usePanZoom, ZoomControls } from "./usePanZoom.js";
 
 const LABEL_LIMIT = 150;
 
@@ -43,10 +45,17 @@ export default function RadialRingView({
   group: GraphIndustryGroupRef | null;
   industries: GraphRadialIndustry[];
 }) {
-  const model = useMemo(
-    () => collectRadial(tree, group?.id ?? null),
-    [group?.id, tree]
+  const industryIds = useMemo(
+    () => (group ? new Set(industries.map((industry) => industry.id)) : null),
+    [group, industries]
   );
+  const model = useMemo(
+    () => collectRadial(tree, industryIds),
+    [industryIds, tree]
+  );
+  const pan = usePanZoom();
+  const frameRef = useRef<HTMLDivElement>(null);
+  const layerRef = useRef<SVGGElement>(null);
   const [stageId, setStageId] = useState<string | null>(null);
   const [companyId, setCompanyId] = useState<string | null>(null);
   const [industryId, setIndustryId] = useState<number | null>(null);
@@ -57,6 +66,39 @@ export default function RadialRingView({
     () => layoutRing(model.companies, model.stages, industries, stageId),
     [industries, model.companies, model.stages, stageId]
   );
+  const companyLabels = useMemo(
+    () => placeCompanyLabels(layout.companies),
+    [layout.companies]
+  );
+  const hoverCompany =
+    layout.companies.find((company) => company.companyId === hoverCompanyId) ?? null;
+  const [popup, setPopup] = useState<{ left: number; top: number } | null>(null);
+
+  useLayoutEffect(() => {
+    const frame = frameRef.current;
+    const layer = layerRef.current;
+    if (!frame || !layer || !hoverCompany) {
+      setPopup(null);
+      return;
+    }
+    const matrix = layer.getScreenCTM();
+    const svg = layer.ownerSVGElement;
+    if (!matrix || !svg) {
+      setPopup(null);
+      return;
+    }
+    const point = svg.createSVGPoint();
+    point.x = hoverCompany.x;
+    point.y = hoverCompany.y;
+    const screen = point.matrixTransform(matrix);
+    const box = frame.getBoundingClientRect();
+    const left = screen.x - box.left + 10;
+    const top = screen.y - box.top + 12;
+    setPopup({
+      left: Math.min(Math.max(8, left), Math.max(8, box.width - 220)),
+      top: Math.min(Math.max(8, top), Math.max(8, box.height - 120)),
+    });
+  }, [hoverCompany, pan.view]);
 
   const showLabels = layout.companies.length <= LABEL_LIMIT;
   const activeCompanyId = companyId ?? hoverCompanyId;
@@ -125,21 +167,32 @@ export default function RadialRingView({
         )}
       </div>
 
-      <div className="relative min-h-0 flex-1">
+      <div ref={frameRef} className="relative min-h-0 flex-1">
         <svg
+          ref={pan.svgRef}
           className="h-full w-full select-none"
           viewBox={`${RING.viewX} ${RING.viewY} ${RING.viewW} ${RING.viewH}`}
           role="img"
           aria-label="Radialer Ring der Firmen"
           onClick={reset}
+          {...pan.pointerProps}
         >
           <rect
+            data-pan=""
             x={RING.viewX}
             y={RING.viewY}
             width={RING.viewW}
             height={RING.viewH}
             fill="#ffffff"
           />
+          <g
+            ref={layerRef}
+            style={{
+              transform: `translate(${pan.view.x}px, ${pan.view.y}px) scale(${pan.view.k})`,
+              transformOrigin: "0 0",
+              transition: pan.animated ? "transform 320ms ease" : undefined,
+            }}
+          >
 
           {layout.companies.flatMap((company) =>
             company.industries.map((link) => {
@@ -188,20 +241,50 @@ export default function RadialRingView({
             );
           })}
 
-          {layout.stages.map((stage) => {
-            if (stage.end - stage.start <= 0.28) return null;
+          {layout.stages.map((stage, index) => {
+            const span = stage.end - stage.start;
+            if (span > 0.28) {
+              return (
+                <text
+                  key={`label-${stage.id}`}
+                  fill="#ffffff"
+                  fontSize={12}
+                  fontWeight={600}
+                  pointerEvents="none"
+                >
+                  <textPath href={`#stage-label-${stage.id}`} startOffset="50%" textAnchor="middle">
+                    {stage.name}
+                  </textPath>
+                </text>
+              );
+            }
+            const mid = (stage.start + stage.end) / 2;
+            const from = ringPoint(mid, RING.ring + RING.band + 2);
+            const radius = RING.ring + RING.band + 28 + (index % 2) * 16;
+            const at = ringPoint(mid, radius);
+            const anchor = Math.sin(mid) >= 0 ? "start" : "end";
             return (
-              <text
-                key={`label-${stage.id}`}
-                fill="#ffffff"
-                fontSize={12}
-                fontWeight={600}
-                pointerEvents="none"
-              >
-                <textPath href={`#stage-label-${stage.id}`} startOffset="50%" textAnchor="middle">
+              <g key={`label-${stage.id}`} pointerEvents="none">
+                <line
+                  x1={from.x}
+                  y1={from.y}
+                  x2={at.x}
+                  y2={at.y}
+                  stroke="#385a46"
+                  strokeWidth={1}
+                />
+                <text
+                  x={at.x + (anchor === "start" ? 4 : -4)}
+                  y={at.y}
+                  textAnchor={anchor}
+                  dominantBaseline="middle"
+                  fill="#1a1a1a"
+                  fontSize={12}
+                  fontWeight={600}
+                >
                   {stage.name}
-                </textPath>
-              </text>
+                </text>
+              </g>
             );
           })}
 
@@ -242,8 +325,11 @@ export default function RadialRingView({
           {layout.companies.map((company) => {
             const faded = companyDimmed(company.companyId, company.industries);
             const marked = company.companyId === activeCompanyId;
+            const placement = companyLabels.get(company.companyId);
+            const hovered = hoverCompanyId === company.companyId;
             const labelVisible =
-              showLabels || marked || hoverCompanyId === company.companyId;
+              (showLabels && (placement?.visible ?? true)) || marked || hovered;
+            const labelRadius = placement?.radius ?? RING.label;
             const svgDeg = ((company.angle * 180) / Math.PI - 90 + 360) % 360;
             const flip = svgDeg > 90 && svgDeg < 270;
             return (
@@ -274,7 +360,7 @@ export default function RadialRingView({
                 />
                 {labelVisible && (
                   <text
-                    transform={`translate(${RING.cx},${RING.cy}) rotate(${svgDeg}) translate(${RING.label},0)${flip ? " rotate(180)" : ""}`}
+                    transform={`translate(${RING.cx},${RING.cy}) rotate(${svgDeg}) translate(${labelRadius},0)${flip ? " rotate(180)" : ""}`}
                     textAnchor={flip ? "end" : "start"}
                     dy="0.32em"
                     fill="#1a1a1a"
@@ -287,7 +373,29 @@ export default function RadialRingView({
               </g>
             );
           })}
+          </g>
         </svg>
+        <ZoomControls
+          onZoomIn={() => pan.zoomBy(1.2)}
+          onZoomOut={() => pan.zoomBy(1 / 1.2)}
+          onReset={pan.reset}
+        />
+        {hoverCompany && popup && (
+          <div
+            className="pointer-events-none absolute z-20 w-52 rounded-md border border-line bg-white px-3 py-2 text-sm shadow-card"
+            style={{ left: popup.left, top: popup.top }}
+          >
+            <p className="font-semibold text-ink">{hoverCompany.name}</p>
+            <p className="text-slate-600">{hoverCompany.sizeName ?? "keine Angabe"}</p>
+            <p className="text-slate-600">
+              {hoverCompany.allStageNames.join(", ") || "keine Stufe"}
+            </p>
+            <p className="text-slate-600">
+              {hoverCompany.industries.map((industry) => industry.name).join(", ") ||
+                "keine Branche"}
+            </p>
+          </div>
+        )}
       </div>
 
       <div className="space-y-2 border-t border-line px-3 py-2 text-sm text-slate-700">

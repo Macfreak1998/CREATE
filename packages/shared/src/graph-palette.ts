@@ -1,17 +1,17 @@
 /**
- * Gedämpfte Farben aus Gras, Teal und warmen Erdtönen. Dieselbe Reihe färbt
+ * Farben der Website: Gras, Teal, Limette und Orange. Dieselbe Reihe färbt
  * neue Ebenen, Tortenscheiben ohne eigene Farbe und die Blasen der
  * anonymen Portfolio-Ansicht.
  */
 export const GRAPH_PALETTE = [
-  "#4f6f2e",
-  "#385a46",
+  "#81ae3d",
+  "#528163",
+  "#bad25f",
+  "#f1874b",
   "#6f9833",
-  "#a4562b",
-  "#467157",
-  "#6b5344",
-  "#2f4a3c",
-  "#8a6239",
+  "#385a46",
+  "#a2b84d",
+  "#d57038",
 ] as const;
 
 export function graphPaletteColor(index: number): string {
@@ -20,27 +20,27 @@ export function graphPaletteColor(index: number): string {
 }
 
 /**
- * Satte, voneinander unterscheidbare Farben fuer Branchen. Dieselbe
+ * Unterscheidbare Abstufungen der Website-Farben fuer Branchen. Dieselbe
  * Branchen-Id bekommt immer dieselbe Farbe, damit Duplikate wiedererkennbar
  * bleiben.
  */
 export const GRAPH_CATEGORY_PALETTE = [
-  "#6b3a4a",
-  "#3c4d99",
-  "#4b5563",
-  "#1f6f64",
-  "#1d4e89",
-  "#8a5a12",
-  "#9a3412",
-  "#0f766e",
-  "#6d28d9",
-  "#9f1239",
-  "#0369a1",
-  "#3f6212",
-  "#7c2d12",
-  "#3730a3",
-  "#155e75",
-  "#854d0e",
+  "#81ae3d",
+  "#528163",
+  "#f1874b",
+  "#5a7a2a",
+  "#467157",
+  "#a4562b",
+  "#bad25f",
+  "#2a4434",
+  "#6f9833",
+  "#385a46",
+  "#d57038",
+  "#7e8f3d",
+  "#1d2e23",
+  "#733c1e",
+  "#a2b84d",
+  "#6c9079",
 ] as const;
 
 export function graphCategoryColor(industryId: number): string {

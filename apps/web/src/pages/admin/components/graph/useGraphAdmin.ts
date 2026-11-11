@@ -90,9 +90,10 @@ export function useGraphMutations({ onError }: GraphMutationOptions) {
   };
 
   const seedIndustries = useMutation({
-    mutationFn: (parentId: string | null) =>
+    mutationFn: (input: { parentId: string | null; industryGroupId: number }) =>
       api.post<GraphSeedIndustriesResult>("/api/admin/graph/seed-industries", {
-        parent_id: parentId,
+        parent_id: input.parentId,
+        industry_group_id: input.industryGroupId,
       }),
     ...mutationDefaults,
   });

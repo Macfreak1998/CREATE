@@ -107,12 +107,13 @@ export async function loadCompanyAggregates(
       ),
       query<Industry>(
         `SELECT i.id, i.slug, i.name, i.sort_order,
+                '[]'::json AS hidden_group_ids,
                 CASE WHEN g.id IS NULL THEN NULL
                      ELSE json_build_object('id', g.id, 'slug', g.slug, 'name', g.name)
                 END AS "group"
            FROM company_industries ci
            JOIN industries i ON i.id = ci.industry_id
-           LEFT JOIN industry_groups g ON g.id = i.group_id
+           LEFT JOIN industry_groups g ON g.id = i.group_id AND g.hidden = false
           WHERE ci.company_id = $1
           ORDER BY (i.group_id IS NULL), g.sort_order, g.name, i.sort_order, i.name`,
         [companyId]

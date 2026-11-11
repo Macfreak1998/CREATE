@@ -1,18 +1,27 @@
 import { graphCategoryColor, type GraphRadialIndustry, type GraphTreeNode } from "@b2b/shared";
 
-const SIZE_AREA: Record<string, number> = {
-  "1-10": 5,
-  "11-50": 30,
-  "51-250": 150,
-  "251-1000": 625,
-  "gt-1000": 2000,
-};
-
 const NO_STAGE = "__none__";
+const MISSING_AREA = 8;
+const AREA_GROWTH = 2.2;
 
-export function companyArea(sizeSlug: string | null): number {
-  if (!sizeSlug) return 8;
-  return SIZE_AREA[sizeSlug] ?? 8;
+/** Rang aus der Reihenfolge der Größenklassen. Der Name bleibt Text. */
+export function areaForSizeOrder(
+  order: number | null,
+  ranks: ReadonlyMap<number, number>
+): number {
+  if (order == null) return MISSING_AREA;
+  const rank = ranks.get(order);
+  if (rank == null) return MISSING_AREA;
+  return MISSING_AREA * Math.pow(AREA_GROWTH, rank);
+}
+
+export function sizeRanks(orders: Iterable<number | null>): Map<number, number> {
+  const unique = [
+    ...new Set(
+      [...orders].filter((order): order is number => order != null)
+    ),
+  ].sort((a, b) => a - b);
+  return new Map(unique.map((order, index) => [order, index]));
 }
 
 export interface PackCompany {
@@ -31,6 +40,7 @@ export interface PackIndustry {
   industryId: number;
   name: string;
   color: string;
+  path: string;
   companies: PackCompany[];
 }
 
@@ -46,7 +56,10 @@ function companyLeaves(node: GraphTreeNode): GraphTreeNode[] {
   return found;
 }
 
-function toPackCompany(node: GraphTreeNode): PackCompany {
+function toPackCompany(
+  node: GraphTreeNode,
+  ranks: ReadonlyMap<number, number>
+): PackCompany {
   return {
     nodeId: node.id,
     companyId: node.company_id ?? node.id,
@@ -55,34 +68,45 @@ function toPackCompany(node: GraphTreeNode): PackCompany {
     anonymous: node.anonymous,
     sizeSlug: node.size_slug,
     sizeName: node.size_name,
-    area: companyArea(node.size_slug),
+    area: areaForSizeOrder(node.size_sort_order, ranks),
   };
 }
 
 /** Branchen-Ebenen als eine Pack-Ebene. Gruppen dazwischen fallen weg. */
 export function collectPack(tree: GraphTreeNode[]): PackIndustry[] {
-  const industries: PackIndustry[] = [];
+  const drafts: { node: GraphTreeNode; path: string }[] = [];
 
-  const walk = (node: GraphTreeNode) => {
-    if (node.kind === "layer" && node.industry_id != null) {
-      industries.push({
-        layerId: node.id,
-        industryId: node.industry_id,
-        name: node.name,
-        color: graphCategoryColor(node.industry_id),
-        companies: companyLeaves(node).map(toPackCompany),
-      });
+  const walk = (node: GraphTreeNode, ancestors: string[]) => {
+    if (node.kind !== "layer") return;
+    if (node.industry_id != null) {
+      const path = node.slug ? [...ancestors, node.slug].join("/") : "";
+      drafts.push({ node, path });
       return;
     }
+    const next = node.slug ? [...ancestors, node.slug] : ancestors;
     for (const child of node.children) {
-      if (child.kind === "layer") walk(child);
+      if (child.kind === "layer") walk(child, next);
     }
   };
 
   for (const node of tree) {
-    if (node.kind === "layer") walk(node);
+    if (node.kind === "layer") walk(node, []);
   }
-  return industries;
+
+  const ranks = sizeRanks(
+    drafts.flatMap(({ node }) =>
+      companyLeaves(node).map((company) => company.size_sort_order)
+    )
+  );
+
+  return drafts.map(({ node, path }) => ({
+    layerId: node.id,
+    industryId: node.industry_id ?? 0,
+    name: node.name,
+    color: graphCategoryColor(node.industry_id ?? 0),
+    path,
+    companies: companyLeaves(node).map((company) => toPackCompany(company, ranks)),
+  }));
 }
 
 export function packStats(industries: PackIndustry[]): {
@@ -98,19 +122,6 @@ export function packStats(industries: PackIndustry[]): {
     }
   }
   return { companies: ids.size, instances };
-}
-
-export function instanceCount(
-  industries: PackIndustry[],
-  companyId: string
-): number {
-  let count = 0;
-  for (const industry of industries) {
-    for (const company of industry.companies) {
-      if (company.companyId === companyId) count += 1;
-    }
-  }
-  return count;
 }
 
 export function industryNamesFor(
@@ -195,7 +206,7 @@ function pushCompanies(
  */
 export function collectRadial(
   tree: GraphTreeNode[],
-  groupId: number | null
+  industryIds: ReadonlySet<number> | null
 ): { stages: RadialStage[]; companies: RadialCompany[] } {
   const stages: RadialStage[] = [];
   const placements: Placement[] = [];
@@ -242,7 +253,7 @@ export function collectRadial(
       if (!stageNames.includes(placement.stageName)) stageNames.push(placement.stageName);
     }
     const industries = chosen.industries
-      .filter((industry) => groupId != null && industry.group_id === groupId)
+      .filter((industry) => industryIds != null && industryIds.has(industry.id))
       .map((industry) => ({
         id: industry.id,
         name: industry.name,
@@ -412,6 +423,47 @@ export function layoutRing(
     stages: placedStages,
     industries: placedIndustries,
   };
+}
+
+export interface CompanyLabelPlacement {
+  radius: number;
+  visible: boolean;
+}
+
+function angularGap(a: number, b: number): number {
+  const diff = Math.abs(a - b) % (Math.PI * 2);
+  return Math.min(diff, Math.PI * 2 - diff);
+}
+
+/** Firmennamen am Ring nach außen staffeln, wenn sie sich sonst überdecken. */
+export function placeCompanyLabels(
+  companies: { companyId: string; angle: number; name: string }[]
+): Map<string, CompanyLabelPlacement> {
+  const sorted = companies.slice().sort((a, b) => a.angle - b.angle);
+  const lanes = [RING.label, RING.label + 18, RING.label + 36];
+  const result = new Map<string, CompanyLabelPlacement>();
+  sorted.forEach((company, index) => {
+    if (sorted.length < 2) {
+      result.set(company.companyId, { radius: RING.label, visible: true });
+      return;
+    }
+    const prev = sorted[(index - 1 + sorted.length) % sorted.length];
+    const next = sorted[(index + 1) % sorted.length];
+    const gap = Math.min(
+      angularGap(company.angle, prev?.angle ?? company.angle),
+      angularGap(company.angle, next?.angle ?? company.angle)
+    );
+    const outer = lanes[lanes.length - 1] ?? RING.label;
+    const needed = (Math.max(company.name.length, 1) * 3.4) / outer;
+    const lane = gap < needed ? index % lanes.length : 0;
+    const radius = lanes[lane] ?? RING.label;
+    const laneNeeded = (Math.max(company.name.length, 1) * 3.4) / radius;
+    result.set(company.companyId, {
+      radius,
+      visible: gap >= laneNeeded * 0.55,
+    });
+  });
+  return result;
 }
 
 export function stageDistribution(

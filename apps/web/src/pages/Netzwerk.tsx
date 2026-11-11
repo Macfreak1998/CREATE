@@ -91,7 +91,7 @@ export default function Netzwerk() {
           <h1 className="text-3xl font-semibold">Netzwerk</h1>
           <p className="mt-1 max-w-2xl text-sm text-slate-600">
             {scope.data?.layout === "pack"
-              ? "Jede Branche ist ein Kreis, Firmen sitzen darin. Ein Klick hebt alle Stellen derselben Firma hervor."
+              ? "Jede Branche ist ein Kreis, Firmen sitzen darin. Ein Klick auf den Kreis öffnet die Ebene."
               : scope.data?.layout === "radial"
                 ? "Jede Firma steht einmal auf dem Ring. Ein Segment filtert auf diese Stufe."
                 : "Klicken Sie auf eine Ebene, um hineinzuzoomen. Mit Escape oder über den Pfad geht es zurück."}
@@ -147,7 +147,10 @@ export default function Netzwerk() {
       ) : (
         <div className="relative mt-4 h-[70vh] overflow-hidden rounded-lg border border-line bg-white">
           {scope.data?.layout === "pack" ? (
-            <CirclePackView tree={scope.data.tree ?? []} />
+            <CirclePackView
+              tree={scope.data.tree ?? []}
+              onOpenLayer={(path) => openPath(scopePath ? `${scopePath}/${path}` : path)}
+            />
           ) : scope.data?.layout === "radial" ? (
             <RadialRingView
               tree={scope.data.tree ?? []}

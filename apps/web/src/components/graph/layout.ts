@@ -67,6 +67,8 @@ export interface PieSliceNodeData extends Record<string, unknown> {
   labelY: number;
   width: number;
   height: number;
+  labelOutside: boolean;
+  leader: { x1: number; y1: number; x2: number; y2: number } | null;
 }
 
 export interface PieCenterNodeData extends Record<string, unknown> {
@@ -208,9 +210,15 @@ function computePieLayout(scope: GraphScope): LayoutResult {
   const angles = sliceAngles(children.map((child) => child.weight));
   applyDiagramColors(scope, children);
 
+  const labelRadii = outsideLabelRadii(
+    angles.map((angle) => angle ?? { start: 0, end: 0 })
+  );
   const nodes: Node<GraphNodeData>[] = children.map((child, index) => {
     const angle = angles[index] ?? { start: 0, end: 0 };
-    const geometry = sliceGeometry(angle.start, angle.end);
+    const geometry = sliceGeometry(angle.start, angle.end, {
+      labelRadius: labelRadii[index] ?? (PIE_OUTER + PIE_INNER) / 2,
+      label: child.label,
+    });
     return {
       id: child.id,
       type: "graphPieSlice",
@@ -228,6 +236,8 @@ function computePieLayout(scope: GraphScope): LayoutResult {
         labelY: geometry.labelY,
         width: geometry.width,
         height: geometry.height,
+        labelOutside: geometry.labelOutside,
+        leader: geometry.leader,
       },
       width: geometry.width,
       height: geometry.height,
@@ -622,7 +632,45 @@ function polar(degrees: number, radius: number): { x: number; y: number } {
   };
 }
 
-function sliceGeometry(start: number, end: number): {
+const PIE_OUTSIDE_SPAN = 24;
+
+function sliceSpan(start: number, end: number): number {
+  return Math.min(360, (end - start + 360) % 360 || 360);
+}
+
+function outsideLabelRadii(angles: { start: number; end: number }[]): number[] {
+  const mids = angles.map((angle) => {
+    const span = sliceSpan(angle.start, angle.end);
+    return angle.start + span / 2;
+  });
+  const radii = angles.map((angle) =>
+    sliceSpan(angle.start, angle.end) < PIE_OUTSIDE_SPAN
+      ? PIE_OUTER + 28
+      : (PIE_OUTER + PIE_INNER) / 2
+  );
+  for (let index = 0; index < radii.length; index += 1) {
+    const span = sliceSpan(angles[index]?.start ?? 0, angles[index]?.end ?? 0);
+    if (span >= PIE_OUTSIDE_SPAN) continue;
+    for (let other = 0; other < index; other += 1) {
+      const otherSpan = sliceSpan(angles[other]?.start ?? 0, angles[other]?.end ?? 0);
+      if (otherSpan >= PIE_OUTSIDE_SPAN) continue;
+      const distance = Math.abs((mids[index] ?? 0) - (mids[other] ?? 0));
+      const gap = Math.min(distance, 360 - distance);
+      const current = radii[index] ?? PIE_OUTER + 28;
+      const previous = radii[other] ?? PIE_OUTER + 28;
+      if (gap < 16 && Math.abs(current - previous) < 12) {
+        radii[index] = Math.max(current, previous) + 22;
+      }
+    }
+  }
+  return radii;
+}
+
+function sliceGeometry(
+  start: number,
+  end: number,
+  label: { labelRadius: number; label: string }
+): {
   x: number;
   y: number;
   width: number;
@@ -630,8 +678,12 @@ function sliceGeometry(start: number, end: number): {
   path: string;
   labelX: number;
   labelY: number;
+  labelOutside: boolean;
+  leader: { x1: number; y1: number; x2: number; y2: number } | null;
 } {
-  const span = Math.min(360, (end - start + 360) % 360 || 360);
+  const span = sliceSpan(start, end);
+  const outside = span < PIE_OUTSIDE_SPAN;
+  const labelRadius = label.labelRadius;
   const samples: { x: number; y: number }[] = [];
   const steps = Math.max(2, Math.ceil(span / 8));
   for (let step = 0; step <= steps; step += 1) {
@@ -639,15 +691,21 @@ function sliceGeometry(start: number, end: number): {
     samples.push(polar(degrees, PIE_OUTER));
     samples.push(polar(degrees, PIE_INNER));
   }
-  const minX = Math.min(...samples.map((point) => point.x));
-  const minY = Math.min(...samples.map((point) => point.y));
-  const maxX = Math.max(...samples.map((point) => point.x));
-  const maxY = Math.max(...samples.map((point) => point.y));
-  const pad = 2;
-  const originX = minX - pad;
-  const originY = minY - pad;
+  const mid = start + span / 2;
+  const labelPoint = polar(mid, labelRadius);
+  const textWidth = Math.min(148, Math.max(48, label.label.length * 6.5));
+  const bounds = [...samples];
+  if (outside) {
+    bounds.push({ x: labelPoint.x - textWidth / 2, y: labelPoint.y - 18 });
+    bounds.push({ x: labelPoint.x + textWidth / 2, y: labelPoint.y + 18 });
+  }
+  const pad = outside ? 8 : 2;
+  const boxX = Math.min(...bounds.map((point) => point.x)) - pad;
+  const boxY = Math.min(...bounds.map((point) => point.y)) - pad;
+  const boxMaxX = Math.max(...bounds.map((point) => point.x)) + pad;
+  const boxMaxY = Math.max(...bounds.map((point) => point.y)) + pad;
   const local = (point: { x: number; y: number }) =>
-    `${point.x - originX} ${point.y - originY}`;
+    `${point.x - boxX} ${point.y - boxY}`;
 
   let path: string;
   if (span >= 359.9) {
@@ -679,15 +737,25 @@ function sliceGeometry(start: number, end: number): {
     ].join(" ");
   }
 
-  const labelPoint = polar(start + span / 2, (PIE_OUTER + PIE_INNER) / 2);
+  const leaderStart = polar(mid, PIE_OUTER + 2);
+  const leaderEnd = polar(mid, Math.max(PIE_OUTER + 8, labelRadius - 12));
   return {
-    x: originX,
-    y: originY,
-    width: maxX - minX + pad * 2,
-    height: maxY - minY + pad * 2,
+    x: boxX,
+    y: boxY,
+    width: boxMaxX - boxX,
+    height: boxMaxY - boxY,
     path,
-    labelX: labelPoint.x - originX,
-    labelY: labelPoint.y - originY,
+    labelX: labelPoint.x - boxX,
+    labelY: labelPoint.y - boxY,
+    labelOutside: outside,
+    leader: outside
+      ? {
+          x1: leaderStart.x - boxX,
+          y1: leaderStart.y - boxY,
+          x2: leaderEnd.x - boxX,
+          y2: leaderEnd.y - boxY,
+        }
+      : null,
   };
 }
 

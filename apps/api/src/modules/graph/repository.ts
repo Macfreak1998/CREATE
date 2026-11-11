@@ -62,6 +62,7 @@ interface LayerRow {
   child_layer_count: number;
   child_company_count: number;
   radial_industry_group_id: number | null;
+  industry_group_id: number | null;
 }
 
 interface CompanyNodeRow {
@@ -122,6 +123,8 @@ function rowToLayer(row: LayerRow): GraphLayer {
       row.radial_industry_group_id == null
         ? null
         : Number(row.radial_industry_group_id),
+    industry_group_id:
+      row.industry_group_id == null ? null : Number(row.industry_group_id),
   };
 }
 
@@ -167,7 +170,7 @@ function rowToEdge(row: EdgeRow): GraphEdge {
 // freigegebene Firmen und zusaetzlich anonym markierte Entwuerfe mit.
 const LAYER_COLUMNS = `
   n.id, n.parent_id, n.name, n.slug, n.description, n.color, n.layout, n.sort_order,
-  n.radial_industry_group_id,
+  n.radial_industry_group_id, n.industry_group_id,
   (SELECT count(*) FROM graph_nodes cl
     WHERE cl.parent_id = n.id AND cl.kind = 'layer')::int AS child_layer_count,
   (SELECT count(*) FROM graph_nodes cc
@@ -489,14 +492,23 @@ async function loadRadialGroup(
   return row ? { id: Number(row.id), name: row.name } : null;
 }
 
+const INDUSTRIES_OF_GROUP_SQL = `
+  SELECT i.id, i.name, i.sort_order
+    FROM industries i
+    JOIN industry_groups g ON g.id = $1
+   WHERE (g.hidden = false AND i.group_id = g.id)
+      OR (g.hidden = true AND EXISTS (
+           SELECT 1 FROM industry_hidden_groups m
+            WHERE m.industry_id = i.id AND m.group_id = g.id
+         ))
+   ORDER BY i.sort_order, i.name
+`;
+
 async function loadRadialIndustries(
   groupId: number
 ): Promise<GraphRadialIndustry[]> {
   const result = await query<GraphRadialIndustry>(
-    `SELECT id, name, sort_order
-       FROM industries
-      WHERE group_id = $1
-      ORDER BY sort_order, name`,
+    INDUSTRIES_OF_GROUP_SQL,
     [groupId]
   );
   return result.rows.map((row) => ({
@@ -611,6 +623,7 @@ async function loadViewTree(
         isCompany && row.size_sort_order != null
           ? Number(row.size_sort_order)
           : null,
+      slug: isCompany ? null : row.slug,
       industries: isCompany
         ? (industriesByCompany.get(row.company_id ?? "") ?? [])
         : [],
@@ -1006,13 +1019,14 @@ export async function addCompanyNode(
 }
 
 /**
- * Legt unter der offenen Ebene die Branchenstruktur an:
- * Branchengruppen (Torte ihrer Branchen), darunter je Branche eine Ebene
- * (Portfolio der Firmen). Ein erneuter Lauf ergaenzt nur noch Fehlendes und
- * zieht Firmen, die noch direkt an der Gruppe haengen, in die Branchen-Ebene.
+ * Legt eine Branchengruppe unter der offenen Ebene an:
+ * die Gruppe als Torte, darunter je Branche eine Ebene im Portfolio,
+ * darin die Firmen. Ein erneuter Lauf ergaenzt nur Fehlendes und laesst
+ * eine bereits gewaehlte Darstellungsform stehen.
  */
 export async function seedIndustryLayers(
-  parentId: string | null
+  parentId: string | null,
+  industryGroupId: number
 ): Promise<GraphSeedIndustriesResult> {
   return withTransaction(async (client) => {
     if (parentId) {
@@ -1032,8 +1046,13 @@ export async function seedIndustryLayers(
     }>(
       `SELECT id, name, description
          FROM industry_groups
-        ORDER BY sort_order, name`
+        WHERE id = $1`,
+      [industryGroupId]
     );
+    const group = groups.rows[0];
+    if (!group) {
+      throw new GraphError(404, "Branchengruppe nicht gefunden.");
+    }
 
     const slugRows = await client.query<{ slug: string }>(
       `SELECT slug FROM graph_nodes
@@ -1053,7 +1072,7 @@ export async function seedIndustryLayers(
     let companiesAdded = 0;
     let companiesSkipped = 0;
 
-    for (const [index, group] of groups.rows.entries()) {
+    {
       const existing = await client.query<{ id: string }>(
         `SELECT id FROM graph_nodes
           WHERE kind = 'layer'
@@ -1076,7 +1095,7 @@ export async function seedIndustryLayers(
             group.name,
             slug,
             group.description,
-            graphPaletteColor(index),
+            graphPaletteColor(sortOrder),
             sortOrder,
             group.id,
           ]
@@ -1084,19 +1103,10 @@ export async function seedIndustryLayers(
         groupLayerId = inserted.rows[0]!.id;
         sortOrder += 1;
         layersCreated += 1;
-      } else {
-        await client.query(
-          `UPDATE graph_nodes
-              SET layout = 'pie', updated_at = now()
-            WHERE id = $1 AND layout IS DISTINCT FROM 'pie'`,
-          [groupLayerId]
-        );
       }
 
       const industries = await client.query<{ id: number; name: string }>(
-        `SELECT id, name FROM industries
-          WHERE group_id = $1
-          ORDER BY sort_order, name`,
+        INDUSTRIES_OF_GROUP_SQL,
         [group.id]
       );
 
@@ -1142,13 +1152,6 @@ export async function seedIndustryLayers(
           industryLayerId = inserted.rows[0]!.id;
           childSort += 1;
           layersCreated += 1;
-        } else {
-          await client.query(
-            `UPDATE graph_nodes
-                SET layout = 'xy', updated_at = now()
-              WHERE id = $1 AND layout IS DISTINCT FROM 'xy'`,
-            [industryLayerId]
-          );
         }
 
         const placed = await client.query<{ total: number; added: number }>(
@@ -1190,8 +1193,15 @@ export async function seedIndustryLayers(
               SELECT 1
                 FROM company_industries ci
                 JOIN industries i ON i.id = ci.industry_id
+                JOIN industry_groups g ON g.id = $2
                WHERE ci.company_id = n.company_id
-                 AND i.group_id = $2
+                 AND (
+                   (g.hidden = false AND i.group_id = g.id)
+                   OR (g.hidden = true AND EXISTS (
+                     SELECT 1 FROM industry_hidden_groups m
+                      WHERE m.industry_id = i.id AND m.group_id = g.id
+                   ))
+                 )
             )`,
         [groupLayerId, group.id]
       );

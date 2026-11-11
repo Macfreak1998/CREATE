@@ -67,8 +67,12 @@ import {
   listTechnologyGroups,
 } from "../taxonomies/technologies.js";
 import {
+  IndustryAssignmentError,
+  assertHiddenChange,
+  assertIndustryGroups,
   listIndustries,
   listIndustryGroups,
+  replaceHiddenMemberships,
 } from "../taxonomies/industries.js";
 import { sendMailStrict } from "../../lib/mailer.js";
 import { logger } from "../../lib/logger.js";
@@ -997,7 +1001,7 @@ function industriesAdminRouter(): Router {
   router.get(
     "/",
     asyncHandler(async (_req: Request, res: Response) => {
-      res.json(await listIndustries());
+      res.json(await listIndustries({ admin: true }));
     })
   );
 
@@ -1005,18 +1009,35 @@ function industriesAdminRouter(): Router {
     "/",
     validate(AdminIndustryInputSchema),
     asyncHandler(async (req: Request, res: Response) => {
-      const { name, group_id } = req.body as AdminIndustryInput;
-      const existing = await query<{ slug: string }>(
-        "SELECT slug FROM industries"
-      );
-      const slug = uniqueSlug(name, new Set(existing.rows.map((r) => r.slug)));
-      const sortOrder = await nextIndustrySortOrder(group_id);
-      await query(
-        `INSERT INTO industries (slug, name, group_id, sort_order)
-         VALUES ($1, $2, $3, $4)`,
-        [slug, name, group_id, sortOrder]
-      );
-      res.status(201).json(await listIndustries());
+      const { name, group_id, hidden_group_ids } = req.body as AdminIndustryInput;
+      try {
+        await withTransaction(async (client) => {
+          const hiddenIds = await assertIndustryGroups(
+            client,
+            group_id,
+            hidden_group_ids
+          );
+          const existing = await client.query<{ slug: string }>(
+            "SELECT slug FROM industries"
+          );
+          const slug = uniqueSlug(name, new Set(existing.rows.map((r) => r.slug)));
+          const sortOrder = await nextIndustrySortOrder(group_id);
+          const inserted = await client.query<{ id: number }>(
+            `INSERT INTO industries (slug, name, group_id, sort_order)
+             VALUES ($1, $2, $3, $4)
+             RETURNING id`,
+            [slug, name, group_id, sortOrder]
+          );
+          await replaceHiddenMemberships(client, inserted.rows[0]!.id, hiddenIds);
+        });
+      } catch (err) {
+        if (err instanceof IndustryAssignmentError) {
+          res.status(err.status).json({ error: err.message });
+          return;
+        }
+        throw err;
+      }
+      res.status(201).json(await listIndustries({ admin: true }));
     })
   );
 
@@ -1024,37 +1045,55 @@ function industriesAdminRouter(): Router {
     "/:id",
     validate(AdminIndustryInputSchema),
     asyncHandler(async (req: Request, res: Response) => {
-      const { name, group_id } = req.body as AdminIndustryInput;
-      const current = await query<{ group_id: number | null }>(
-        "SELECT group_id FROM industries WHERE id = $1",
-        [req.params.id]
-      );
-      if (current.rowCount === 0) {
-        res.status(404).json({ error: "Eintrag nicht gefunden." });
-        return;
+      const { name, group_id, hidden_group_ids } = req.body as AdminIndustryInput;
+      try {
+        const updated = await withTransaction(async (client) => {
+          const hiddenIds = await assertIndustryGroups(
+            client,
+            group_id,
+            hidden_group_ids
+          );
+          const current = await client.query<{ group_id: number | null }>(
+            "SELECT group_id FROM industries WHERE id = $1",
+            [req.params.id]
+          );
+          if (current.rowCount === 0) return false;
+          const existing = await client.query<{ slug: string }>(
+            "SELECT slug FROM industries WHERE id <> $1",
+            [req.params.id]
+          );
+          const newSlug = uniqueSlug(
+            name,
+            new Set(existing.rows.map((r) => r.slug))
+          );
+          const groupChanged = current.rows[0]!.group_id !== group_id;
+          const sortOrder = groupChanged
+            ? await nextIndustrySortOrder(group_id)
+            : null;
+          await client.query(
+            `UPDATE industries
+                SET name = $2,
+                    slug = $3,
+                    group_id = $4,
+                    sort_order = COALESCE($5, sort_order)
+              WHERE id = $1`,
+            [req.params.id, name, newSlug, group_id, sortOrder]
+          );
+          await replaceHiddenMemberships(client, Number(req.params.id), hiddenIds);
+          return true;
+        });
+        if (!updated) {
+          res.status(404).json({ error: "Eintrag nicht gefunden." });
+          return;
+        }
+      } catch (err) {
+        if (err instanceof IndustryAssignmentError) {
+          res.status(err.status).json({ error: err.message });
+          return;
+        }
+        throw err;
       }
-      const existing = await query<{ slug: string }>(
-        "SELECT slug FROM industries WHERE id <> $1",
-        [req.params.id]
-      );
-      const newSlug = uniqueSlug(
-        name,
-        new Set(existing.rows.map((r) => r.slug))
-      );
-      const groupChanged = current.rows[0].group_id !== group_id;
-      const sortOrder = groupChanged
-        ? await nextIndustrySortOrder(group_id)
-        : null;
-      await query(
-        `UPDATE industries
-            SET name = $2,
-                slug = $3,
-                group_id = $4,
-                sort_order = COALESCE($5, sort_order)
-          WHERE id = $1`,
-        [req.params.id, name, newSlug, group_id, sortOrder]
-      );
-      res.json(await listIndustries());
+      res.json(await listIndustries({ admin: true }));
     })
   );
 
@@ -1108,7 +1147,7 @@ function industriesAdminRouter(): Router {
         res.status(404).json({ error: "Eintrag nicht gefunden." });
         return;
       }
-      res.json(await listIndustries());
+      res.json(await listIndustries({ admin: true }));
     })
   );
 
@@ -1141,7 +1180,7 @@ function industryGroupsAdminRouter(): Router {
   router.get(
     "/",
     asyncHandler(async (_req: Request, res: Response) => {
-      res.json(await listIndustryGroups());
+      res.json(await listIndustryGroups({ includeHidden: true }));
     })
   );
 
@@ -1149,18 +1188,18 @@ function industryGroupsAdminRouter(): Router {
     "/",
     validate(IndustryGroupInputSchema),
     asyncHandler(async (req: Request, res: Response) => {
-      const { name, description, sort_order } =
+      const { name, description, sort_order, hidden } =
         req.body as IndustryGroupInput;
       const existing = await query<{ slug: string }>(
         "SELECT slug FROM industry_groups"
       );
       const slug = uniqueSlug(name, new Set(existing.rows.map((r) => r.slug)));
       await query(
-        `INSERT INTO industry_groups (slug, name, description, sort_order)
-         VALUES ($1, $2, $3, $4)`,
-        [slug, name, description || null, sort_order]
+        `INSERT INTO industry_groups (slug, name, description, sort_order, hidden)
+         VALUES ($1, $2, $3, $4, $5)`,
+        [slug, name, description || null, sort_order, hidden]
       );
-      res.status(201).json(await listIndustryGroups());
+      res.status(201).json(await listIndustryGroups({ includeHidden: true }));
     })
   );
 
@@ -1168,27 +1207,44 @@ function industryGroupsAdminRouter(): Router {
     "/:id",
     validate(IndustryGroupInputSchema),
     asyncHandler(async (req: Request, res: Response) => {
-      const { name, description, sort_order } =
+      const { name, description, sort_order, hidden } =
         req.body as IndustryGroupInput;
-      const existing = await query<{ slug: string }>(
-        "SELECT slug FROM industry_groups WHERE id <> $1",
-        [req.params.id]
-      );
-      const newSlug = uniqueSlug(
-        name,
-        new Set(existing.rows.map((r) => r.slug))
-      );
-      const result = await query(
-        `UPDATE industry_groups
-            SET name = $2, slug = $3, description = $4, sort_order = $5
-          WHERE id = $1`,
-        [req.params.id, name, newSlug, description || null, sort_order]
-      );
-      if (result.rowCount === 0) {
-        res.status(404).json({ error: "Gruppe nicht gefunden." });
-        return;
+      try {
+        const updated = await withTransaction(async (client) => {
+          const current = await client.query<{ id: number }>(
+            `SELECT id FROM industry_groups WHERE id = $1`,
+            [req.params.id]
+          );
+          if (current.rowCount === 0) return false;
+          await assertHiddenChange(client, Number(req.params.id), hidden);
+          const existing = await client.query<{ slug: string }>(
+            "SELECT slug FROM industry_groups WHERE id <> $1",
+            [req.params.id]
+          );
+          const newSlug = uniqueSlug(
+            name,
+            new Set(existing.rows.map((r) => r.slug))
+          );
+          await client.query(
+            `UPDATE industry_groups
+                SET name = $2, slug = $3, description = $4, sort_order = $5, hidden = $6
+              WHERE id = $1`,
+            [req.params.id, name, newSlug, description || null, sort_order, hidden]
+          );
+          return true;
+        });
+        if (!updated) {
+          res.status(404).json({ error: "Gruppe nicht gefunden." });
+          return;
+        }
+      } catch (err) {
+        if (err instanceof IndustryAssignmentError) {
+          res.status(err.status).json({ error: err.message });
+          return;
+        }
+        throw err;
       }
-      res.json(await listIndustryGroups());
+      res.json(await listIndustryGroups({ includeHidden: true }));
     })
   );
 

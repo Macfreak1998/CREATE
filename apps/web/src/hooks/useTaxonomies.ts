@@ -50,6 +50,13 @@ export function useIndustryGroups() {
   });
 }
 
+export function useAdminIndustryGroups() {
+  return useQuery<IndustryGroup[]>({
+    queryKey: ["admin", "industry-groups"],
+    queryFn: () => api.get<IndustryGroup[]>("/api/admin/industry-groups"),
+  });
+}
+
 export function useKnowhows() {
   return useQuery<Knowhow[]>({
     queryKey: ["knowhows"],

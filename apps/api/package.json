@@ -10,9 +10,9 @@
     "start": "node dist/server.js",
     "lint": "eslint \"src/**/*.ts\"",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "migrate:up": "node-pg-migrate up --migrations-dir src/db/migrations --migration-file-language sql --envPath ../../.env --database-url-var DATABASE_URL",
-    "migrate:down": "node-pg-migrate down --migrations-dir src/db/migrations --migration-file-language sql --envPath ../../.env --database-url-var DATABASE_URL",
-    "migrate:prod": "node-pg-migrate up --migrations-dir apps/api/migrations --migration-file-language sql --database-url-var DATABASE_URL",
+    "migrate:up": "node-pg-migrate-esm up --migrations-dir src/db/migrations --migration-file-language sql --envPath ../../.env --database-url-var DATABASE_URL",
+    "migrate:down": "node-pg-migrate-esm down --migrations-dir src/db/migrations --migration-file-language sql --envPath ../../.env --database-url-var DATABASE_URL",
+    "migrate:prod": "node-pg-migrate-esm up --migrations-dir apps/api/migrations --migration-file-language sql --database-url-var DATABASE_URL",
     "admin:create": "NODE_OPTIONS=--conditions=development tsx src/scripts/create-admin.ts",
     "seed:demo": "NODE_OPTIONS=--conditions=development tsx src/scripts/seed-companies.ts",
     "import:partners": "NODE_OPTIONS=--conditions=development tsx src/scripts/import-partners.ts"

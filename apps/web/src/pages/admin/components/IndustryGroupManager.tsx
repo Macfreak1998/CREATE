@@ -14,11 +14,13 @@ export default function IndustryGroupManager() {
 
   const [newName, setNewName] = useState("");
   const [newDescription, setNewDescription] = useState("");
+  const [newHidden, setNewHidden] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editValue, setEditValue] = useState<IndustryGroupInput>({
     name: "",
     description: "",
     sort_order: 0,
+    hidden: false,
   });
   const [error, setError] = useState<string | null>(null);
 
@@ -38,6 +40,7 @@ export default function IndustryGroupManager() {
     onSuccess: (groups) => {
       setNewName("");
       setNewDescription("");
+      setNewHidden(false);
       invalidate(groups);
     },
     onError,
@@ -74,6 +77,7 @@ export default function IndustryGroupManager() {
       name: newName.trim(),
       description: newDescription.trim(),
       sort_order: maxSort + 10,
+      hidden: newHidden,
     });
   };
 
@@ -83,7 +87,8 @@ export default function IndustryGroupManager() {
       <p className="mt-1 text-sm text-slate-600">
         Gruppen bündeln Branchen in Suche und Firmenformular. Die
         Beschreibung erscheint dort als Hinweis neben dem Gruppennamen.
-        Branchen ohne Gruppe stehen am Ende der Liste.
+        Branchen ohne Gruppe stehen am Ende der Liste. Eine Gruppe nur für
+        den Netzwerkgraphen ist dort nicht auswählbar.
       </p>
 
       <form onSubmit={onCreate} className="mt-4 grid sm:grid-cols-[1fr_2fr_auto] gap-2">
@@ -104,6 +109,15 @@ export default function IndustryGroupManager() {
         <button type="submit" className="btn-primary" disabled={create.isPending}>
           Anlegen
         </button>
+        <label className="sm:col-span-3 flex items-center gap-2 text-sm text-slate-700">
+          <input
+            type="checkbox"
+            className="checkbox"
+            checked={newHidden}
+            onChange={(e) => setNewHidden(e.target.checked)}
+          />
+          Nur für den Netzwerkgraphen
+        </label>
       </form>
 
       {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
@@ -142,6 +156,17 @@ export default function IndustryGroupManager() {
                   type="number"
                   min={0}
                 />
+                <label className="sm:col-span-3 flex items-center gap-2 text-sm text-slate-700">
+                  <input
+                    type="checkbox"
+                    className="checkbox"
+                    checked={editValue.hidden}
+                    onChange={(e) =>
+                      setEditValue((v) => ({ ...v, hidden: e.target.checked }))
+                    }
+                  />
+                  Nur für den Netzwerkgraphen
+                </label>
                 <button
                   type="button"
                   className="btn-primary text-sm"
@@ -162,6 +187,9 @@ export default function IndustryGroupManager() {
               <div className="flex items-start gap-2">
                 <div className="flex-1 min-w-0">
                   <span className="text-sm font-medium">{group.name}</span>
+                  {group.hidden && (
+                    <span className="ml-2 text-xs text-slate-500">Nur Graph</span>
+                  )}
                   {group.description && (
                     <p className="text-xs text-slate-500 mt-0.5">
                       {group.description}
@@ -180,6 +208,7 @@ export default function IndustryGroupManager() {
                       name: group.name,
                       description: group.description ?? "",
                       sort_order: group.sort_order,
+                      hidden: group.hidden,
                     });
                   }}
                 >
@@ -191,7 +220,7 @@ export default function IndustryGroupManager() {
                   onClick={() => {
                     if (
                       confirm(
-                        `Gruppe „${group.name}“ löschen? Die Branchen bleiben erhalten und rücken zu „Ohne Gruppe“.`
+                        `Gruppe „${group.name}“ löschen? Die Branchen bleiben erhalten und rücken zu „Ohne Gruppe“. Unsichtbare Zuordnungen dieser Gruppe fallen weg.`
                       )
                     ) {
                       del.mutate(group.id);

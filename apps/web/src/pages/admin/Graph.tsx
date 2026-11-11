@@ -42,7 +42,7 @@ import {
   useGraphMutations,
   useGraphScope,
 } from "./components/graph/useGraphAdmin.js";
-import { useIndustryGroups } from "../../hooks/useTaxonomies.js";
+import { useAdminIndustryGroups } from "../../hooks/useTaxonomies.js";
 
 type LayerDialogState = { open: false } | { open: true; layer: GraphLayer | null };
 type EdgeDialogState = { open: false } | { open: true; edge: GraphEdge | null };
@@ -59,7 +59,7 @@ export default function AdminGraph() {
 
   const scope = useGraphScope(parentId);
   const edgeKinds = useGraphEdgeKinds();
-  const industryGroups = useIndustryGroups();
+  const industryGroups = useAdminIndustryGroups();
   const mutations = useGraphMutations({ onError: setError });
 
   const openLayer = (layerId: string | null) => {
@@ -181,16 +181,19 @@ export default function AdminGraph() {
     );
   };
 
-  const seedIndustries = () => {
+  const addIndustryGroup = (industryGroupId: number) => {
     setError(null);
     setSeedNotice(null);
-    mutations.seedIndustries.mutate(parentId, {
-      onSuccess: (result: GraphSeedIndustriesResult) => {
-        setSeedNotice(
-          `${result.layers_created} Ebenen angelegt, ${result.companies_added} Firmen zugeordnet, ${result.companies_skipped} bereits vorhanden.`
-        );
-      },
-    });
+    mutations.seedIndustries.mutate(
+      { parentId, industryGroupId },
+      {
+        onSuccess: (result: GraphSeedIndustriesResult) => {
+          setSeedNotice(
+            `${result.layers_created} Ebenen angelegt, ${result.companies_added} Firmen zugeordnet, ${result.companies_skipped} bereits vorhanden.`
+          );
+        },
+      }
+    );
   };
 
   const submitLayer = (values: LayerFormValues) => {
@@ -317,7 +320,7 @@ export default function AdminGraph() {
                     <option value="">Bitte wählen</option>
                     {(industryGroups.data ?? []).map((group) => (
                       <option key={group.id} value={group.id}>
-                        {group.name}
+                        {group.hidden ? `${group.name} (nur Graph)` : group.name}
                       </option>
                     ))}
                   </select>
@@ -360,11 +363,12 @@ export default function AdminGraph() {
         <div className="mt-4 grid gap-4 lg:grid-cols-3">
           <LayerList
             layers={layers}
+            groups={industryGroups.data ?? []}
             activeDragId={activeDragId}
             onOpen={openLayer}
             onCreate={() => setLayerDialog({ open: true, layer: null })}
-            onSeedIndustries={seedIndustries}
-            seeding={mutations.seedIndustries.isPending}
+            onAddGroup={addIndustryGroup}
+            addingGroup={mutations.seedIndustries.isPending}
             onEdit={(layer) => setLayerDialog({ open: true, layer })}
             onDelete={deleteLayer}
             onMove={reorderLayers}

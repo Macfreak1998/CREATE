@@ -41,12 +41,14 @@ type IndustryCatalogEntry = {
   name: string;
   group_slug: string | null;
   sort_order: number;
+  hidden_group_slugs: string[];
 };
 
 type IndustryGroupCatalogEntry = {
   name: string;
   description: string | null;
   sort_order: number;
+  hidden: boolean;
 };
 
 type TaxonomyCatalog = {
@@ -92,6 +94,7 @@ function catalogToExport(catalog: TaxonomyCatalog): CompanyExportTaxonomies {
         name: value.name,
         description: value.description,
         sort_order: value.sort_order,
+        hidden: value.hidden,
       }))
       .sort((a, b) => a.sort_order - b.sort_order),
     industries: [...catalog.industries.entries()]
@@ -100,6 +103,7 @@ function catalogToExport(catalog: TaxonomyCatalog): CompanyExportTaxonomies {
         name: value.name,
         group_slug: value.group_slug,
         sort_order: value.sort_order,
+        hidden_group_slugs: value.hidden_group_slugs,
       }))
       .sort((a, b) => a.name.localeCompare(b.name, "de")),
     machines: toItems(catalog.machines),
@@ -140,6 +144,7 @@ function mergeCatalogFromExport(
       name: item.name,
       description: item.description ?? null,
       sort_order: item.sort_order ?? 0,
+      hidden: item.hidden ?? false,
     });
   }
   for (const item of taxonomies.industries) {
@@ -147,6 +152,7 @@ function mergeCatalogFromExport(
       name: item.name,
       group_slug: item.group_slug ?? null,
       sort_order: item.sort_order ?? 0,
+      hidden_group_slugs: item.hidden_group_slugs ?? [],
     });
   }
   for (const item of taxonomies.machines) {
@@ -195,6 +201,7 @@ function mergeCatalogFromCompany(
         name: nameFromSlug(slug),
         group_slug: null,
         sort_order: 0,
+        hidden_group_slugs: [],
       });
     }
   }
@@ -303,19 +310,19 @@ async function ensureIndustryGroup(
   if (map.has(slug)) {
     await client.query(
       `UPDATE industry_groups
-          SET name = $2, description = $3, sort_order = $4
+          SET name = $2, description = $3, sort_order = $4, hidden = $5
         WHERE slug = $1`,
-      [slug, value.name, value.description, value.sort_order]
+      [slug, value.name, value.description, value.sort_order, value.hidden]
     );
     return false;
   }
 
   const inserted = await client.query<{ id: number }>(
-    `INSERT INTO industry_groups (slug, name, description, sort_order)
-     VALUES ($1, $2, $3, $4)
+    `INSERT INTO industry_groups (slug, name, description, sort_order, hidden)
+     VALUES ($1, $2, $3, $4, $5)
      ON CONFLICT (slug) DO NOTHING
      RETURNING id`,
-    [slug, value.name, value.description, value.sort_order]
+    [slug, value.name, value.description, value.sort_order, value.hidden]
   );
   if (inserted.rowCount && inserted.rowCount > 0) {
     map.set(slug, inserted.rows[0].id);
@@ -330,12 +337,38 @@ async function ensureIndustryGroup(
     map.set(slug, existing.rows[0].id);
     await client.query(
       `UPDATE industry_groups
-          SET name = $2, description = $3, sort_order = $4
+          SET name = $2, description = $3, sort_order = $4, hidden = $5
         WHERE slug = $1`,
-      [slug, value.name, value.description, value.sort_order]
+      [slug, value.name, value.description, value.sort_order, value.hidden]
     );
   }
   return false;
+}
+
+async function syncHiddenMemberships(
+  client: PoolClient,
+  industryId: number,
+  slugs: string[],
+  groups: Map<string, number>
+): Promise<void> {
+  await client.query(
+    `DELETE FROM industry_hidden_groups WHERE industry_id = $1`,
+    [industryId]
+  );
+  const ids = [
+    ...new Set(
+      slugs
+        .map((slug) => groups.get(slug))
+        .filter((id): id is number => id != null)
+    ),
+  ];
+  if (ids.length === 0) return;
+  await client.query(
+    `INSERT INTO industry_hidden_groups (industry_id, group_id)
+     SELECT $1, gid FROM unnest($2::int[]) AS gid
+     ON CONFLICT DO NOTHING`,
+    [industryId, ids]
+  );
 }
 
 async function ensureIndustry(
@@ -344,9 +377,16 @@ async function ensureIndustry(
   value: IndustryCatalogEntry,
   maps: TaxonomyMaps
 ): Promise<boolean> {
-  const groupId = value.group_slug
+  let groupId = value.group_slug
     ? maps.industryGroups.get(value.group_slug) ?? null
     : null;
+  if (groupId != null) {
+    const group = await client.query<{ hidden: boolean }>(
+      `SELECT hidden FROM industry_groups WHERE id = $1`,
+      [groupId]
+    );
+    if (group.rows[0]?.hidden) groupId = null;
+  }
 
   if (maps.industries.has(slug)) {
     await client.query(
@@ -355,6 +395,15 @@ async function ensureIndustry(
         WHERE slug = $1`,
       [slug, groupId, value.sort_order]
     );
+    const industryId = maps.industries.get(slug);
+    if (industryId != null) {
+      await syncHiddenMemberships(
+        client,
+        industryId,
+        value.hidden_group_slugs,
+        maps.industryGroups
+      );
+    }
     return false;
   }
 
@@ -366,7 +415,14 @@ async function ensureIndustry(
     [slug, value.name, groupId, value.sort_order]
   );
   if (inserted.rowCount && inserted.rowCount > 0) {
-    maps.industries.set(slug, inserted.rows[0].id);
+    const industryId = inserted.rows[0].id;
+    maps.industries.set(slug, industryId);
+    await syncHiddenMemberships(
+      client,
+      industryId,
+      value.hidden_group_slugs,
+      maps.industryGroups
+    );
     return true;
   }
 
@@ -375,12 +431,19 @@ async function ensureIndustry(
     [slug]
   );
   if (existing.rowCount && existing.rowCount > 0) {
-    maps.industries.set(slug, existing.rows[0].id);
+    const industryId = existing.rows[0].id;
+    maps.industries.set(slug, industryId);
     await client.query(
       `UPDATE industries
           SET group_id = $2, sort_order = $3
         WHERE slug = $1`,
       [slug, groupId, value.sort_order]
+    );
+    await syncHiddenMemberships(
+      client,
+      industryId,
+      value.hidden_group_slugs,
+      maps.industryGroups
     );
   }
   return false;
@@ -653,12 +716,14 @@ export async function exportCompanies(
     group_name: string | null;
     group_description: string | null;
     group_sort_order: number | null;
+    group_hidden: boolean | null;
   }>(
     `SELECT i.slug, i.sort_order,
             g.slug AS group_slug,
             g.name AS group_name,
             g.description AS group_description,
-            g.sort_order AS group_sort_order
+            g.sort_order AS group_sort_order,
+            g.hidden AS group_hidden
        FROM industries i
        LEFT JOIN industry_groups g ON g.id = i.group_id`
   );
@@ -671,8 +736,40 @@ export async function exportCompanies(
             name: row.group_name ?? row.group_slug,
             description: row.group_description,
             sort_order: row.group_sort_order ?? 0,
+            hidden: row.group_hidden === true,
           }
         : null,
+    });
+  }
+
+  const hiddenMemberships = new Map<string, string[]>();
+  const hiddenGroupMeta = new Map<string, IndustryGroupCatalogEntry>();
+  const hiddenMembershipResult = await query<{
+    industry_slug: string;
+    group_slug: string;
+    group_name: string;
+    group_description: string | null;
+    group_sort_order: number;
+  }>(
+    `SELECT i.slug AS industry_slug,
+            g.slug AS group_slug,
+            g.name AS group_name,
+            g.description AS group_description,
+            g.sort_order AS group_sort_order
+       FROM industry_hidden_groups m
+       JOIN industries i ON i.id = m.industry_id
+       JOIN industry_groups g ON g.id = m.group_id
+      ORDER BY g.sort_order, g.name`
+  );
+  for (const row of hiddenMembershipResult.rows) {
+    const list = hiddenMemberships.get(row.industry_slug) ?? [];
+    list.push(row.group_slug);
+    hiddenMemberships.set(row.industry_slug, list);
+    hiddenGroupMeta.set(row.group_slug, {
+      name: row.group_name,
+      description: row.group_description,
+      sort_order: row.group_sort_order,
+      hidden: true,
     });
   }
 
@@ -703,9 +800,14 @@ export async function exportCompanies(
         name: industry.name,
         group_slug: meta?.group_slug ?? null,
         sort_order: meta?.sort_order ?? 0,
+        hidden_group_slugs: hiddenMemberships.get(industry.slug) ?? [],
       });
       if (meta?.group_slug && meta.group) {
         catalog.industryGroups.set(meta.group_slug, meta.group);
+      }
+      for (const groupSlug of hiddenMemberships.get(industry.slug) ?? []) {
+        const hiddenGroup = hiddenGroupMeta.get(groupSlug);
+        if (hiddenGroup) catalog.industryGroups.set(groupSlug, hiddenGroup);
       }
     }
     for (const machine of admin.machines) {

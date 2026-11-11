@@ -24,15 +24,19 @@ export const IndustryGroupSchema = z.object({
   name: z.string(),
   description: z.string().nullable(),
   sort_order: z.number().int(),
+  hidden: z.boolean(),
 });
 export type IndustryGroup = z.infer<typeof IndustryGroupSchema>;
 
 // Branchen sind gruppiert und manuell sortierbar. group ist null,
 // solange keine Gruppe zugeordnet wurde ("Ohne Gruppe").
+// hidden_group_ids verweist auf unsichtbare Gruppen und ist in der
+// öffentlichen Liste leer.
 export const IndustrySchema = TaxonomySchema.extend({
   group: IndustryGroupSchema.pick({ id: true, slug: true, name: true })
     .nullable(),
   sort_order: z.number().int(),
+  hidden_group_ids: z.array(z.number().int().positive()).default([]),
 });
 export type Industry = z.infer<typeof IndustrySchema>;
 
@@ -439,6 +443,11 @@ export const AdminIndustryInputSchema = z.object({
     .nullable()
     .optional()
     .default(null),
+  hidden_group_ids: z
+    .array(z.number().int().positive())
+    .max(50)
+    .optional()
+    .default([]),
 });
 export type AdminIndustryInput = z.infer<typeof AdminIndustryInputSchema>;
 
@@ -463,6 +472,7 @@ export const IndustryGroupInputSchema = z.object({
   name: z.string().trim().min(1).max(120),
   description: z.string().trim().max(2000).optional().default(""),
   sort_order: z.coerce.number().int().min(0).max(9999).optional().default(0),
+  hidden: z.boolean().optional().default(false),
 });
 export type IndustryGroupInput = z.infer<typeof IndustryGroupInputSchema>;
 
@@ -740,11 +750,13 @@ const ExportTechnologyGroupSchema = ExportTaxonomyItemSchema.extend({
 const ExportIndustryItemSchema = ExportTaxonomyItemSchema.extend({
   group_slug: z.string().nullable().optional().default(null),
   sort_order: z.number().int().optional().default(0),
+  hidden_group_slugs: z.array(z.string()).optional().default([]),
 });
 
 const ExportIndustryGroupSchema = ExportTaxonomyItemSchema.extend({
   description: z.string().nullable().optional().default(null),
   sort_order: z.number().int().optional().default(0),
+  hidden: z.boolean().optional().default(false),
 });
 
 export const CompanyExportTaxonomiesSchema = z.object({
@@ -844,6 +856,7 @@ export const GraphLayerSchema = z.object({
   child_layer_count: z.number().int(),
   child_company_count: z.number().int(),
   radial_industry_group_id: z.number().int().positive().nullable(),
+  industry_group_id: z.number().int().positive().nullable(),
 });
 export type GraphLayer = z.infer<typeof GraphLayerSchema>;
 
@@ -868,6 +881,7 @@ export interface GraphTreeNode {
   size_slug: string | null;
   size_name: string | null;
   size_sort_order: number | null;
+  slug: string | null;
   industries: GraphTreeIndustry[];
   children: GraphTreeNode[];
 }
@@ -886,6 +900,7 @@ export const GraphTreeNodeSchema: z.ZodType<GraphTreeNode> = z.lazy(() =>
     size_slug: z.string().nullable(),
     size_name: z.string().nullable(),
     size_sort_order: z.number().int().nullable(),
+    slug: z.string().nullable(),
     industries: z.array(GraphTreeIndustrySchema),
     children: z.array(GraphTreeNodeSchema),
   })
@@ -1054,6 +1069,7 @@ export type GraphRootLayoutUpdate = z.infer<typeof GraphRootLayoutUpdateSchema>;
 
 export const GraphSeedIndustriesInputSchema = z.object({
   parent_id: z.string().uuid().nullable().optional().default(null),
+  industry_group_id: z.number().int().positive(),
 });
 export type GraphSeedIndustriesInput = z.infer<
   typeof GraphSeedIndustriesInputSchema

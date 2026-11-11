@@ -205,14 +205,27 @@ export function PieSliceNode({ id, data }: NodeProps<Node<PieSliceNodeData>>) {
             {data.detail ? ` — ${data.detail}` : ""}
           </title>
         </path>
+        {data.leader && (
+          <line
+            x1={data.leader.x1}
+            y1={data.leader.y1}
+            x2={data.leader.x2}
+            y2={data.leader.y2}
+            stroke="#385a46"
+            strokeWidth={1}
+          />
+        )}
       </svg>
       <div
-        className="absolute max-w-[8.5rem] -translate-x-1/2 -translate-y-1/2 text-center"
+        className={[
+          "absolute -translate-x-1/2 -translate-y-1/2 text-center",
+          data.labelOutside ? "max-w-[9.5rem]" : "max-w-[8.5rem]",
+        ].join(" ")}
         style={{
           left: data.labelX,
           top: data.labelY,
           pointerEvents: "none",
-          textShadow: "0 0 6px #fff, 0 0 6px #fff",
+          textShadow: data.labelOutside ? undefined : "0 0 6px #fff, 0 0 6px #fff",
         }}
       >
         <div className="line-clamp-3 text-xs font-semibold leading-tight text-ink">
