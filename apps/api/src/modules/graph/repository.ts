@@ -1020,14 +1020,17 @@ export async function addCompanyNode(
 
 /**
  * Legt eine Branchengruppe unter der offenen Ebene an:
- * die Gruppe als Torte, darunter je Branche eine Ebene im Portfolio,
- * darin die Firmen. Ein erneuter Lauf ergaenzt nur Fehlendes und laesst
+ * die Gruppe als Torte, darunter je Branche eine Ebene als Ring,
+ * darin die Firmen. Der Ring nutzt den gewaehlten Anwendungsbereich.
+ * Ein erneuter Lauf ergaenzt nur Fehlendes und laesst
  * eine bereits gewaehlte Darstellungsform stehen.
  */
 export async function seedIndustryLayers(
   parentId: string | null,
-  industryGroupId: number
+  industryGroupId: number,
+  radialIndustryGroupId: number
 ): Promise<GraphSeedIndustriesResult> {
+  await assertIndustryGroup(radialIndustryGroupId);
   return withTransaction(async (client) => {
     if (parentId) {
       const parent = await client.query(
@@ -1137,8 +1140,9 @@ export async function seedIndustryLayers(
           childSlugs.add(slug);
           const inserted = await client.query<{ id: string }>(
             `INSERT INTO graph_nodes
-               (parent_id, kind, name, slug, color, layout, sort_order, industry_id)
-             VALUES ($1, 'layer', $2, $3, $4, 'xy', $5, $6)
+               (parent_id, kind, name, slug, color, layout, sort_order, industry_id,
+                radial_industry_group_id)
+             VALUES ($1, 'layer', $2, $3, $4, 'radial', $5, $6, $7)
              RETURNING id`,
             [
               groupLayerId,
@@ -1147,6 +1151,7 @@ export async function seedIndustryLayers(
               graphPaletteColor(industryIndex),
               childSort,
               industry.id,
+              radialIndustryGroupId,
             ]
           );
           industryLayerId = inserted.rows[0]!.id;

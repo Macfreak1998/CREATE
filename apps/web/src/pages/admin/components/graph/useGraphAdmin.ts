@@ -90,10 +90,15 @@ export function useGraphMutations({ onError }: GraphMutationOptions) {
   };
 
   const seedIndustries = useMutation({
-    mutationFn: (input: { parentId: string | null; industryGroupId: number }) =>
+    mutationFn: (input: {
+      parentId: string | null;
+      industryGroupId: number;
+      radialIndustryGroupId: number;
+    }) =>
       api.post<GraphSeedIndustriesResult>("/api/admin/graph/seed-industries", {
         parent_id: input.parentId,
         industry_group_id: input.industryGroupId,
+        radial_industry_group_id: input.radialIndustryGroupId,
       }),
     ...mutationDefaults,
   });

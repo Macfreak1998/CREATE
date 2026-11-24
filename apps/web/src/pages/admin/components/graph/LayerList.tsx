@@ -21,13 +21,14 @@ export default function LayerList({
   activeDragId: string | null;
   onOpen: (layerId: string) => void;
   onCreate: () => void;
-  onAddGroup: (groupId: number) => void;
+  onAddGroup: (groupId: number, radialGroupId: number) => void;
   addingGroup: boolean;
   onEdit: (layer: GraphLayer) => void;
   onDelete: (layer: GraphLayer) => void;
   onMove: (layerId: string, direction: -1 | 1) => void;
 }) {
   const [groupId, setGroupId] = useState<number | "">("");
+  const [radialGroupId, setRadialGroupId] = useState<number | "">("");
   const present = new Set(
     layers
       .map((layer) => layer.industry_group_id)
@@ -46,40 +47,61 @@ export default function LayerList({
         className="mt-3 flex flex-col gap-2"
         onSubmit={(event) => {
           event.preventDefault();
-          if (groupId === "") return;
-          onAddGroup(groupId);
+          if (groupId === "" || radialGroupId === "") return;
+          onAddGroup(groupId, radialGroupId);
         }}
       >
         <label className="label" htmlFor="add-industry-group">
           Branchengruppe hinzufügen
         </label>
-        <div className="flex gap-2">
+        <select
+          id="add-industry-group"
+          className="input text-xs"
+          value={groupId}
+          onChange={(event) =>
+            setGroupId(event.target.value ? Number(event.target.value) : "")
+          }
+        >
+          <option value="">Gruppe wählen</option>
+          {groups.map((group) => (
+            <option key={group.id} value={group.id}>
+              {group.name}
+              {group.hidden ? " (nur Graph)" : ""}
+              {present.has(group.id) ? " · bereits angelegt" : ""}
+            </option>
+          ))}
+        </select>
+        <div>
+          <label className="label" htmlFor="add-radial-group">
+            Anwendungsbereich des Rings
+          </label>
           <select
-            id="add-industry-group"
-            className="input min-w-0 flex-1 text-xs"
-            value={groupId}
+            id="add-radial-group"
+            className="input text-xs"
+            value={radialGroupId}
             onChange={(event) =>
-              setGroupId(event.target.value ? Number(event.target.value) : "")
+              setRadialGroupId(event.target.value ? Number(event.target.value) : "")
             }
           >
             <option value="">Gruppe wählen</option>
             {groups.map((group) => (
               <option key={group.id} value={group.id}>
-                {group.name}
-                {group.hidden ? " (nur Graph)" : ""}
-                {present.has(group.id) ? " · bereits angelegt" : ""}
+                {group.hidden ? `${group.name} (nur Graph)` : group.name}
               </option>
             ))}
           </select>
-          <button
-            type="submit"
-            className="btn-secondary shrink-0 text-xs"
-            disabled={addingGroup || groupId === ""}
-            title="Gruppe als Torte, Branchen als Portfolio mit den Firmen"
-          >
-            {addingGroup ? "Wird angelegt …" : "Hinzufügen"}
-          </button>
+          <p className="mt-1 text-xs text-slate-500">
+            Die Branchengruppe wird eine Torte. Jede Branche darunter ist ein Ring
+            mit den Firmen. Im Zentrum stehen die Branchen dieser Gruppe.
+          </p>
         </div>
+        <button
+          type="submit"
+          className="btn-secondary self-start text-xs"
+          disabled={addingGroup || groupId === "" || radialGroupId === ""}
+        >
+          {addingGroup ? "Wird angelegt …" : "Hinzufügen"}
+        </button>
       </form>
 
       {layers.length === 0 ? (

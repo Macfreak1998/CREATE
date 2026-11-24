@@ -107,8 +107,15 @@ adminGraphRouter.post(
   "/seed-industries",
   validate(GraphSeedIndustriesInputSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const { parent_id, industry_group_id } = req.body as GraphSeedIndustriesInput;
-    res.json(await seedIndustryLayers(parent_id, industry_group_id));
+    const { parent_id, industry_group_id, radial_industry_group_id } =
+      req.body as GraphSeedIndustriesInput;
+    res.json(
+      await seedIndustryLayers(
+        parent_id,
+        industry_group_id,
+        radial_industry_group_id
+      )
+    );
   })
 );
 

@@ -9,12 +9,19 @@ import OutwardEdgeChips from "../components/graph/OutwardEdgeChips.js";
 import CirclePackView from "../components/graph/CirclePackView.js";
 import RadialRingView from "../components/graph/RadialRingView.js";
 import {
+  downloadGraphSvg,
+  graphExportFilename,
+  graphScopeToSvg,
+} from "../components/graph/exportSvg.js";
+import { isGraphSceneLayout } from "../components/graph/layoutMode.js";
+import {
   useGraphEdgeKinds,
   useGraphScope,
   usePrefetchScope,
   useScopeLayout,
 } from "../components/graph/useGraph.js";
 import { SHOW_NETWORK_GRAPH } from "../config/features.js";
+import { useMe } from "../hooks/useAuth.js";
 
 const BASE_PATH = "/netzwerk";
 
@@ -26,6 +33,8 @@ function scopePathFromLocation(pathname: string): string {
 export default function Netzwerk() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { data: me } = useMe();
+  const isAdmin = me?.user.role === "admin";
   const scopePath = scopePathFromLocation(location.pathname);
 
   const scope = useGraphScope(scopePath);
@@ -69,6 +78,19 @@ export default function Netzwerk() {
     if (company.anonymous || !company.company_slug) return;
     window.open(`/firma/${company.company_slug}`, "_blank", "noopener,noreferrer");
   }, []);
+
+  const sceneLayout = Boolean(scope.data && isGraphSceneLayout(scope.data.layout));
+  const exportReady =
+    Boolean(scope.data) && !scope.isLoading && (!sceneLayout || Boolean(layout.data));
+
+  const exportSvg = useCallback(() => {
+    if (me?.user.role !== "admin" || !scope.data) return;
+    if (isGraphSceneLayout(scope.data.layout) && !layout.data) return;
+    downloadGraphSvg(
+      graphExportFilename(scope.data),
+      graphScopeToSvg(scope.data, layout.data ?? null)
+    );
+  }, [layout.data, me?.user.role, scope.data]);
 
   if (!SHOW_NETWORK_GRAPH) {
     return (
@@ -180,11 +202,28 @@ export default function Netzwerk() {
         {scope.data?.layout === "graph" && (
           <EdgeLegend edgeKinds={edgeKinds.data ?? []} />
         )}
-        {scopePath && (
-          <button type="button" className="btn-secondary ml-auto text-xs" onClick={goUp}>
-            Eine Ebene zurück
-          </button>
-        )}
+        <div className="ml-auto flex flex-wrap items-center gap-2">
+          {isAdmin && scope.data && !notFound && (
+            <button
+              type="button"
+              className="btn-secondary text-xs"
+              disabled={!exportReady}
+              title={
+                exportReady
+                  ? "Geöffnete Ebene als SVG herunterladen"
+                  : "Die Ebene wird noch gezeichnet"
+              }
+              onClick={exportSvg}
+            >
+              Als SVG exportieren
+            </button>
+          )}
+          {scopePath && (
+            <button type="button" className="btn-secondary text-xs" onClick={goUp}>
+              Eine Ebene zurück
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

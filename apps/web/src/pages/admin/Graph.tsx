@@ -181,11 +181,14 @@ export default function AdminGraph() {
     );
   };
 
-  const addIndustryGroup = (industryGroupId: number) => {
+  const addIndustryGroup = (
+    industryGroupId: number,
+    radialIndustryGroupId: number
+  ) => {
     setError(null);
     setSeedNotice(null);
     mutations.seedIndustries.mutate(
-      { parentId, industryGroupId },
+      { parentId, industryGroupId, radialIndustryGroupId },
       {
         onSuccess: (result: GraphSeedIndustriesResult) => {
           setSeedNotice(

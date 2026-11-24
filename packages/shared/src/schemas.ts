@@ -1070,6 +1070,7 @@ export type GraphRootLayoutUpdate = z.infer<typeof GraphRootLayoutUpdateSchema>;
 export const GraphSeedIndustriesInputSchema = z.object({
   parent_id: z.string().uuid().nullable().optional().default(null),
   industry_group_id: z.number().int().positive(),
+  radial_industry_group_id: z.number().int().positive(),
 });
 export type GraphSeedIndustriesInput = z.infer<
   typeof GraphSeedIndustriesInputSchema
