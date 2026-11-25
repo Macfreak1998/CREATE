@@ -26,10 +26,10 @@ const ConfigSchema = z.object({
     .string()
     .optional()
     .transform((v) => (v && v.length > 0 ? v : undefined)),
-  CORS_ORIGIN: z.string().default("http://localhost:5173"),
+  CORS_ORIGIN: z.string().default("http://localhost:5175"),
   UPLOADS_DIR: z.string().default("/app/uploads"),
   PUBLIC_UPLOADS_BASE_URL: z.string().default("http://localhost:4000/uploads"),
-  APP_BASE_URL: z.string().url().default("http://localhost:5173"),
+  APP_BASE_URL: z.string().url().default("http://localhost:5175"),
   SMTP_HOST: z.string().default("mailpit"),
   SMTP_PORT: optionalPort(1025),
   SMTP_SECURE: z

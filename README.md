@@ -64,7 +64,7 @@ cp .env.example .env
 docker compose up --build
 ```
 
-Das startet Postgres, Mailpit, API (Port 3000) und Web (Port 5173). Die
+Das startet Postgres, Mailpit, API (Port 3000) und Web (Port 5175). Die
 Mailpit-Web-UI fängt in Dev sämtliche ausgehenden E-Mails ab und ist unter
 <http://localhost:8025> erreichbar (SMTP auf Port 1025). Beim ersten Start:
 
@@ -77,7 +77,7 @@ docker compose exec api npm run admin:create -- \
   --email=admin@example.com --password=mind10Zeichen
 ```
 
-Danach ist die Anwendung unter <http://localhost:5173> erreichbar,
+Danach ist die Anwendung unter <http://localhost:5175> erreichbar,
 die API unter <http://localhost:4000>.
 
 ## Lokaler Dev-Start ohne Docker

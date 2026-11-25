@@ -45,10 +45,10 @@ services:
       COOKIE_SECRET: ${COOKIE_SECRET:-change-me}
       COOKIE_SECURE: ${COOKIE_SECURE:-false}
       COOKIE_DOMAIN: ${COOKIE_DOMAIN:-}
-      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:5173}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:5175}
       UPLOADS_DIR: /app/uploads
       PUBLIC_UPLOADS_BASE_URL: ${PUBLIC_UPLOADS_BASE_URL:-http://localhost:4000/uploads}
-      APP_BASE_URL: ${APP_BASE_URL:-http://localhost:5173}
+      APP_BASE_URL: ${APP_BASE_URL:-http://localhost:5175}
       SMTP_HOST: ${SMTP_HOST:-mailpit}
       SMTP_PORT: ${SMTP_PORT:-1025}
       SMTP_SECURE: ${SMTP_SECURE:-false}
@@ -74,7 +74,7 @@ services:
     environment:
       VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:4000}
     ports:
-      - "${WEB_PORT:-5173}:5173"
+      - "${WEB_PORT:-5175}:5175"
     volumes:
       - ./apps/web/src:/app/apps/web/src
       - ./apps/web/public:/app/apps/web/public
