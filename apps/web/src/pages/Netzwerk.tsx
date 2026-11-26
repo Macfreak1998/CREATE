@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ReactFlowProvider } from "@xyflow/react";
 import type { GraphCompanyNode, GraphLayer } from "@b2b/shared";
@@ -13,6 +13,10 @@ import {
   graphExportFilename,
   graphScopeToSvg,
 } from "../components/graph/exportSvg.js";
+import {
+  GraphStageControls,
+  GraphTextScaleProvider,
+} from "../components/graph/graphChrome.js";
 import { isGraphSceneLayout } from "../components/graph/layoutMode.js";
 import {
   useGraphEdgeKinds,
@@ -36,6 +40,9 @@ export default function Netzwerk() {
   const { data: me } = useMe();
   const isAdmin = me?.user.role === "admin";
   const scopePath = scopePathFromLocation(location.pathname);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const [fontScale, setFontScale] = useState(1);
+  const [fullscreen, setFullscreen] = useState(false);
 
   const scope = useGraphScope(scopePath);
   const edgeKinds = useGraphEdgeKinds();
@@ -55,11 +62,29 @@ export default function Netzwerk() {
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") goUp();
+      if (event.key !== "Escape") return;
+      if (document.fullscreenElement) return;
+      goUp();
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [goUp]);
+
+  useEffect(() => {
+    const onChange = () => setFullscreen(document.fullscreenElement === stageRef.current);
+    document.addEventListener("fullscreenchange", onChange);
+    return () => document.removeEventListener("fullscreenchange", onChange);
+  }, []);
+
+  const toggleFullscreen = useCallback(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
+    if (document.fullscreenElement) {
+      void document.exitFullscreen();
+      return;
+    }
+    void stage.requestFullscreen();
+  }, []);
 
   const childPath = useCallback(
     (layer: GraphLayer) =>
@@ -86,11 +111,15 @@ export default function Netzwerk() {
   const exportSvg = useCallback(() => {
     if (me?.user.role !== "admin" || !scope.data) return;
     if (isGraphSceneLayout(scope.data.layout) && !layout.data) return;
-    downloadGraphSvg(
-      graphExportFilename(scope.data),
-      graphScopeToSvg(scope.data, layout.data ?? null)
-    );
-  }, [layout.data, me?.user.role, scope.data]);
+    const current = scope.data;
+    void graphScopeToSvg(current, layout.data ?? null, fontScale)
+      .then((svg) => {
+        downloadGraphSvg(graphExportFilename(current), svg);
+      })
+      .catch(() => {
+        window.alert("Der Export konnte nicht erstellt werden.");
+      });
+  }, [fontScale, layout.data, me?.user.role, scope.data]);
 
   if (!SHOW_NETWORK_GRAPH) {
     return (
@@ -167,7 +196,11 @@ export default function Netzwerk() {
           </Link>
         </div>
       ) : (
-        <div className="relative mt-4 h-[70vh] overflow-hidden rounded-lg border border-line bg-white">
+        <GraphTextScaleProvider value={fontScale}>
+        <div
+          ref={stageRef}
+          className="relative mt-4 h-[70vh] overflow-hidden rounded-lg border border-line bg-white [&:fullscreen]:mt-0 [&:fullscreen]:h-screen [&:fullscreen]:w-screen [&:fullscreen]:rounded-none"
+        >
           {scope.data?.layout === "pack" ? (
             <CirclePackView
               tree={scope.data.tree ?? []}
@@ -195,7 +228,14 @@ export default function Netzwerk() {
           {scope.data?.layout === "graph" && (
             <OutwardEdgeChips edges={scope.data.outward_edges} />
           )}
+          <GraphStageControls
+            scale={fontScale}
+            fullscreen={fullscreen}
+            onChangeScale={setFontScale}
+            onToggleFullscreen={toggleFullscreen}
+          />
         </div>
+        </GraphTextScaleProvider>
       )}
 
       <div className="mt-3 flex flex-wrap items-center justify-between gap-3">

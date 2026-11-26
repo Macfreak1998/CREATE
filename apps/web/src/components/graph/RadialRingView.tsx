@@ -14,9 +14,8 @@ import {
   ringPoint,
   stageDistribution,
 } from "./viewModel.js";
+import { useGraphTextScale } from "./graphChrome.js";
 import { usePanZoom, ZoomControls } from "./usePanZoom.js";
-
-const LABEL_LIMIT = 150;
 
 const segmentArc = arc<{ start: number; end: number }>()
   .innerRadius(RING.ring - RING.band)
@@ -66,9 +65,10 @@ export default function RadialRingView({
     () => layoutRing(model.companies, model.stages, industries, stageId),
     [industries, model.companies, model.stages, stageId]
   );
+  const fontScale = useGraphTextScale();
   const companyLabels = useMemo(
-    () => placeCompanyLabels(layout.companies),
-    [layout.companies]
+    () => placeCompanyLabels(layout.companies, fontScale),
+    [fontScale, layout.companies]
   );
   const hoverCompany =
     layout.companies.find((company) => company.companyId === hoverCompanyId) ?? null;
@@ -100,7 +100,7 @@ export default function RadialRingView({
     });
   }, [hoverCompany, pan.view]);
 
-  const showLabels = layout.companies.length <= LABEL_LIMIT;
+  const singleStage = layout.stages.length < 2;
   const activeCompanyId = companyId ?? hoverCompanyId;
   const activeIndustryId = industryId ?? hoverIndustryId;
 
@@ -148,7 +148,7 @@ export default function RadialRingView({
 
   return (
     <div className="flex h-full flex-col bg-white">
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line px-3 py-2 text-sm text-slate-600">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line py-2 pl-24 pr-28 text-sm text-slate-600">
         <p>
           <span className="font-semibold text-ink">{model.companies.length}</span> Firmen
           {group ? (
@@ -224,31 +224,32 @@ export default function RadialRingView({
                   d={path}
                   transform={`translate(${RING.cx},${RING.cy})`}
                   fill="#6b7280"
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: singleStage ? "default" : "pointer" }}
                   onClick={(event) => {
+                    if (singleStage) return;
                     event.stopPropagation();
                     setCompanyId(null);
                     setIndustryId(null);
                     setStageId(stage.id);
                   }}
                 >
-                  <title>{stage.name}</title>
+                  <title>{singleStage ? undefined : stage.name}</title>
                 </path>
-                {wide && (
+                {!singleStage && wide && (
                   <path id={`stage-label-${stage.id}`} d={labelArc(stage.start, stage.end)} fill="none" />
                 )}
               </g>
             );
           })}
 
-          {layout.stages.map((stage, index) => {
+          {!singleStage && layout.stages.map((stage, index) => {
             const span = stage.end - stage.start;
             if (span > 0.28) {
               return (
                 <text
                   key={`label-${stage.id}`}
                   fill="#ffffff"
-                  fontSize={12}
+                  fontSize={12 * fontScale}
                   fontWeight={600}
                   pointerEvents="none"
                 >
@@ -279,7 +280,7 @@ export default function RadialRingView({
                   textAnchor={anchor}
                   dominantBaseline="middle"
                   fill="#1a1a1a"
-                  fontSize={12}
+                  fontSize={12 * fontScale}
                   fontWeight={600}
                 >
                   {stage.name}
@@ -327,8 +328,7 @@ export default function RadialRingView({
             const marked = company.companyId === activeCompanyId;
             const placement = companyLabels.get(company.companyId);
             const hovered = hoverCompanyId === company.companyId;
-            const labelVisible =
-              (showLabels && (placement?.visible ?? true)) || marked || hovered;
+            const labelText = marked || hovered ? company.name : (placement?.text ?? company.name);
             const labelRadius = placement?.radius ?? RING.label;
             const svgDeg = ((company.angle * 180) / Math.PI - 90 + 360) % 360;
             const flip = svgDeg > 90 && svgDeg < 270;
@@ -358,16 +358,16 @@ export default function RadialRingView({
                   stroke={marked ? "#1a1a1a" : "#334155"}
                   strokeWidth={marked ? 2 : 1}
                 />
-                {labelVisible && (
+                {labelText && (
                   <text
                     transform={`translate(${RING.cx},${RING.cy}) rotate(${svgDeg}) translate(${labelRadius},0)${flip ? " rotate(180)" : ""}`}
                     textAnchor={flip ? "end" : "start"}
                     dy="0.32em"
                     fill="#1a1a1a"
-                    fontSize={12}
+                    fontSize={12 * fontScale}
                     pointerEvents="none"
                   >
-                    {company.name}
+                    {labelText}
                   </text>
                 )}
               </g>

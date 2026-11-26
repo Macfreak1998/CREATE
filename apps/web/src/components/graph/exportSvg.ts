@@ -6,7 +6,13 @@ import {
   type HierarchyNode,
 } from "d3-hierarchy";
 import { arc } from "d3-shape";
+import { parse as parseFont, type Font } from "opentype.js";
 import type { GraphScope } from "@b2b/shared";
+import dosisRegular from "../../assets/fonts/Dosis-Regular.ttf";
+import dosisMedium from "../../assets/fonts/Dosis-Medium.ttf";
+import dosisSemiBold from "../../assets/fonts/Dosis-SemiBold.ttf";
+import dosisBold from "../../assets/fonts/Dosis-Bold.ttf";
+import { FONT_SCALE_MAX, FONT_SCALE_MIN } from "./graphChrome.js";
 import type {
   ChartBackdropNodeData,
   GraphEdgeData,
@@ -17,11 +23,16 @@ import {
   RING,
   collectPack,
   collectRadial,
+  inkOn,
   layoutRing,
+  packFontSize,
+  packLabelFits,
   packStats,
+  packSwatches,
   placeCompanyLabels,
   ringPoint,
   type PackIndustry,
+  type PackNode,
 } from "./viewModel.js";
 
 const INK = "#1a1a1a";
@@ -67,16 +78,6 @@ interface SvgPart {
   subtitle: string | null;
   legend: LegendEntry[];
   legendNote: string | null;
-}
-
-interface PackDatum {
-  id: string;
-  name: string;
-  kind: "root" | "industry" | "company";
-  color?: string;
-  companyName?: string;
-  area: number;
-  children?: PackDatum[];
 }
 
 interface PackLabel {
@@ -130,7 +131,7 @@ function imageHref(url: string | null): string | null {
 function wrapLines(text: string, maxChars: number, maxLines: number): string[] {
   const clean = text.replace(/\s+/g, " ").trim();
   if (!clean || maxLines < 1) return [];
-  const limit = Math.max(4, maxChars);
+  const limit = Math.max(4, Math.floor(maxChars / Math.max(textScale, 0.75)));
   const words = clean.split(" ");
   const lines: string[] = [];
   let current = "";
@@ -162,6 +163,40 @@ function wrapLines(text: string, maxChars: number, maxLines: number): string[] {
   return lines;
 }
 
+type DosisSet = Record<400 | 500 | 600 | 700, Font>;
+
+let dosisFonts: DosisSet | null = null;
+let textScale = 1;
+
+async function loadDosis(): Promise<DosisSet> {
+  if (dosisFonts) return dosisFonts;
+  const sources = [
+    [400, dosisRegular],
+    [500, dosisMedium],
+    [600, dosisSemiBold],
+    [700, dosisBold],
+  ] as const;
+  const parsed = await Promise.all(
+    sources.map(async ([weight, url]) => {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Dosis konnte nicht geladen werden.");
+      return [weight, parseFont(await response.arrayBuffer())] as const;
+    })
+  );
+  const fonts = Object.fromEntries(parsed) as DosisSet;
+  dosisFonts = fonts;
+  return fonts;
+}
+
+function fontFor(weight: number): Font {
+  const fonts = dosisFonts;
+  if (!fonts) throw new Error("Dosis ist nicht geladen.");
+  if (weight >= 700) return fonts[700];
+  if (weight >= 600) return fonts[600];
+  if (weight >= 500) return fonts[500];
+  return fonts[400];
+}
+
 function textEl(options: {
   x: number;
   y: number;
@@ -175,15 +210,55 @@ function textEl(options: {
   extra?: string;
 }): string {
   if (!options.text) return "";
+  const size = options.size * textScale;
+  const font = fontFor(options.weight ?? 400);
+  const width = font.getAdvanceWidth(options.text, size);
   const anchor = options.anchor ?? "start";
-  const weight = options.weight ?? 400;
-  const baseline =
-    options.baseline === "auto" ? "" : ` dominant-baseline="middle"`;
-  const halo = options.halo
-    ? ` stroke="#ffffff" stroke-width="2.5" paint-order="stroke fill"`
-    : "";
+  let x = options.x;
+  if (anchor === "middle") x -= width / 2;
+  else if (anchor === "end") x -= width;
+  let y = options.y;
+  if (options.baseline !== "auto") {
+    y += ((font.ascender + font.descender) / 2 / font.unitsPerEm) * size;
+  }
+  const path = font.getPath(options.text, x, y, size);
+  const d = path.toPathData(2);
   const extra = options.extra ? ` ${options.extra}` : "";
-  return `<text x="${num(options.x)}" y="${num(options.y)}" fill="${options.fill}" font-size="${num(options.size)}" font-weight="${weight}" text-anchor="${anchor}"${baseline}${halo}${extra}>${esc(options.text)}</text>`;
+  const halo = options.halo
+    ? `<path d="${d}" fill="none" stroke="#ffffff" stroke-width="${num(Math.max(1.5, size * 0.18))}" stroke-linejoin="round"${extra}/>`
+    : "";
+  return `${halo}<path d="${d}" fill="${options.fill}"${extra}/>`;
+}
+
+function textAlongRing(
+  text: string,
+  start: number,
+  end: number,
+  fill: string,
+  size: number,
+  weight: number
+): string {
+  if (!text) return "";
+  const drawn = size * textScale;
+  const font = fontFor(weight);
+  const width = font.getAdvanceWidth(text, drawn);
+  const mid = (start + end) / 2;
+  const lower = mid > Math.PI / 2 && mid < (3 * Math.PI) / 2;
+  const sign = lower ? -1 : 1;
+  let cursor = -width / 2;
+  const parts: string[] = [];
+  for (const char of text) {
+    const advance = font.getAdvanceWidth(char, drawn) || drawn * 0.3;
+    const angle = mid + sign * ((cursor + advance / 2) / RING.ring);
+    const point = ringPoint(angle, RING.ring);
+    const rot = (angle * 180) / Math.PI + (lower ? 180 : 0);
+    const path = font.getPath(char, -advance / 2, 0, drawn);
+    parts.push(
+      `<path d="${path.toPathData(2)}" fill="${fill}" transform="translate(${num(point.x)} ${num(point.y)}) rotate(${num(rot)})"/>`
+    );
+    cursor += advance;
+  }
+  return parts.join("");
 }
 
 function stackFrom(
@@ -196,12 +271,13 @@ function stackFrom(
   let y = top;
   const markup = lines
     .map((line) => {
-      const middle = y + line.size / 2;
-      y += line.size + gap;
+      const size = line.size * textScale;
+      const middle = y + size / 2;
+      y += size + gap * textScale;
       return textEl({ ...line, x, y: middle, anchor });
     })
     .join("");
-  const height = lines.length === 0 ? 0 : y - top - gap;
+  const height = lines.length === 0 ? 0 : y - top - gap * textScale;
   return { markup, height };
 }
 
@@ -214,7 +290,8 @@ function stackedAt(
 ): string {
   if (lines.length === 0) return "";
   const total =
-    lines.reduce((sum, line) => sum + line.size, 0) + gap * (lines.length - 1);
+    lines.reduce((sum, line) => sum + line.size * textScale, 0) +
+    gap * textScale * Math.max(0, lines.length - 1);
   return stackFrom(x, y - total / 2, lines, gap, anchor).markup;
 }
 
@@ -760,43 +837,26 @@ function renderScene(layout: LayoutResult, scope: GraphScope): SvgPart {
   };
 }
 
-function fitsInside(name: string, radius: number): boolean {
-  if (radius < 36) return false;
-  const maxChars = Math.max(4, Math.floor((radius * 1.5) / 7));
-  return name.length <= maxChars;
-}
-
 function layoutPack(
   industries: PackIndustry[],
   fullWidth: number,
   fullHeight: number
-): { nodes: HierarchyCircularNode<PackDatum>[]; labels: Map<string, PackLabel> } {
-  const datum: PackDatum = {
+): { nodes: HierarchyCircularNode<PackNode>[]; labels: Map<string, PackLabel> } {
+  const datum: PackNode = {
     id: "root",
     name: "",
-    kind: "root",
+    kind: "circle",
+    shell: true,
+    color: "#ffffff",
     area: 0,
-    children: industries.map((industry) => ({
-      id: industry.layerId,
-      name: industry.name,
-      kind: "industry" as const,
-      color: industry.color,
-      area: 0,
-      children: industry.companies.map((company) => ({
-        id: company.nodeId,
-        name: company.name,
-        kind: "company" as const,
-        companyName: company.name,
-        area: company.area,
-      })),
-    })),
+    children: industries.map((industry) => industry.circle),
   };
   const innerWidth = Math.max(200, fullWidth - PACK_MARGIN * 2);
   const innerHeight = Math.max(200, fullHeight - PACK_MARGIN * 2);
   const root = hierarchy(datum)
     .sum((item) => {
       if (item.kind === "company") return item.area;
-      if (item.kind === "industry" && (item.children?.length ?? 0) === 0) return 12;
+      if (item.kind === "circle" && (item.children?.length ?? 0) === 0) return 12;
       return 0;
     })
     .sort(
@@ -804,11 +864,11 @@ function layoutPack(
         (b.value ?? 0) - (a.value ?? 0) ||
         a.data.name.localeCompare(b.data.name, "de")
     );
-  const laidOut = pack<PackDatum>()
+  const laidOut = pack<PackNode>()
     .size([innerWidth, innerHeight])
-    .padding((node: HierarchyNode<PackDatum>) => (node.depth === 1 ? 18 : 3))(
-    root
-  );
+    .padding((node: HierarchyNode<PackNode>) =>
+      node.depth <= 1 ? 18 : (node.children?.length ?? 0) > 0 ? 10 : 3
+    )(root);
   const nodes = laidOut
     .descendants()
     .filter((node) => node.depth > 0)
@@ -822,7 +882,9 @@ function layoutPack(
   const centerX = fullWidth / 2;
   const centerY = fullHeight / 2;
   for (const node of nodes) {
-    if (node.data.kind !== "industry" || fitsInside(node.data.name, node.r)) continue;
+    if (node.data.kind !== "circle") continue;
+    const drawn = packFontSize(node.r, textScale);
+    if (packLabelFits(node.data.name, node.r, drawn)) continue;
     const dx = node.x - centerX;
     const dy = node.y - centerY;
     const length = Math.hypot(dx, dy) || 1;
@@ -882,13 +944,16 @@ function renderPack(scope: GraphScope): SvgPart {
   for (const node of nodes) {
     grow(node.x - node.r, node.y - node.r);
     grow(node.x + node.r, node.y + node.r);
-    if (node.data.kind === "industry") {
-      const fontSize = Math.max(11, Math.min(16, node.r * 0.11));
-      const inside = fitsInside(node.data.name, node.r);
+    if (node.data.kind === "circle") {
+      const unscaled = Math.max(11, Math.min(16, node.r * 0.11));
+      const fontSize = unscaled * textScale;
+      const inside = packLabelFits(node.data.name, node.r, fontSize);
       const outside = labels.get(node.data.id);
+      const fill = paint(node.data.color, node.data.shell ? "#f4f7f5" : GRASS);
+      const stroke = node.data.shell ? ` stroke="#cbd5e1" stroke-width="1.5"` : "";
       parts.push(`<g><title>${esc(node.data.name)}</title>`);
       parts.push(
-        `<circle cx="${num(node.x)}" cy="${num(node.y)}" r="${num(node.r)}" fill="${paint(node.data.color, GRASS)}"/>`
+        `<circle cx="${num(node.x)}" cy="${num(node.y)}" r="${num(node.r)}" fill="${fill}"${stroke}/>`
       );
       if (inside) {
         parts.push(
@@ -896,8 +961,8 @@ function renderPack(scope: GraphScope): SvgPart {
             x: node.x,
             y: node.y - node.r + fontSize + 4,
             text: node.data.name,
-            size: fontSize,
-            fill: "#ffffff",
+            size: unscaled,
+            fill: node.data.shell ? INK : inkOn(fill),
             anchor: "middle",
             weight: 600,
             baseline: "auto",
@@ -929,9 +994,9 @@ function renderPack(scope: GraphScope): SvgPart {
       continue;
     }
 
-    if (!node.data.companyName) continue;
+    if (!node.data.company) continue;
     parts.push(
-      `<g><title>${esc(node.data.companyName)}</title><circle cx="${num(node.x)}" cy="${num(node.y)}" r="${num(node.r)}" fill="#1f2937"/></g>`
+      `<g><title>${esc(node.data.company.name)}</title><circle cx="${num(node.x)}" cy="${num(node.y)}" r="${num(node.r)}" fill="#1f2937"/></g>`
     );
   }
 
@@ -942,25 +1007,13 @@ function renderPack(scope: GraphScope): SvgPart {
     defs: "",
     body: `<g transform="translate(${num(pad - minX)} ${num(pad - minY)})">${parts.join("")}</g>`,
     subtitle,
-    legend: industries.map((industry) => ({
+    legend: packSwatches(industries).map((industry) => ({
       swatch: "dot" as const,
       color: paint(industry.color, GRASS),
       label: industry.name,
     })),
     legendNote: "Firmen können in mehreren Branchen erscheinen.",
   };
-}
-
-function labelArc(start: number, end: number): string {
-  const mid = (start + end) / 2;
-  const lower = mid > Math.PI / 2 && mid < (3 * Math.PI) / 2;
-  const from = lower ? end : start;
-  const to = lower ? start : end;
-  const a = ringPoint(from, RING.ring);
-  const b = ringPoint(to, RING.ring);
-  const large = Math.abs(end - start) > Math.PI ? 1 : 0;
-  const sweep = lower ? 0 : 1;
-  return `M ${num(a.x)} ${num(a.y)} A ${RING.ring} ${RING.ring} 0 ${large} ${sweep} ${num(b.x)} ${num(b.y)}`;
 }
 
 function renderRadial(scope: GraphScope): SvgPart {
@@ -980,7 +1033,8 @@ function renderRadial(scope: GraphScope): SvgPart {
   }
 
   const laidOut = layoutRing(model.companies, model.stages, scope.radial_industries, null);
-  const companyLabels = placeCompanyLabels(laidOut.companies);
+  const companyLabels = placeCompanyLabels(laidOut.companies, textScale);
+  const singleStage = laidOut.stages.length < 2;
   const segment = arc<{ start: number; end: number }>()
     .innerRadius(RING.ring - RING.band)
     .outerRadius(RING.ring + RING.band)
@@ -1002,23 +1056,17 @@ function renderRadial(scope: GraphScope): SvgPart {
   for (const stage of laidOut.stages) {
     const path = segment({ start: stage.start, end: stage.end });
     if (!path) continue;
-    const wide = stage.end - stage.start > 0.28;
-    const id = svgId("stage-", stage.id);
     parts.push(`<g><title>${esc(stage.name)}</title>`);
     parts.push(
       `<path d="${path}" transform="translate(${RING.cx},${RING.cy})" fill="#6b7280"/>`
     );
-    if (wide) parts.push(`<path id="${id}" d="${labelArc(stage.start, stage.end)}" fill="none"/>`);
     parts.push("</g>");
   }
 
-  laidOut.stages.forEach((stage, index) => {
+  if (!singleStage) laidOut.stages.forEach((stage, index) => {
     const span = stage.end - stage.start;
     if (span > 0.28) {
-      const id = svgId("stage-", stage.id);
-      parts.push(
-        `<text fill="#ffffff" font-size="12" font-weight="600"><textPath href="#${id}" xlink:href="#${id}" startOffset="50%" text-anchor="middle">${esc(stage.name)}</textPath></text>`
-      );
+      parts.push(textAlongRing(stage.name, stage.start, stage.end, "#ffffff", 12, 600));
       return;
     }
     const mid = (stage.start + stage.end) / 2;
@@ -1048,7 +1096,7 @@ function renderRadial(scope: GraphScope): SvgPart {
 
   for (const company of laidOut.companies) {
     const placement = companyLabels.get(company.companyId);
-    const visible = placement?.visible ?? true;
+    const label = placement?.text ?? company.name;
     const radius = placement?.radius ?? RING.label;
     const svgDeg = ((company.angle * 180) / Math.PI - 90 + 360) % 360;
     const flip = svgDeg > 90 && svgDeg < 270;
@@ -1056,10 +1104,19 @@ function renderRadial(scope: GraphScope): SvgPart {
     parts.push(
       `<circle cx="${num(company.x)}" cy="${num(company.y)}" r="5.5" fill="#f8fafc" stroke="#334155" stroke-width="1"/>`
     );
-    if (visible) {
-      const transform = `translate(${num(RING.cx)},${num(RING.cy)}) rotate(${num(svgDeg)}) translate(${num(radius)},0)${flip ? " rotate(180)" : ""}`;
+    if (label) {
+      const transform = `translate(${num(RING.cx)},${num(RING.cy)}) rotate(${num(svgDeg)}) translate(${num(radius)},0)${flip ? " rotate(180)" : ""} translate(0 ${num(0.32 * 12 * textScale)})`;
       parts.push(
-        `<text transform="${transform}" text-anchor="${flip ? "end" : "start"}" dy="0.32em" fill="${INK}" font-size="12">${esc(company.name)}</text>`
+        textEl({
+          x: 0,
+          y: 0,
+          text: label,
+          size: 12,
+          fill: INK,
+          anchor: flip ? "end" : "start",
+          baseline: "auto",
+          extra: `transform="${transform}"`,
+        })
       );
     }
     parts.push("</g>");
@@ -1067,10 +1124,12 @@ function renderRadial(scope: GraphScope): SvgPart {
 
   const longest = Math.max(
     12,
-    ...laidOut.companies.map((company) => company.name.length),
-    ...laidOut.stages.map((stage) => stage.name.length)
+    ...laidOut.companies.map(
+      (company) => (companyLabels.get(company.companyId)?.text ?? company.name).length
+    ),
+    ...(singleStage ? [0] : laidOut.stages.map((stage) => stage.name.length))
   );
-  const extent = RING.label + 72 + longest * 7.4;
+  const extent = RING.label + 72 + longest * 7.4 * textScale;
   const viewX = RING.cx - extent;
   const viewY = RING.cy - extent;
 
@@ -1104,11 +1163,11 @@ function renderLegend(
   const placed: { x: number; y: number; item: LegendEntry }[] = [];
   let x = 0;
   let y = 0;
-  const rowHeight = 22;
+  const rowHeight = 22 * textScale;
   const gap = 16;
   for (const item of items) {
     const swatch = item.swatch === "line" ? 22 : 12;
-    const width = swatch + 8 + item.label.length * 6.5;
+    const width = (swatch + 8 + item.label.length * 6.5) * textScale;
     if (x > 0 && x + width > maxWidth) {
       x = 0;
       y += rowHeight;
@@ -1120,7 +1179,7 @@ function renderLegend(
   const itemsHeight = items.length === 0 ? 0 : y + rowHeight;
   const body = placed
     .map((entry) => {
-      const mid = entry.y + 11;
+      const mid = entry.y + rowHeight / 2;
       const swatch =
         entry.item.swatch === "line"
           ? `<line x1="${num(entry.x)}" y1="${num(mid)}" x2="${num(entry.x + 18)}" y2="${num(mid)}" stroke="${entry.item.color}" stroke-width="2" stroke-linecap="round"/>`
@@ -1161,7 +1220,13 @@ function renderLegend(
  * Zeichnet die geoeffnete Ebene als eigenstaendige SVG-Datei.
  * Zoom, Filter und Hover der Ansicht bleiben aussen vor.
  */
-export function graphScopeToSvg(scope: GraphScope, layout: LayoutResult | null): string {
+export async function graphScopeToSvg(
+  scope: GraphScope,
+  layout: LayoutResult | null,
+  fontScale = 1
+): Promise<string> {
+  await loadDosis();
+  textScale = Math.min(FONT_SCALE_MAX, Math.max(FONT_SCALE_MIN, fontScale));
   const part = renderScope(scope, layout);
   const title = scopeTitle(scope);
   const padX = 36;
@@ -1221,10 +1286,6 @@ export function graphScopeToSvg(scope: GraphScope, layout: LayoutResult | null):
     `<?xml version="1.0" encoding="UTF-8"?>`,
     `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xml:lang="de" role="img">`,
     `<title>${esc(title)}</title>`,
-    `<style><![CDATA[
-      @import url("https://fonts.googleapis.com/css2?family=Dosis:wght@400;500;600;700&display=swap");
-      text { font-family: "Dosis", system-ui, sans-serif; }
-    ]]></style>`,
     part.defs,
     `<rect width="100%" height="100%" fill="#ffffff"/>`,
     chunks.join(""),

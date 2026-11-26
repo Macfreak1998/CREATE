@@ -1,28 +1,21 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { hierarchy, pack, type HierarchyCircularNode, type HierarchyNode } from "d3-hierarchy";
 import type { GraphTreeNode } from "@b2b/shared";
+import { useGraphTextScale } from "./graphChrome.js";
 import {
   collectPack,
   industryNamesFor,
+  inkOn,
+  packFontSize,
+  packLabelFits,
   packStats,
-  type PackCompany,
-  type PackIndustry,
+  packSwatches,
+  type PackNode,
 } from "./viewModel.js";
 import { usePanZoom, ZoomControls } from "./usePanZoom.js";
 
 const ZOOM_DURATION = 320;
 const PACK_MARGIN = 56;
-
-interface PackDatum {
-  id: string;
-  name: string;
-  kind: "root" | "industry" | "company";
-  color?: string;
-  path?: string;
-  company?: PackCompany;
-  area: number;
-  children?: PackDatum[];
-}
 
 interface ExternalLabel {
   x1: number;
@@ -33,34 +26,12 @@ interface ExternalLabel {
   name: string;
 }
 
-function fitsInside(name: string, radius: number): boolean {
-  if (radius < 36) return false;
-  const maxChars = Math.max(4, Math.floor((radius * 1.5) / 7));
-  return name.length <= maxChars;
-}
-
-function buildDatum(industries: PackIndustry[]): PackDatum {
-  return {
-    id: "root",
-    name: "",
-    kind: "root",
-    area: 0,
-    children: industries.map((industry) => ({
-      id: industry.layerId,
-      name: industry.name,
-      kind: "industry" as const,
-      color: industry.color,
-      path: industry.path,
-      area: 0,
-      children: industry.companies.map((company) => ({
-        id: company.nodeId,
-        name: company.name,
-        kind: "company" as const,
-        company,
-        area: company.area,
-      })),
-    })),
-  };
+function subtreeHasCompany(
+  node: HierarchyCircularNode<PackNode>,
+  ids: Set<string>
+): boolean {
+  if (node.data.company && ids.has(node.data.company.companyId)) return true;
+  return node.children?.some((child) => subtreeHasCompany(child, ids)) ?? false;
 }
 
 export default function CirclePackView({
@@ -79,6 +50,7 @@ export default function CirclePackView({
   const [hoverNodeId, setHoverNodeId] = useState<string | null>(null);
   const opening = useRef(false);
   const pan = usePanZoom();
+  const fontScale = useGraphTextScale();
 
   useEffect(() => {
     const element = boxRef.current;
@@ -96,14 +68,23 @@ export default function CirclePackView({
     return () => observer.disconnect();
   }, []);
 
-  const nodes = useMemo((): HierarchyCircularNode<PackDatum>[] => {
+  const nodes = useMemo((): HierarchyCircularNode<PackNode>[] => {
     if (industries.length === 0) return [];
     const width = Math.max(200, size.width - PACK_MARGIN * 2);
     const height = Math.max(200, size.height - PACK_MARGIN * 2);
-    const root = hierarchy(buildDatum(industries))
+    const rootDatum: PackNode = {
+      id: "root",
+      name: "",
+      kind: "circle",
+      shell: true,
+      color: "#ffffff",
+      area: 0,
+      children: industries.map((industry) => industry.circle),
+    };
+    const root = hierarchy(rootDatum)
       .sum((datum) => {
         if (datum.kind === "company") return datum.area;
-        if (datum.kind === "industry" && (datum.children?.length ?? 0) === 0) return 12;
+        if (datum.kind === "circle" && (datum.children?.length ?? 0) === 0) return 12;
         return 0;
       })
       .sort(
@@ -111,11 +92,11 @@ export default function CirclePackView({
           (b.value ?? 0) - (a.value ?? 0) ||
           a.data.name.localeCompare(b.data.name, "de")
       );
-    const laidOut = pack<PackDatum>()
+    const laidOut = pack<PackNode>()
       .size([width, height])
-      .padding((node: HierarchyNode<PackDatum>) => (node.depth === 1 ? 18 : 3))(
-      root
-    );
+      .padding((node: HierarchyNode<PackNode>) =>
+        node.depth <= 1 ? 18 : (node.children?.length ?? 0) > 0 ? 10 : 3
+      )(root);
     return laidOut.descendants().filter((node) => node.depth > 0).map((node) => {
       node.x += PACK_MARGIN;
       node.y += PACK_MARGIN;
@@ -128,8 +109,9 @@ export default function CirclePackView({
     const centerX = size.width / 2;
     const centerY = size.height / 2;
     for (const node of nodes) {
-      if (node.data.kind !== "industry") continue;
-      if (fitsInside(node.data.name, node.r)) continue;
+      if (node.data.kind !== "circle") continue;
+      const fontSize = packFontSize(node.r, fontScale);
+      if (packLabelFits(node.data.name, node.r, fontSize)) continue;
       const dx = node.x - centerX;
       const dy = node.y - centerY;
       const length = Math.hypot(dx, dy) || 1;
@@ -161,7 +143,7 @@ export default function CirclePackView({
       }
     }
     return labels;
-  }, [nodes, size.height, size.width]);
+  }, [fontScale, nodes, size.height, size.width]);
 
   const queryIds = useMemo(() => {
     const term = query.trim().toLowerCase();
@@ -181,7 +163,7 @@ export default function CirclePackView({
   const activeIds = activeId ? new Set([activeId]) : queryIds;
   const dimming = activeIds != null;
 
-  const openIndustry = (node: HierarchyCircularNode<PackDatum>) => {
+  const openIndustry = (node: HierarchyCircularNode<PackNode>) => {
     const path = node.data.path;
     if (!path || opening.current) return;
     opening.current = true;
@@ -215,7 +197,7 @@ export default function CirclePackView({
 
   return (
     <div className="flex h-full flex-col bg-white">
-      <div className="flex flex-wrap items-end justify-between gap-3 border-b border-line px-3 py-2">
+      <div className="flex flex-wrap items-end justify-between gap-3 border-b border-line py-2 pl-24 pr-28">
         <label className="block">
           <span className="label">Firma suchen</span>
           <input
@@ -260,17 +242,12 @@ export default function CirclePackView({
             }}
           >
             {nodes.map((node) => {
-              if (node.data.kind === "industry") {
-                const contains =
-                  !dimming ||
-                  node.children?.some(
-                    (child) =>
-                      child.data.company &&
-                      activeIds?.has(child.data.company.companyId)
-                  );
-                const fontSize = Math.max(11, Math.min(16, node.r * 0.11));
-                const inside = fitsInside(node.data.name, node.r);
+              if (node.data.kind === "circle") {
+                const contains = !dimming || subtreeHasCompany(node, activeIds ?? new Set());
+                const fontSize = packFontSize(node.r, fontScale);
+                const inside = packLabelFits(node.data.name, node.r, fontSize);
                 const outside = outsideLabels.get(node.data.id);
+                const labelFill = node.data.shell ? "#1a1a1a" : inkOn(node.data.color);
                 return (
                   <g
                     key={node.data.id}
@@ -281,13 +258,20 @@ export default function CirclePackView({
                       openIndustry(node);
                     }}
                   >
-                    <circle cx={node.x} cy={node.y} r={node.r} fill={node.data.color} />
+                    <circle
+                      cx={node.x}
+                      cy={node.y}
+                      r={node.r}
+                      fill={node.data.color}
+                      stroke={node.data.shell ? "#cbd5e1" : "none"}
+                      strokeWidth={node.data.shell ? 1.5 : 0}
+                    />
                     {inside && (
                       <text
                         x={node.x}
                         y={node.y - node.r + fontSize + 4}
                         textAnchor="middle"
-                        fill="#ffffff"
+                        fill={labelFill}
                         fontSize={fontSize}
                         fontWeight={600}
                         pointerEvents="none"
@@ -312,7 +296,7 @@ export default function CirclePackView({
                           textAnchor={outside.anchor}
                           dominantBaseline="middle"
                           fill="#1a1a1a"
-                          fontSize={12}
+                          fontSize={12 * fontScale}
                           fontWeight={600}
                           pointerEvents="none"
                         >
@@ -378,8 +362,8 @@ export default function CirclePackView({
 
       <div className="border-t border-line px-3 py-2">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-600">
-          {industries.map((industry) => (
-            <span key={industry.layerId} className="inline-flex items-center gap-1.5">
+          {packSwatches(industries).map((industry) => (
+            <span key={`${industry.name}-${industry.color}`} className="inline-flex items-center gap-1.5">
               <span
                 className="h-2.5 w-2.5 rounded-full"
                 style={{ backgroundColor: industry.color }}

@@ -2,6 +2,7 @@ import { createContext, useContext, useState } from "react";
 import { createPortal } from "react-dom";
 import { Handle, Position, type NodeProps, type Node } from "@xyflow/react";
 import type { GraphCompanyNode, GraphLayer } from "@b2b/shared";
+import { useGraphTextScale } from "./graphChrome.js";
 import type {
   BubbleNodeData,
   ChartBackdropNodeData,
@@ -43,6 +44,7 @@ function CenterHandles() {
 export function LayerNode({ data }: NodeProps<Node<LayerNodeData>>) {
   const { layer } = data;
   const accent = layer.color ?? "#81ae3d";
+  const scale = useGraphTextScale();
 
   return (
     <div
@@ -50,10 +52,13 @@ export function LayerNode({ data }: NodeProps<Node<LayerNodeData>>) {
       style={{ borderColor: accent }}
       title={layer.description ?? undefined}
     >
-      <span className="text-sm font-semibold leading-tight text-ink">
+      <span
+        className="font-semibold leading-tight text-ink"
+        style={{ fontSize: 14 * scale }}
+      >
         {layer.name}
       </span>
-      <span className="mt-1 text-xs text-slate-500">
+      <span className="mt-1 text-slate-500" style={{ fontSize: 12 * scale }}>
         {layer.child_company_count} Firmen
         {layer.child_layer_count > 0 && ` · ${layer.child_layer_count} Ebenen`}
       </span>
@@ -69,12 +74,13 @@ function raiseNode(event: { currentTarget: HTMLElement }, zIndex: string) {
 
 export function CompanyNode({ data }: NodeProps<Node<CompanyNodeData>>) {
   const { node, anonymized, color, compact } = data;
+  const scale = useGraphTextScale();
 
   if (anonymized) {
     return (
       <div
-        className="flex h-full w-full items-center justify-center rounded-full text-sm font-semibold text-white"
-        style={{ backgroundColor: color }}
+        className="flex h-full w-full items-center justify-center rounded-full font-semibold text-white"
+        style={{ backgroundColor: color, fontSize: 14 * scale }}
         aria-label="1 Firma"
       >
         1
@@ -103,12 +109,16 @@ export function CompanyNode({ data }: NodeProps<Node<CompanyNodeData>>) {
       ) : (
         <span
           aria-hidden="true"
-          className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-slate-100 text-xs font-semibold text-slate-500"
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-slate-100 font-semibold text-slate-500"
+          style={{ fontSize: 12 * scale }}
         >
           {node.company_name.slice(0, 2).toUpperCase()}
         </span>
       )}
-      <span className="line-clamp-2 text-left text-xs font-medium leading-tight text-ink">
+      <span
+        className="line-clamp-2 text-left font-medium leading-tight text-ink"
+        style={{ fontSize: 12 * scale }}
+      >
         {node.company_name}
       </span>
       <CenterHandles />
@@ -124,6 +134,7 @@ function CompactCompany({
   color: string;
 }) {
   const [tip, setTip] = useState<{ x: number; y: number } | null>(null);
+  const scale = useGraphTextScale();
   const initials = node.company_name.slice(0, 2).toUpperCase();
 
   return (
@@ -149,14 +160,16 @@ function CompactCompany({
           loading="lazy"
         />
       ) : (
-        <span className="text-[10px] font-semibold text-slate-500">{initials}</span>
+        <span className="font-semibold text-slate-500" style={{ fontSize: 10 * scale }}>
+          {initials}
+        </span>
       )}
       <CenterHandles />
       {tip &&
         createPortal(
           <div
-            className="pointer-events-none fixed z-[80] max-w-[16rem] -translate-x-1/2 rounded-md bg-ink px-2 py-1 text-center text-xs font-medium leading-snug text-white shadow-card"
-            style={{ left: tip.x, top: tip.y }}
+            className="pointer-events-none fixed z-[80] max-w-[16rem] -translate-x-1/2 rounded-md bg-ink px-2 py-1 text-center font-medium leading-snug text-white shadow-card"
+            style={{ left: tip.x, top: tip.y, fontSize: 12 * scale }}
           >
             {node.company_name}
           </div>,
@@ -168,6 +181,7 @@ function CompactCompany({
 
 export function PieSliceNode({ id, data }: NodeProps<Node<PieSliceNodeData>>) {
   const actions = useContext(GraphActionsContext);
+  const scale = useGraphTextScale();
 
   const activate = () => {
     if (data.layer) actions?.openLayerNode(id, data.layer);
@@ -228,11 +242,16 @@ export function PieSliceNode({ id, data }: NodeProps<Node<PieSliceNodeData>>) {
           textShadow: data.labelOutside ? undefined : "0 0 6px #fff, 0 0 6px #fff",
         }}
       >
-        <div className="line-clamp-3 text-xs font-semibold leading-tight text-ink">
+        <div
+          className="line-clamp-3 font-semibold leading-tight text-ink"
+          style={{ fontSize: 12 * scale }}
+        >
           {data.label}
         </div>
         {data.detail && (
-          <div className="text-[10px] leading-tight text-slate-600">{data.detail}</div>
+          <div className="leading-tight text-slate-600" style={{ fontSize: 10 * scale }}>
+            {data.detail}
+          </div>
         )}
       </div>
     </div>
@@ -240,9 +259,13 @@ export function PieSliceNode({ id, data }: NodeProps<Node<PieSliceNodeData>>) {
 }
 
 export function PieCenterNode({ data }: NodeProps<Node<PieCenterNodeData>>) {
+  const scale = useGraphTextScale();
   return (
     <div className="flex h-full w-full items-center justify-center px-6 text-center">
-      <span className="line-clamp-4 text-sm font-semibold leading-tight text-ink">
+      <span
+        className="line-clamp-4 font-semibold leading-tight text-ink"
+        style={{ fontSize: 14 * scale }}
+      >
         {data.title}
       </span>
     </div>
@@ -250,10 +273,11 @@ export function PieCenterNode({ data }: NodeProps<Node<PieCenterNodeData>>) {
 }
 
 export function BubbleNode({ data }: NodeProps<Node<BubbleNodeData>>) {
+  const scale = useGraphTextScale();
   return (
     <div
-      className="flex h-full w-full items-center justify-center rounded-full text-sm font-semibold text-white shadow-card"
-      style={{ backgroundColor: data.color }}
+      className="flex h-full w-full items-center justify-center rounded-full font-semibold text-white shadow-card"
+      style={{ backgroundColor: data.color, fontSize: 14 * scale }}
       aria-label={data.count === 1 ? "1 Firma" : `${data.count} Firmen`}
     >
       {data.count}
@@ -265,6 +289,7 @@ export function ChartBackdropNode({
   data,
 }: NodeProps<Node<ChartBackdropNodeData>>) {
   const { plot, columnStops, rowStops } = data;
+  const scale = useGraphTextScale();
 
   return (
     <svg width={data.width} height={data.height} className="overflow-visible">
@@ -304,7 +329,7 @@ export function ChartBackdropNode({
           textAnchor="end"
           dominantBaseline="middle"
           fill="#64748b"
-          fontSize={11}
+          fontSize={11 * scale}
         >
           {label.text}
         </text>
@@ -315,7 +340,7 @@ export function ChartBackdropNode({
         textAnchor="middle"
         dominantBaseline="middle"
         fill="#334155"
-        fontSize={12}
+        fontSize={12 * scale}
         fontWeight={600}
         transform={`rotate(-90 18 ${plot.top + plot.height / 2})`}
       >
@@ -328,7 +353,7 @@ export function ChartBackdropNode({
           y={plot.top + plot.height + 18}
           textAnchor="middle"
           fill="#64748b"
-          fontSize={10}
+          fontSize={10 * scale}
         >
           {label.text}
         </text>
@@ -338,7 +363,7 @@ export function ChartBackdropNode({
         y={plot.top + plot.height + 56}
         textAnchor="middle"
         fill="#334155"
-        fontSize={12}
+        fontSize={12 * scale}
         fontWeight={600}
       >
         {data.xTitle}

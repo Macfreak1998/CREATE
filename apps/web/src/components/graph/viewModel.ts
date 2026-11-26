@@ -35,6 +35,20 @@ export interface PackCompany {
   area: number;
 }
 
+export const PACK_SHELL_COLOR = "#f4f7f5";
+
+export interface PackNode {
+  id: string;
+  name: string;
+  kind: "circle" | "company";
+  shell: boolean;
+  color: string;
+  path?: string;
+  company?: PackCompany;
+  area: number;
+  children?: PackNode[];
+}
+
 export interface PackIndustry {
   layerId: string;
   industryId: number;
@@ -42,6 +56,44 @@ export interface PackIndustry {
   color: string;
   path: string;
   companies: PackCompany[];
+  circle: PackNode;
+}
+
+/** Dunkle Schrift auf heller Fläche, weiße Schrift auf dunkler Fläche. */
+export function inkOn(fill: string): string {
+  const hex = fill.trim().replace("#", "");
+  const full =
+    hex.length === 3
+      ? hex
+          .split("")
+          .map((char) => char + char)
+          .join("")
+      : hex.slice(0, 6);
+  if (full.length < 6 || /[^0-9a-fA-F]/.test(full)) return "#1a1a1a";
+  const channel = (start: number) => {
+    const value = parseInt(full.slice(start, start + 2), 16) / 255;
+    return value <= 0.03928 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+  };
+  const luminance =
+    0.2126 * channel(0) + 0.7152 * channel(2) + 0.0722 * channel(4);
+  return luminance > 0.45 ? "#1a1a1a" : "#ffffff";
+}
+
+export function ellipsize(name: string, maxChars: number): string {
+  const clean = name.trim();
+  if (maxChars <= 1) return "…";
+  if (clean.length <= maxChars) return clean;
+  return `${clean.slice(0, Math.max(1, maxChars - 1))}…`;
+}
+
+export function packFontSize(radius: number, scale: number): number {
+  return Math.max(11, Math.min(16, radius * 0.11)) * scale;
+}
+
+export function packLabelFits(name: string, radius: number, fontSize: number): boolean {
+  if (radius < 28) return false;
+  const maxChars = Math.max(4, Math.floor((radius * 1.55) / Math.max(6, fontSize * 0.58)));
+  return name.length <= maxChars;
 }
 
 function companyLeaves(node: GraphTreeNode): GraphTreeNode[] {
@@ -72,6 +124,93 @@ function toPackCompany(
   };
 }
 
+function layerColor(node: GraphTreeNode): string {
+  if (node.color) return node.color;
+  return graphCategoryColor(node.industry_id ?? 0);
+}
+
+function layerChildren(node: GraphTreeNode): GraphTreeNode[] {
+  return node.children.filter((child) => child.kind === "layer");
+}
+
+function companyNodes(
+  nodes: GraphTreeNode[],
+  ranks: ReadonlyMap<number, number>
+): PackNode[] {
+  return nodes
+    .filter((child) => child.kind === "company" && child.company_id)
+    .map((child) => {
+      const company = toPackCompany(child, ranks);
+      return {
+        id: company.nodeId,
+        name: company.name,
+        kind: "company" as const,
+        shell: false,
+        color: "#1f2937",
+        company,
+        area: company.area,
+      };
+    });
+}
+
+/**
+ * Ein Kreis übernimmt die Farbe der direkten Unterebene. Eine Unterebene
+ * färbt den ganzen Kreis, mehrere bleiben als eigene Kreise in einer hellen
+ * Hülle. Ohne Unterebene gilt die Farbe der Kreisebene.
+ */
+function packCircle(
+  node: GraphTreeNode,
+  path: string,
+  ranks: ReadonlyMap<number, number>
+): PackNode {
+  const layers = layerChildren(node);
+  const companies = companyNodes(node.children, ranks);
+  if (layers.length > 1) {
+    return {
+      id: node.id,
+      name: node.name,
+      kind: "circle",
+      shell: true,
+      color: PACK_SHELL_COLOR,
+      path,
+      area: 0,
+      children: [
+        ...layers.map((layer) =>
+          packCircle(
+            layer,
+            layer.slug ? (path ? `${path}/${layer.slug}` : layer.slug) : path,
+            ranks
+          )
+        ),
+        ...companies,
+      ],
+    };
+  }
+  if (layers.length === 1) {
+    const child = layers[0];
+    return {
+      id: node.id,
+      name: node.name,
+      kind: "circle",
+      shell: false,
+      color: child ? layerColor(child) : layerColor(node),
+      path,
+      area: 0,
+      children: companyNodes(companyLeaves(node), ranks),
+    };
+  }
+  return {
+    id: node.id,
+    name: node.name,
+    kind: "circle",
+    shell: false,
+    color: layerColor(node),
+    path,
+    area: 0,
+    children: companies,
+  };
+}
+
 /** Branchen-Ebenen als eine Pack-Ebene. Gruppen dazwischen fallen weg. */
 export function collectPack(tree: GraphTreeNode[]): PackIndustry[] {
   const drafts: { node: GraphTreeNode; path: string }[] = [];
@@ -99,14 +238,31 @@ export function collectPack(tree: GraphTreeNode[]): PackIndustry[] {
     )
   );
 
-  return drafts.map(({ node, path }) => ({
-    layerId: node.id,
-    industryId: node.industry_id ?? 0,
-    name: node.name,
-    color: graphCategoryColor(node.industry_id ?? 0),
-    path,
-    companies: companyLeaves(node).map((company) => toPackCompany(company, ranks)),
-  }));
+  return drafts.map(({ node, path }) => {
+    const circle = packCircle(node, path, ranks);
+    return {
+      layerId: node.id,
+      industryId: node.industry_id ?? 0,
+      name: node.name,
+      color: circle.color,
+      path,
+      companies: companyLeaves(node).map((company) => toPackCompany(company, ranks)),
+      circle,
+    };
+  });
+}
+
+export function packSwatches(
+  industries: PackIndustry[]
+): { name: string; color: string }[] {
+  const items: { name: string; color: string }[] = [];
+  const walk = (node: PackNode) => {
+    if (node.kind !== "circle") return;
+    if (!node.shell) items.push({ name: node.name, color: node.color });
+    for (const child of node.children ?? []) walk(child);
+  };
+  for (const industry of industries) walk(industry.circle);
+  return items;
 }
 
 export function packStats(industries: PackIndustry[]): {
@@ -360,7 +516,7 @@ export function layoutRing(
     activeStages.some((stage) => stage.id === company.stageId)
   );
 
-  const gap = activeStages.length > 1 ? 0.055 : 0.04;
+  const gap = activeStages.length > 1 ? 0.055 : 0;
   const available = Math.PI * 2 - gap * activeStages.length;
   const counts = activeStages.map(
     (stage) => activeCompanies.filter((company) => company.stageId === stage.id).length
@@ -427,7 +583,7 @@ export function layoutRing(
 
 export interface CompanyLabelPlacement {
   radius: number;
-  visible: boolean;
+  text: string;
 }
 
 function angularGap(a: number, b: number): number {
@@ -435,16 +591,18 @@ function angularGap(a: number, b: number): number {
   return Math.min(diff, Math.PI * 2 - diff);
 }
 
-/** Firmennamen am Ring nach außen staffeln, wenn sie sich sonst überdecken. */
+/** Firmennamen am Ring nach außen staffeln und auf die Lücke kürzen. */
 export function placeCompanyLabels(
-  companies: { companyId: string; angle: number; name: string }[]
+  companies: { companyId: string; angle: number; name: string }[],
+  fontScale = 1
 ): Map<string, CompanyLabelPlacement> {
   const sorted = companies.slice().sort((a, b) => a.angle - b.angle);
   const lanes = [RING.label, RING.label + 18, RING.label + 36];
   const result = new Map<string, CompanyLabelPlacement>();
+  const charPx = 3.4 * Math.max(0.75, fontScale);
   sorted.forEach((company, index) => {
     if (sorted.length < 2) {
-      result.set(company.companyId, { radius: RING.label, visible: true });
+      result.set(company.companyId, { radius: RING.label, text: company.name });
       return;
     }
     const prev = sorted[(index - 1 + sorted.length) % sorted.length];
@@ -454,13 +612,13 @@ export function placeCompanyLabels(
       angularGap(company.angle, next?.angle ?? company.angle)
     );
     const outer = lanes[lanes.length - 1] ?? RING.label;
-    const needed = (Math.max(company.name.length, 1) * 3.4) / outer;
+    const needed = (Math.max(company.name.length, 1) * charPx) / outer;
     const lane = gap < needed ? index % lanes.length : 0;
     const radius = lanes[lane] ?? RING.label;
-    const laneNeeded = (Math.max(company.name.length, 1) * 3.4) / radius;
+    const maxChars = Math.max(1, Math.floor((gap * radius * 0.9) / charPx));
     result.set(company.companyId, {
       radius,
-      visible: gap >= laneNeeded * 0.55,
+      text: ellipsize(company.name, maxChars),
     });
   });
   return result;

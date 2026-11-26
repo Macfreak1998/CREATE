@@ -818,8 +818,7 @@ export async function searchCompanyOptions(
             ) AS already_placed
        FROM companies c
       WHERE $1 = '' OR c.name ILIKE '%' || $1 || '%'
-      ORDER BY c.name
-      LIMIT 25`,
+      ORDER BY c.name`,
     [searchTerm, parentId]
   );
   return result.rows;
