@@ -31,11 +31,15 @@ export function GraphStageControls({
   fullscreen,
   onChangeScale,
   onToggleFullscreen,
+  onGoUp,
+  goUpTitle,
 }: {
   scale: number;
   fullscreen: boolean;
   onChangeScale: (next: number) => void;
   onToggleFullscreen: () => void;
+  onGoUp?: () => void;
+  goUpTitle?: string;
 }) {
   return (
     <>
@@ -63,13 +67,25 @@ export function GraphStageControls({
           −
         </button>
       </div>
-      <button
-        type="button"
-        className="absolute right-3 top-3 z-20 rounded-md border border-line bg-white px-2 py-1 text-xs shadow-card hover:bg-slate-50"
-        onClick={onToggleFullscreen}
-      >
-        {fullscreen ? "Vollbild beenden" : "Vollbild"}
-      </button>
+      <div className="absolute right-3 top-3 z-20 flex overflow-hidden rounded-md border border-line bg-white shadow-card">
+        {fullscreen && onGoUp ? (
+          <button
+            type="button"
+            className="border-r border-line px-2 py-1 text-xs hover:bg-slate-50"
+            onClick={onGoUp}
+            title={goUpTitle}
+          >
+            Eine Ebene zurück
+          </button>
+        ) : null}
+        <button
+          type="button"
+          className="px-2 py-1 text-xs hover:bg-slate-50"
+          onClick={onToggleFullscreen}
+        >
+          {fullscreen ? "Vollbild beenden" : "Vollbild"}
+        </button>
+      </div>
     </>
   );
 }

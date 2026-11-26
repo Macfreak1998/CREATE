@@ -112,13 +112,10 @@ export default function Netzwerk() {
     if (me?.user.role !== "admin" || !scope.data) return;
     if (isGraphSceneLayout(scope.data.layout) && !layout.data) return;
     const current = scope.data;
-    void graphScopeToSvg(current, layout.data ?? null, fontScale)
-      .then((svg) => {
-        downloadGraphSvg(graphExportFilename(current), svg);
-      })
-      .catch(() => {
-        window.alert("Der Export konnte nicht erstellt werden.");
-      });
+    downloadGraphSvg(
+      graphExportFilename(current),
+      graphScopeToSvg(current, layout.data ?? null, fontScale)
+    );
   }, [fontScale, layout.data, me?.user.role, scope.data]);
 
   if (!SHOW_NETWORK_GRAPH) {
@@ -134,6 +131,12 @@ export default function Netzwerk() {
 
   const breadcrumb = scope.data?.breadcrumb ?? [];
   const notFound = scope.isError;
+  const parentLevelName =
+    breadcrumb.length > 1
+      ? breadcrumb[breadcrumb.length - 2]?.name
+      : breadcrumb.length === 1
+        ? "Netzwerk"
+        : null;
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
@@ -145,7 +148,7 @@ export default function Netzwerk() {
               ? "Jede Branche ist ein Kreis, Firmen sitzen darin. Ein Klick auf den Kreis öffnet die Ebene."
               : scope.data?.layout === "radial"
                 ? "Jede Firma steht einmal auf dem Ring. Ein Segment filtert auf diese Stufe."
-                : "Klicken Sie auf eine Ebene, um hineinzuzoomen. Mit Escape oder über den Pfad geht es zurück."}
+                : "Klicken Sie auf eine Ebene, um hineinzuzoomen. Zurück geht es über den Pfad oder mit Escape. Im Vollbild liegt „Eine Ebene zurück“ oben rechts."}
           </p>
         </div>
         <GraphSearch onSelect={(result) => openPath(result.parent_path)} />
@@ -233,6 +236,8 @@ export default function Netzwerk() {
             fullscreen={fullscreen}
             onChangeScale={setFontScale}
             onToggleFullscreen={toggleFullscreen}
+            onGoUp={scopePath ? goUp : undefined}
+            goUpTitle={parentLevelName ? `Zurück zu ${parentLevelName}` : undefined}
           />
         </div>
         </GraphTextScaleProvider>
